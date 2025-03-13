@@ -1,0 +1,40 @@
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\bin\Debug\ManifestVieweRTF.exe.config
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\bin\Debug\ManifestVieweRTF.exe
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\bin\Debug\ManifestVieweRTF.pdb
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.csproj.AssemblyReference.cache
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.Properties.Resources.resources
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.csproj.GenerateResource.cache
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.csproj.CoreCompileInputs.cache
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.exe
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.pdb
+C:\Users\lbeacroft_dev\Documents\repos\ManifestVieweRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.FrmManifestViewer.resources
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.csproj.AssemblyReference.cache
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.FrmManifestViewer.resources
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.Properties.Resources.resources
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.csproj.GenerateResource.cache
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.csproj.CoreCompileInputs.cache
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.exe
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.pdb
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestVieweRTF.exe.config
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestVieweRTF.exe
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestVieweRTF.pdb
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.NewFile.resources
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestControlFileViewer.resx
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestControlFileViewer.cs
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestControlFileViewer.Designer.cs
+C:\Users\lbeacroft_dev\Documents\repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestBaseCommandFiles.txt
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestBaseCommandFiles.txt
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestControlFileViewer.resx
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestControlFileViewer.cs
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestControlFileViewer.Designer.cs
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestVieweRTF.exe.config
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestVieweRTF.exe
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\bin\Debug\ManifestVieweRTF.pdb
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.csproj.AssemblyReference.cache
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.FrmManifestViewer.resources
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.NewFile.resources
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.Properties.Resources.resources
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.csproj.GenerateResource.cache
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.csproj.CoreCompileInputs.cache
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.exe
+C:\Users\lance.beacroft\OneDrive - Southern Housing\Documents\Repos\ManifestViewerRTF\ManifestVieweRTF\obj\Debug\ManifestVieweRTF.pdb

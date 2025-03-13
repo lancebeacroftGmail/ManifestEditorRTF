@@ -1,0 +1,681 @@
+[Version 11/11/2024]
+[ARCHIVEFILE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal command
+FORMAT=ARCHIVEFILE
+DESCRIPTION=Archive a file to a folder
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$NEWPATHANDFILENAME,nvarchar(10),,,,$$
+PARAMETERS=
+$$FILETOARCHIVE,nvarchar(100),,,,Full path and name of file to archive$$
+$$ARCHIVEFOLDER,nvarchar(100),,,,Full path to move file to$$
+$$FILEPREFIX,nvarchar(100),,,,Alternative prefix instead of ARCHIVEFILE$$
+$$
+HEADER=N
+DETAIL=N
+TRAILER=N
+
+[CONCAT]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal command
+FORMAT=SET
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$VALUE,string,,,,The Answer$$
+PARAMETERS=
+$$INVALUE1,string,,,,$$
+$$INVALUE2,string,,,,$$
+$$
+$$INVALUE1,string,,,,$$$$INVALUE2,string,,,,$$
+[CSVCOMMAND]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Windows Folder
+FORMAT=CSVCOMMAND
+DESCRIPTION=Read Directory Listing
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.FILENAME,int,[0-9],1,,File name in folder$$
+PARAMETERS=
+$$DOSCOMMAND,nvarchar(100),,,dir "{0}" /O:DN /T:C /S /B,DOS Command to execute$$
+$$
+HEADER=Y
+$$HEADER.FILENAME,int,[0-9],1,,File in folder$$
+DETAIL=N
+TRAILER=N
+
+[CSVREADFILE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Job Text File
+FORMAT=CSVFILE
+DESCRIPTION=CSV File reading only first row field 1 and 2
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.PROPERTYSEQ,int,[0-9],1,,Property Sequence Number$$
+$$HEADER.DOUBLEBEDS,int,,2,,Number of Double Bedrooms$$
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,File name with path$$
+$$
+HEADER=Y
+$$HEADER.PROPERTYSEQ,int,[0-9],1,,Property Sequence$$
+$$HEADER.DOUBLEBEDS,int,,2,,Number of Double Beds$$
+DETAIL=N
+TRAILER=N
+
+[CSVWRITE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Windows Folder
+FORMAT=CSVFILE
+DESCRIPTION=Write to a file
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,File name in folder$$
+$$DETAIL.EXTERNALID,nvarchar(100),,PersonID,,$$
+$$DETAIL.TENANCYREFERENCE,nvarchar(100),,TenancyID,,$$
+$$DETAIL.PIN,nvarchar(100),,,,$$
+$$DETAIL.SALUTATION,nvarchar(500),,Title,,$$
+$$DETAIL.FIRSTNAME,nvarchar(100),,FirstName,,$$
+$$DETAIL.LASTNAME,nvarchar(100),,LastName,,$$
+$$DETAIL.HOMEEMAIL,nvarchar(100),,Email,,$$
+$$DETAIL.WORKPHONE,nvarchar(100),,DayTel,,$$
+$$DETAIL.HOMEPHONE,nvarchar(100),,HomeTel,,$$
+$$DETAIL.MOBILEPHONE,nvarchar(100),,MobTel,,$$
+$$DETAIL.DATEOFBIRTH,nvarchar(100),,DateOfBirth,,$$
+$$DETAIL.GENDER,nvarchar(100),,Gender,,$$
+$$DETAIL.ETHNICORIGIN,nvarchar(100),,EthnicOriginCode,,$$
+$$DETAIL.NINUMBER,nvarchar(100),,NINumber,,$$
+$$DETAIL.LANGUAGE,nvarchar(100),,LanguageCode,,$$
+$$DETAIL.ENDDATE,nvarchar(100),,,,$$
+$$DETAIL.CONTACTWARNING,nvarchar(100),,ContactWarning,,$$
+$$DETAIL.POTENTIALLYVIOLENT,nvarchar(100),,PotentiallyViolent,,$$
+$$DETAIL.TENANCYSYSTEMREF,nvarchar(100),,TenancyID,,$$
+$$DETAIL.TENANCYSTATUS,nvarchar(100),,TenancyStatus,,$$
+$$
+[DIRECTORY]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=UA TEST
+FORMAT=DIR
+DESCRIPTION=Retrieve list of files
+RESULT=
+$$RESPONSE,string,[0-Z],,,$$
+$$ERROR,int,[0-Z],,,$$
+$$HEADER.PATH,nvarchar(100),,,,Mandatory$$
+$$HEADER.FILENAME,nvarchar(100),,,,Filename$$
+$$HEADER.PATHANDFILENAME,nvarchar(100),,,,$$
+$$HEADER.EXTENSION,nvarchar(100),,,,$$
+$$HEADER.FILENAMENOEXTENSION,nvarchar(100),,,,$$
+$$HEADER.MODIFIED,nvarchar(100),,,,Date time$$
+$$HEADER.ACCESSED,nvarchar(100),,,,Date time$$
+$$HEADER.CREATED,nvarchar(100),,,,Date time$$
+$$HEADER.SIZE,nvarchar(100),,,,Size of the file$$
+
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,Mandatory$$
+$$INCLUDELOCKED,nvarchar(100),,,,optional default is N to not include locked files$$
+$$ORDERBY,nvarchar(100),,,,Optional default is the file name$$
+$$ORDER,nvarchar(100),,,,Path of file$$
+$$
+
+HEADER=N
+DETAIL=N
+TRAILER=N
+
+[DOSCOPY]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=DOSCOMMAND
+DESCRIPTION=Execute DOS Command
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+PARAMETERS=
+$$FILENAMEFROM,nvarchar(100),,,,$$
+$$FILENAMETO,nvarchar(100),,,,$$
+$$
+
+copy "$$FILENAMEFROM,nvarchar(100),,,,$$" "$$FILENAMETO,nvarchar(100),,,,$$" /Y
+
+[DOSGetNextFileInFolder]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Windows Folder
+FORMAT=CSVCOMMAND
+DESCRIPTION=Read Directory Listing
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.FILENAME,int,[0-9],1,,File name in folder$$
+PARAMETERS=
+$$DOSCOMMAND,nvarchar(100),,,dir {0} /O:DN /T:C /S /B,DOS Command to execute$$
+$$
+HEADER=Y
+$$HEADER.FILENAME,int,[0-9],1,,File in folder$$
+DETAIL=N
+TRAILER=N
+
+[DOSLogMessageToFile]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=DOSCOMMAND
+DESCRIPTION=Execute DOS Command
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+
+PARAMETERS=
+$$DATE,,,,,$$
+$$FILENAME,nvarchar(100),,,,$$
+$$MESSAGE,nvarchar(100),,,,$$
+$$
+
+echo $$DATE,,,,,$$ $$MESSAGE,,,,,$$ >> $$FILENAME,nvarchar(100),,,,$$
+
+[EXCHGSendEmail]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal
+FORMAT=EXCHGEMAIL
+DESCRIPTION=Send Email to Exchange 2013
+RESULT=
+$$ERROR,nvarchar(10),,,,ERROR$$
+
+PARAMETERS=
+$$URL,nvarchar(100),,,,URL of EWS Service$$
+$$FROMADDRESS,nvarchar(100),,,,Email address sending the email$$
+$$PASSWORD,nvarchar(100),,,BLAZEAES,Encrypted password$$
+$$TOADDRESS,nvarchar(100),,,,Destination Email address$$
+$$SUBJECT,nvarchar(100),,,,Subject$$
+$$PATHANDFILENAME1,nvarchar(100),,,,Attachment 1 to 10$$
+$$PATHANDFILENAME2,nvarchar(100),,,,Attachment 1 to 10$$
+
+$$
+
+Please see attached the following files:
+$$PATHANDFILENAME1,nvarchar(100),,,,Attachment 1 to 10$$
+$$PATHANDFILENAME2,nvarchar(100),,,,Attachment 1 to 10$$
+
+Yours
+
+
+MUART Team
+[FIXED TEXT PARSING]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Job Text File
+FORMAT=FIXEDPOSPARSE
+DESCRIPTION=Text string to fields
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.DEPT,nvarchar(100),,2-4,,Department$$
+$$HEADER.JOBID,nvarchar(100),,5-11,,Job Num$$
+PARAMETERS=
+$$STRING,nvarchar(100),,,,String that needs parsing$$
+$$
+HEADER=Y
+$$HEADER.DEPT,nvarchar(100),,2-4,,Department$$
+$$HEADER.JOBID,nvarchar(100),,6-11,,Job Num$$
+DETAIL=N
+TRAILER=N
+[EXCEL READ]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal Command
+FORMAT=EXCELOLE
+DESCRIPTION=Write contents to an Excel spreadsheet
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,Path to file$$
+$$WORKSHEETNAME,nvarchar(100),,,,Worksheet name$$
+$$KEEPEXISTINGDATA,nvarchar(100),,,,Y to keep existing data$$
+$$DETAILSTARTROW,nvarchar(100),,,,Row to start inserting details$$
+$$PaymentPaymentId,nvarchar(10),,A,,$$
+$$Date,nvarchar(10),,B,,$$
+$$TenancyRef,nvarchar(10),,C,,$$
+$$PaymentAmount,nvarchar(10),,D,,$$
+$$PaymentCollectionDate,nvarchar(10),,E,,$$
+$$ID,nvarchar(10),,F,,$$
+$$
+HEADER=N
+DETAIL=N
+TRAILER=N
+
+[GETDATE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal Command
+FORMAT=GETDATETIME
+DESCRIPTION=Get current date in numerous formats
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$TIMESTAMP,nvarchar(10),,,,Full Date and Time$$
+$$DD/MM/YYYY,nvarchar(10),,,,Full Date and Time$$
+$$HH:MM:SS,nvarchar(10),,,,Full Date and Time$$
+$$XML,nvarchar(10),,,,Full Date and Time$$
+$$XMLUTC,nvarchar(10),,,,Full Date and Time$$
+$$SQL,nvarchar(10),,,,Full Date and Time$$
+PARAMETERS=$$INPUTDATE,nvarchar(100),,,,Date to convert to another format (optional)$$
+$$
+HEADER=N
+DETAIL=N
+TRAILER=N
+[GETENVVAR]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=DOSCOMMAND
+DESCRIPTION=Get the environment variable
+RESULT=
+$$RESPONSE,string,,,,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+PARAMETERS=
+$$EnvVar,string,,,,$$
+$$
+ECHO:$$EnvVar,string,,,,$$
+[JAVA]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal Command
+FORMAT=JAVASCRIPT
+DESCRIPTION=Trims string provided in source and removes \r and \n
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$RESULT,nvarchar(200),,result,,Result$$
+$$ERROR,nvarchar(10),,error,,Error$$
+PARAMETERS=
+$$SOURCE,nvarchar(200),,,,SOURCE$$
+$$
+result="";
+error="";
+
+result=trimAndRemoveNewLines(SOURCE);
+
+function trimAndRemoveNewLines(input) 
+{
+    if (input === null || input === undefined) {
+	error="Nothing Provided to process";
+        return null;
+    }
+    // Trim the string and replace new line characters
+    return input.trim().replace(/\r?\n/g, '');
+}
+[JSON PARSE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal command
+FORMAT=JSONPARSE
+DESCRIPTION=
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.FIELD1,nvarchar(100),,Field1,,$$
+$$HEADER.FIELD2,nvarchar(100),,Field2,,$$
+$$HEADER.FIELD3,nvarchar(100),,Field3,,$$
+PARAMETERS=
+$$JSON,nvarchar(100),,,,JSon Text$$
+$$STRUCTURE,nvarchar(100),,,,ARRAY or Object$$
+$$ARRAYNAME,nvarchar(100),,,,Field (optional)$$
+$$
+HEADER=N
+DETAIL=Y
+$$HEADER.FIELD1,nvarchar(100),,Field1,,$$
+$$HEADER.FIELD2,nvarchar(100),,Field2,,$$
+$$HEADER.FIELD3,nvarchar(100),,Field3,,$$
+TRAILER=N
+[GOTO]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=LOGIC
+FROM=Internal command
+FORMAT=GOTO
+DESCRIPTION=Goto Label if logic is true
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=
+$$LABEL,nvarchar(100),,,,Label$$
+$$
+
+[IFGOTO]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=LOGIC
+FROM=Internal command
+FORMAT=IFGOTO
+DESCRIPTION=Goto Label if logic is true
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=$$VARIABLE1,nvarchar(100),,,,Variable to check$$
+$$OPERAND,nvarchar(100),,,,Variable to check$$
+$$VARIABLE2,nvarchar(100),,,,Variable to check$$
+$$LABEL,nvarchar(100),,,,Variable to check$$
+$$
+
+[MATH]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal command
+FORMAT=MATH
+DESCRIPTION=Do some math operations
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$ANSWER,nvarchar(10),,,,The Answer$$
+PARAMETERS=$$VARIABLE1,nvarchar(100),,,,Variable to check$$
+$$OPERAND,nvarchar(100),,,,Variable to check$$
+$$VARIABLE2,nvarchar(100),,,,Variable to check$$
+$$
+
+[OISWSSearch]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=OISWS
+DESCRIPTION=Search for a property (return a single property)
+
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+$$DETAIL.ID,nvarchar(100),,Envelope.Body.findPlusPROPERTYResponse.results.PlusPROPERTYSearchResult.PROPERTYSEQUENCE,,Property Sequence Number$$
+$$DETAIL.ADDRESS1,nvarchar(100),,Envelope.Body.findPlusPROPERTYResponse.results.PlusPROPERTYSearchResult.ADDRESSLINE1,,Address Line 1$$
+$$DETAIL.ADDRESS2,nvarchar(100),,Envelope.Body.findPlusPROPERTYResponse.results.PlusPROPERTYSearchResult.ADDRESSLINE2,,Address Line 2$$
+$$HEADER.ADDRESS1,nvarchar(100),,ADDRESSLINE1,,Address Line 1$$
+
+PARAMETERS=
+$$URL,nvarchar(500),,,,URL of the web service$$
+$$USERNAME,nvarchar(100),,,,User ID for Web Service$$
+$$PASSWORD,nvarchar(100),,,BLAZEAES,Password for Web Service$$
+$$PROPERTYSEQ,int,,,,Property sequence number$$
+$$OPERATOR,int,,,,Equals etc$$
+$$ALLOWERROR,nvarchar,,,,Y to allow an error and set ERROR result$$
+$$REMOVEEMPTYTAGS,nvarchar,,,,Y to remove empty tags$$
+$$
+
+$$OISWSControlH.uaz,INCLUDE,,external,BLAZEAES,$$
+
+<ser:findPlusPROPERTY>
+
+<ser:criteria>
+<typ:PROPERTYSEQUENCE>
+<typ:operator>
+$$OPERATOR,int,,,,Equals etc$$
+</typ:operator>
+<typ:value>
+$$PROPERTYSEQ,int,,,,Property sequence number$$
+</typ:value>
+</typ:PROPERTYSEQUENCE>         
+</ser:criteria>
+
+</ser:findPlusPROPERTY>
+
+$$OISWSControlT.uaz,INCLUDE,,external,BLAZEAES,$$
+
+[PAUSE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=LOGIC
+FROM=Internal command
+FORMAT=PAUSE
+DESCRIPTION=Wait in seconds between 1 and 30 - other value set to 1
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=
+$$SECONDS,nvarchar(100),,,,Number of seconds to pause 1-30$$
+$$
+[RESTAPI CALL Via ManifestRestAPI.Exe]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=DOSCOMMAND
+DESCRIPTION=Execute DOS Command
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+PARAMETERS=
+$$URL,nvarchar(100),,,,source URL for Map$$
+$$Method,nvarchar(100),,,,Name of method end point$$
+$$Verb,nvarchar(100),,,,GET POST Etc$$
+$$Username,nvarchar(100),,,,username-optional$$
+$$password,nvarchar(100),,BLAZEAES,,password-optional$$
+$$ContentFile,nvarchar(100),,,,file for body text - optional$$
+$$query,nvarchar(100),,,,query-optional$$
+
+$$
+MANIFESTRESTAPI.exe URL="$$URL,nvarchar(100),,,,$$" Method="$$Method,nvarchar(100),,,,$$" Verb="$$Verb,nvarchar(100),,,,$$" Username="$$Username,nvarchar(100),,,,$$" password="$$password,nvarchar(100),,,,$$" ContentFile="$$ContentFile,nvarchar(100),,,,$$" query="$select=$$Fields,nvarchar(100),,,,$$&$filter=gcs_personnumberid eq $$ContactId,nvarar(100),,,,$$"
+EXIT /B %ERRORLEVEL%
+
+[SET]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal command
+FORMAT=SET
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$VALUE,string,,,,The Answer$$
+PARAMETERS=
+$$INVALUE1,string,,,,$$
+$$INVALUE2,string,,,,$$
+$$
+$$INVALUE1,string,,,,$$/$$INVALUE2,string,,,,$$
+[SQLSELECT]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Read from a SQL Select
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$DETAIL.ID,int,,ID,,ID of this record$$
+$$DETAIL.SUBJECT,nvarchar(100),,EmailSubject,,Email Subject$$
+$$DETAIL.TO,nvarchar(100),,EmailTo,,Salutation in Email$$
+$$DETAIL.MESSAGE,nvarchar(100),,EmailMessage,,Message Body$$
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$
+
+SELECT [ID],[EmailSubject],[EmailTo],[EmailMessage],[ProcessedDateTime],[ProcessedStatus] FROM [Release_AS1].[dbo].[MUARTTABLE1] ORDER BY ID
+
+[SQLUPDATEMERGE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Read from a SQL Select
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$DETAIL.ID,int,,ID,,ID of this record$$
+$$DETAIL.SUBJECT,nvarchar(100),,EmailSubject,,Email Subject$$
+$$DETAIL.TO,nvarchar(100),,EmailTo,,Salutation in Email$$
+$$DETAIL.MESSAGE,nvarchar(100),,EmailMessage,,Message Body$$
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$
+
+SELECT [ID],[EmailSubject],[EmailTo],[EmailMessage],[ProcessedDateTime],[ProcessedStatus] FROM [Release_AS1].[dbo].[MUARTTABLE1] ORDER BY ID
+
+[STOPIFEMPTY]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=LOGIC
+FROM=Internal command
+FORMAT=STOPIFEMPTY
+DESCRIPTION=Check if parameter is empty
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=$$VARIABLE,nvarchar(100),,,,Variable to check if empty$$
+$$
+
+[TRIM]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal Command
+FORMAT=JAVASCRIPT
+DESCRIPTION=Trims string provided in source and removes \r and \n
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$RESULT,nvarchar(200),,result,,Result$$
+$$ERROR,nvarchar(10),,error,,Error$$
+PARAMETERS=
+$$SOURCE,nvarchar(200),,,,SOURCE$$
+$$
+result="";
+error="";
+result=trimAndRemoveNewLines(SOURCE);
+
+function trimAndRemoveNewLines(input) 
+{
+    if (input === null || input === undefined) {
+        return null;
+    }
+    // Trim the string and replace new line characters
+    return input.trim().replace(/\r?\n/g, '');
+}
+[WEBAPI ACCESS]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Lifespan
+FORMAT=WEBSERVICE
+DESCRIPTION=Dash Verify/XREF Step 1
+RESULT=
+$$RESPONSE,string,[0-Z],,,description$$
+$$ERROR,int,[0-Z],,,description$$
+PARAMETERS=
+$$URL,nvarchar(500),,,,URL of the web service$$
+$$Content-Type,nvarchar(500),,,,Content Type$$
+$$METHOD,nvarchar(500),,,,Get$$
+$$Accept,nvarchar(500),,,,Format$$
+$$ALLOWERROR,nvarchar(500),,,,Y to allow error$$
+$$ProcessID,nvarchar(500),,,,$$
+$$BodyVar1,nvarchar(500),,,,$$
+$$BodyVar2,nvarchar(500),,,,$$
+$$BodyVar3,nvarchar(500),,,,$$
+$$
+//Example body
+{
+    "body": "$$var$$",
+}
+[WRITE TEXT TO FILE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal Command
+FORMAT=TEXTFILE
+DESCRIPTION=Write text file
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,Path to binary file$$
+$$ACTIONIFEXISTS,nvarchar(100),,,,NEW or APPEND$$
+$$CREATEDDATETIME,nvarchar(100),,,,$$
+$$REQUESTID,nvarchar(100),,,,$$
+$$
+...Text to write here...
+[XMLFILEMERGE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal Command
+FORMAT=XMLFILEMERGE
+DESCRIPTION=Write text file
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$RESPONSE,nvarchar(10),,,,OK or FAIL$$
+
+PARAMETERS=
+$$PATHANDFILENAMENEW,nvarchar(100),,,,Path to XML file$$
+$$PATHANDFILENAMEOLD,nvarchar(100),,,,Path to XML file$$
+$$PATHANDFILENAMEOUT,nvarchar(100),,,,Path to XML file$$
+$$ENTITYNAME,nvarchar(10),,,,$$
+$$UNIQUEATTRIBUTENAME,nvarchar(10),,,,$$
+$$STATUSATTRIBUTENAME,nvarchar(10),,,,$$
+$$STATUSNEW,nvarchar(10),,,,$$
+$$STATUSDELETED,nvarchar(10),,,,$$
+$$STATUSMODIFIED,nvarchar(10),,,,$$
+$$STATUSUNCHANGED,nvarchar(10),,,,$$
+
+$$
+
+[XMLREADFILE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Job Text File
+FORMAT=XMLFILE
+DESCRIPTION=XML File 
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.VISITID,int,[0-9],Surveys.Survey.AnswerSet.VisitId,,Visit ID$$
+$$HEADER.Location,int,[0-9],Surveys.Survey.AnswerSet.Location,,Location ID$$
+$$DETAIL.EXTERNALID,int,[0-9],Surveys.Survey.Answers.Section.Line.ExternalId,,External ID Field$$
+$$DETAIL.VALUE,int,[0-9],Surveys.Survey.Answers.Section.Line.Value,,Value in Field$$
+
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,File name with path$$
+$$
+HEADER=Y
+$$HEADER.VISITID,int,[0-9],Surveys.Survey.AnswerSet.VisitId,,Visit ID$$
+$$HEADER.Location,int,[0-9],Surveys.Survey.AnswerSet.Location,,Location ID$$
+DETAIL=Y
+$$DETAIL.EXTERNALID,int,[0-9],Surveys.Survey.Answers.Section.Line.ExternalId,,External ID Field$$
+$$DETAIL.VALUE,int,[0-9],Surveys.Survey.Answers.Section.Line.Value,,Value in Field$$
+TRAILER=N
+
+[XMLWRITE]
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal Command
+FORMAT=TEXTFILE
+DESCRIPTION=Write text file
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,Path to binary file$$
+$$ACTIONIFEXISTS,nvarchar(100),,,,NEW or APPEND$$
+$$CREATEDDATETIME,nvarchar(100),,,,$$
+$$REQUESTID,nvarchar(100),,,,$$
+$$
+<?xml version="1.0"?>
+<OrderImport created="$$CREATEDDATETIME,nvarchar(100),,,,$$" requestId="$$REQUESTID,nvarchar(100),,,,$$">
+  <Orders>
+
+
+
