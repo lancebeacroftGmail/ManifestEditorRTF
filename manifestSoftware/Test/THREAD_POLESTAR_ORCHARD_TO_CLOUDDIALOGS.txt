@@ -1,0 +1,22 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard
+ACTIVEDAYS=SMTWTFS
+ACTIVESTARTTIME=00:05
+ACTIVEENDTIME=23:55
+TIMER=60
+DESCRIPTION=Update Orchard
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\ORCHARD_TO_CONTRACTOR\
+$$
+//
+// 
+//
+
+C:\ManifestSoftware\TEST\ControlFiles\POLESTAR_ORCHARD_TO_CONTRACTOR\IFCSendJobToContractorBatch.txt()
+
+C:\ManifestSoftware\TEST\ControlFiles\POLESTAR_ORCHARD_TO_CONTRACTOR\IFCSendCancelToContractorBatch.txt()
+
+C:\ManifestSoftware\TEST\ControlFiles\POLESTAR_ORCHARD_TO_CONTRACTOR\IFCSendJobToContractorRETRY.txt()
+
+C:\ManifestSoftware\TEST\ControlFiles\POLESTAR_ORCHARD_TO_CONTRACTOR\IFCSendCancelToContractorRETRY.txt()

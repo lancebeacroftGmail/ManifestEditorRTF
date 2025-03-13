@@ -1,0 +1,22 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal Command
+FORMAT=TEXTFILE
+DESCRIPTION=Write text file
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,Path to binary file$$
+$$ACTIONIFEXISTS,nvarchar(10),,,,Full Date and Time$$
+$$DATETIME,nvarchar(10),,,,$$
+$$LOGINFO,MEMO,,,,$$
+$$ERRCODE,nvarchar(10),,,,$$
+$$
+
+$$DATETIME,nvarchar(10),,,,$$
+$$LOGINFO,MEMO,,,,$$
+$$ERRCODE,nvarchar(10),,,,$$
+* * * * * * * * * *
+

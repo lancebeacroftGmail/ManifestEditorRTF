@@ -1,0 +1,16 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal command
+FORMAT=SET
+DESCRIPTION=Set a variable
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$VALUE,MEMO,,,,OK or FAIL$$
+PARAMETERS=
+$$ACTION,nvarchar(100),,,,ACTION$$
+$$IN1,nvarchar(100),,,,IN$$
+$$IN2,nvarchar(100),,,,IN$$
+$$IN3,nvarchar(100),,,,IN$$
+$$
+$$IN1,nvarchar(100),,,,IN$$$$IN2,nvarchar(100),,,,IN$$$$IN3,nvarchar(100),,,,IN$$

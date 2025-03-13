@@ -1,0 +1,37 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Insert the tenants to the Wrap table
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.ContractorCode,nvarchar(10),,UDCValue,,$$
+$$HEADER.Contractor,nvarchar(10),,Contractor_Name,,$$
+$$HEADER.ContractorTel,nvarchar(10),,Contractor_Phone,,$$
+$$HEADER.ContractorURL,nvarchar(10),,Contractor_Web,,$$
+$$HEADER.ContractorEmail,nvarchar(10),,Contractor_Email,,$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$PropertyID,nvarchar(100),,,,$$
+$$
+
+SELECT UDC.[OISPropertyID]
+      ,UDC.[UDCValue]
+      ,GC.[Contractor_Name]
+      ,GC.[Contractor_Phone]
+      ,GC.[Contractor_Email]
+      ,GC.[Contractor_Web]
+FROM [dbo].[OISUDC] UDC
+INNER JOIN [dbo].[OPV_Gas_Contractors] GC
+   ON UDC.[UDCValue] COLLATE DATABASE_DEFAULT = GC.[UDC_Code] COLLATE DATABASE_DEFAULT
+INNER JOIN [dbo].[OPV_Property_Region] R
+   ON R.pr_seq_no = UDC.[OISPropertyID]
+where UDC.[OISPropertyID] = $$PropertyID,nvarchar(100),,,,$$
+  and UDC.[UDCEntity] = 'PROPERTY'
+  and UDC.[UDCTypeCode] = 'HEATCO'
+  and GC.Geo_Region = R.geo_region

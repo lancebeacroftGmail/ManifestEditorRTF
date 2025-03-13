@@ -1,0 +1,73 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Merge tenant comms for this person
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$SQLTIMEOUTSECS,nvarchar(100),,,,SQL Timeout optional$$
+$$PERSONREF,nvarchar(100),,,,$$
+$$
+
+MERGE OISTenantCommunications SQLT
+USING 
+(
+select * from openquery(ORCHHMS,
+'
+select DISTINCT 
+per.num,
+acommstyp.ID as TypeID,
+per.ttl,
+per.fnam,
+per.snam,
+aCommsEntity."acomms_ID",
+acommstyp.Name,
+acomms.commsdata
+FROM 
+pub.per
+LEFT JOIN PUB."aCommsEntity" ON per."num"=aCommsEntity.entityinstid
+LEFT JOIN PUB.aCommsTyp ON acommsentity.acommstyp_id_use = acommstyp.ID
+LEFT JOIN PUB.aComms ON acommsentity.acomms_id = acomms.ID
+WHERE aComms_ID is not null
+AND char_length(CommsData)>0
+AND EntityTyp_ID = 1
+and num = $$PERSONREF,nvarchar(100),,,,$$
+'
+)
+) 
+AS OIS
+ON SQLT.OISTenantID = OIS.[num]
+AND SQLT.CommsEntityID = OIS.[acomms_ID]
+AND SQLT.CommsMethodID = OIS.[TYPEID]
+WHEN MATCHED THEN 
+-- Matched so UPDATE
+UPDATE SET 
+       [CommsMethod]=OIS.[name]
+      ,[CommsDetails]=OIS.[commsdata]
+WHEN NOT MATCHED BY TARGET THEN
+-- Not matched so INSERT
+INSERT 
+(
+       OISTenantID
+      ,[CommsEntityID]
+      ,[CommsMethodID]
+      ,[CommsMethod]
+      ,[CommsDetails]
+)
+VALUES 
+(
+OIS.[num],
+OIS.acomms_ID,
+OIS.[TYPEID],
+OIS.[name],
+OIS.[commsdata])
+WHEN NOT MATCHED BY SOURCE AND OISTenantID = '$$PERSONREF,nvarchar(100),,,,$$' THEN
+DELETE;
+

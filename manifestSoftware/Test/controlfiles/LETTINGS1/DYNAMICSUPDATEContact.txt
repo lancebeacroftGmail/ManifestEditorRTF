@@ -1,0 +1,66 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=UA
+FORMAT=DYNAMICS
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$RESPONSE,nvarchar(100),,,,$$
+
+PARAMETERS=
+$$CRMCLIENTID,nvarchar(100),,,,$$
+$$CRMDOMAIN,nvarchar(100),,,,$$
+$$CRMUSER,nvarchar(100),,,,$$
+$$CRMPASSWORD,nvarchar(100),,,BLAZEAES,$$
+$$CRMSERVICEURL,nvarchar(100),,,,$$
+$$CRMENTITY,nvarchar(100),,,,$$
+$$CRMACTION,nvarchar(100),,,,$$
+$$CRMGUID,nvarchar(100),,,,$$
+$$Propno,nvarchar(100),,,,$$
+$$Personno,nvarchar(100),,,,$$
+$$Tenure,nvarchar(100),,,,$$
+$$Contactno,nvarchar(100),,,,$$
+$$FirstName,nvarchar(100),,,,$$
+$$LastName,nvarchar(100),,,,$$
+$$NINO,nvarchar(100),,,,$$
+$$DOB,nvarchar(100),,,,$$
+$$EMAIL,nvarchar(100),,,,$$
+$$MobTel,nvarchar(100),,,,$$
+$$MobTel2,nvarchar(100),,,,$$
+$$HomeTel,nvarchar(100),,,,$$
+$$Daytel,nvarchar(100),,,,$$
+$$Language,nvarchar(100),,,,$$
+$$Ethnicity,nvarchar(100),,,,$$
+$$Religion,nvarchar(100),,,,$$
+$$Addr1,nvarchar(100),,,,$$
+$$Addr2,nvarchar(100),,,,$$
+$$Addr3,nvarchar(100),,,,$$
+$$Area,nvarchar(100),,,,$$
+$$Postcode,nvarchar(100),,,,$$
+$$IncomeOfficer,nvarchar(100),,,,$$
+$$CustomerType,nvarchar(100),,,,$$
+$$
+{
+	"gcs_propno": "$$Propno,nvarchar(100),,,,$$",
+	"gcs_personocc": "$$Personno,nvarchar(100),,,,$$",
+	"gcs_tenuredescription": "$$Tenure,nvarchar(100),,,,$$",
+	"gcs_archousepersonnum": "$$Contactno,nvarchar(100),,,,$$",
+	"gcs_uid": "$$Contactno,nvarchar(100),,,,$$",
+	"firstname": "$$FirstName,nvarchar(100),,,,$$",
+	"lastname": "$$LastName,nvarchar(100),,,,$$",
+	"gcs_ninumber": "$$NINO,nvarchar(100),,,,$$",
+	"gcs_dob": "$$DOB,nvarchar(100),,,,$$",
+	"emailaddress1": "$$EMAIL,nvarchar(100),,,,$$",
+	"mobilephone": "$$MobTel,nvarchar(100),,,,$$",
+	"gcs_mobtel2": "$$MobTel2,nvarchar(100),,,,$$",
+	"telephone2": "$$HomeTel,nvarchar(100),,,,$$",
+	"gcs_daytel": "$$Daytel,nvarchar(100),,,,$$",
+	"address1_line1": "$$Addr1,nvarchar(100),,,,$$",
+	"address1_line2": "$$Addr2,nvarchar(100),,,,$$",
+	"address1_line3": "$$Addr3,nvarchar(100),,,,$$",
+	"gcs_area": "$$Area,nvarchar(100),,,,$$",
+	"address1_postalcode": "$$Postcode,nvarchar(100),,,,$$",
+	"gcs_incomeofficerid@odata.bind":"/systemusers($$IncomeOfficer,nvarchar(100),,,,$$)",
+	"gcs_contacttype": $$CustomerType,nvarchar(100),,,,$$
+}

@@ -1,0 +1,286 @@
+<MUARTParameters>
+
+<ManifestDB>
+	<SQLInstance>ManifestDB.shtest.local</SQLInstance>
+	<SQLDatabase>ManifestLive</SQLDatabase>
+	<SQLUser>manifest</SQLUser>
+	<SQLPassword>go1glqQspCgWFZ4+43FRwA==</SQLPassword>
+	<CXDatabase>CustomerExperienceDB</CXDatabase>
+	<CXView>CustomerExperienceViews</CXView>
+	<SQLLinkedServer>ARCHOUSELIVE</SQLLinkedServer>
+</ManifestDB>
+
+<Notifications>
+	<ExchangeURL>https://outlook.office365.com/EWS/Exchange.asmx</ExchangeURL>
+	<ExchangeEmail>UACloud-TEST@manifest-software.co.uk</ExchangeEmail>
+	<EmailNotificationLimit>1000</EmailNotificationLimit>
+	<OAUTHAccount>UACloud-TEST</OAUTHAccount>
+	<OAUTHAppID>TfRDLc0yXA2cSz17Ft3/8u3rZDqDLSYAeKOTpsM9xaXAuROV+ADHQ3MzPPzpYgoJ</OAUTHAppID>
+	<OAUTHSecretValue>ln1cSizwOLh2rY6Yh/uRYo9z47bYgbeKTk6eM440ggrwYFC9vBLL1PEk0FNkAfEo</OAUTHSecretValue>
+	<OAUTHTenancyID>J+9jS6JE6AFosihPinSXeIY+XdMzl6c8HWa8tWHjXowtFh6a5tFY2dWOkTTlxHZM</OAUTHTenancyID>
+</Notifications>
+
+<Manifest>
+	<OAuthAppID>FE+edbsrd6RUhokREPgJ3bCQqG4rfYrYigLav/49M0HHuAoiBXcWFFSGZoZxUFkf</OAuthAppID>
+	<OAuthClientSecret>4pG/7umYrvqIQb2v2ivPBFXMKfJS6SlnkqOVgeMOLDtdlU+lDsBQSa8/12vyx7Cv</OAuthClientSecret>
+	<OAuthTenantID>J+9jS6JE6AFosihPinSXeIY+XdMzl6c8HWa8tWHjXowtFh6a5tFY2dWOkTTlxHZM</OAuthTenantID>
+</Manifest>
+
+<OptivoDynamics>
+<DynamicsUser>DynamicsIntegration3@optivo.org.uk</DynamicsUser>
+<DynamicsPassword>l459SVMOLcZvqpt+Z9/kIa4fnT5iBwC+uQ/2jR0+sNI=</DynamicsPassword>
+	<DynamicsTokenId>51f81489-12ee-4a9e-aaae-a2591f45987d</DynamicsTokenId>
+	<DynamicsEndpoint>https://polestar-dev.api.crm11.dynamics.com/api/data/v9.2/</DynamicsEndpoint>
+	<DynamicsClientID>41932b8b-e883-48e1-b1a5-7459fcb69d3d</DynamicsClientID>
+	<DynamicsTenantID>52d8e6d2-ff07-4a13-8c51-3cf667c0caa4</DynamicsTenantID>
+	
+	<DynamicsSecret>~l18Q~X11aWVFR4fkDVaBCB1PgbS~nktMoO3OcY1</DynamicsSecret>
+	
+<!--<DynamicsSecret>hA_8Q~S3TenCQXFo1b5UzyhzERwNN2FLzRrISacI</DynamicsSecret> Original, used until 28/9/2023-->
+	<DynamicsScope>https://polestar-dev.api.crm11.dynamics.com/.default</DynamicsScope>
+	<IntegrationReportFolder>C:\ManifestSoftware\TEST\DataFiles\Dynamics\Reports\</IntegrationReportFolder>
+	<ErrorEmailList>kevin.may@southernhousing.org.uk</ErrorEmailList>
+	<!--<PreferAnnotations>odata.include-annotations="*"</PreferAnnotations>-->
+	<PreferAnnotations></PreferAnnotations>
+
+</OptivoDynamics>
+
+<Dynamics365>
+	<BaseURL>polestar-dev.api.crm11.dynamics.com</BaseURL>
+	<Database>polestar-dev</Database>
+	<User>ServiceD365@optivo.org.uk</User>
+	<Password>L3FF0G1uMVy4OiD4PO+wczIC3qA/Hz5lDTwvdEh+0xo=</Password>
+	<AuthenticationType>Active Directory Password</AuthenticationType>
+	<RetryCount>5</RetryCount>
+	<RetryDelay>2</RetryDelay>
+	<RetryAllowError>N</RetryAllowError>
+</Dynamics365>
+
+<Wrap>
+	<SMSUrl>https://www.2sms.com/WebServices/2.2/Simple/Message.asmx</SMSUrl>
+	<SMSUsername>1sttouch</SMSUsername>
+	<SMSPassword>Welcome01</SMSPassword>
+	<BitLyAPIURL>https://api-ssl.bitly.com/v4/bitlinks</BitLyAPIURL>
+	<BitLyBearerToken>Bearer 5d9c335df9633a4871c3d53169b7e631da1a34ac</BitLyBearerToken>
+	<BitLyWrapURL>https://wrap.co/wraps/3c116b35-cec2-4526-8bde-361bb4902fe6</BitLyWrapURL>
+	<WrapAPIURL>https://api.wrap.co/api/wraps/06c93efa-9c28-4172-963a-509fdbcbabfc/personalize/v2</WrapAPIURL>
+	<WrapAPIURLNoGas>https://wrapi.wrap.co/api/wraps/e0d924be-6a07-48f8-a928-fa646cc97a26/personalize/v2</WrapAPIURLNoGas>
+	<WrapBearerToken>Bearer 25c1cc4b652c57c9578092f3b0be5a429e66a22698c0de428daa43603b7e351a</WrapBearerToken>
+</Wrap>
+
+<FLS>
+	<URL>https://axis-test.vt-fls.com:443/VTS/WS</URL>
+	<Username>INT.OPTIVO</Username>
+	<Password>Fls0pT1vo</Password>
+	<NewJobPickupDir>C:\AxisIntegrator\OrderNew\</NewJobPickupDir>
+	<NewJobArchiveDir>C:\ManifestSoftware\TEST\DataFiles\FLS\ProcessedNewJobs\</NewJobArchiveDir>
+	<NewJobSOAPAction>https://axis-test.vt-fls.com:443/VTS/WS/Call</NewJobSOAPAction>
+	<CancelJobPickupDir>C:\AxisIntegrator\OrderDelete\</CancelJobPickupDir>
+	<CancelJobArchiveDir>C:\ManifestSoftware\TEST\DataFiles\FLS\ProcessedCancelledJobs\</CancelJobArchiveDir>
+	<AppointmentsSOAPAction>https://axis-test.vt-fls.com:443/VTS/WS/GetSchedule</AppointmentsSOAPAction>
+</FLS>
+
+<Orchard>
+	<EDRWebServiceUser>ManiHMall</EDRWebServiceUser>
+	<OISWSPassword>manifest01</OISWSPassword>
+	<EDRWebServicePassword>bWFuaWZlc3QwMQ==</EDRWebServicePassword>
+	<EDRAddEventURL>http://tst-orc-t01:38200/orchardWS/services/EDRMUAET_REPAIR_INT_4Service</EDRAddEventURL>
+	<EDRAddVoidEventURL>http://devorchardtest:38200/orchardWS/services/EDRPlusVOID_EVENTService</EDRAddVoidEventURL>
+	<EDRAddVoidEventNotesURL>http://devorchardtest:38200/orchardWS/services/EDRPlusVOID_NOTESService</EDRAddVoidEventNotesURL>
+	<EDROfficerCode>MANIH</EDROfficerCode>
+	<ApptClass>OPT</ApptClass>
+	<ApptCode>50</ApptCode>
+	<PersonApplicationURL>http://tst-orc-t01:38200/orchardWS/services/EDRMUA_PERSON_APPLService</PersonApplicationURL>
+	<CreateTenancyURL>http://tst-orc-t01:38200/orchardWS/services/EDRMUA_CREATE_TENANCYService</CreateTenancyURL>
+	<PersonServiceURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusPERSONService</PersonServiceURL>
+	<AddJobURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusJOBService</AddJobURL>
+	<JobSORURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusJOBDETService</JobSORURL>
+	<JobPadURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusJOBPADService</JobPadURL>
+	<JobTextURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusJOBTEXTService</JobTextURL>
+	<AddBlockURL>http://tst-orc-t01:38200/orchardWS/services/EDROPTEN_PROP_HO_IN_BLOCKService</AddBlockURL>
+	<AddChargesURL>http://tst-orc-t01:38200/orchardWS/services/EDROPTEN_PROP_HO_IN_CHARGESService</AddChargesURL>
+	<AddCOREURL>http://tst-orc-t01:38200/orchardWS/services/EDROPTEN_PROP_HO_IN_COREService</AddCOREURL>
+	<AddPropertyURL>http://tst-orc-t01:38200/orchardWS/services/EDROPTEN_PROP_HO_IN_UNITService</AddPropertyURL>
+	<AddScheme>http://tst-orc-t01:38200/orchardWS/services/EDROPTEN_PROP_HO_IN_SCHEMEService</AddScheme>
+	<AddPropertyPlusURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusPROPERTYService</AddPropertyPlusURL>
+	<AddPropertyUDCURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusPROPERTY_UDCService</AddPropertyUDCURL>
+	<AddTncyUDCURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusTENANCY_UDCService</AddTncyUDCURL>
+	<UCPaymentURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusRENT_UNI_CREDIT_CLAIMService</UCPaymentURL>
+	<VaryJobURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusJOBVARService</VaryJobURL>
+	<HHArrearsURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusARREARS_HOUSEHOLDService</HHArrearsURL>
+	<ArrearsNotesURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusARREARS_NOTEPADService</ArrearsNotesURL>
+	<CorresAddrURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusCORADDRService</CorresAddrURL>
+	<FWDAddrURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusFORWARDINGADDRESSService</FWDAddrURL>
+	<PerContactURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusPER_CONTACTService</PerContactURL>
+	<PerNotepadURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusPERSONNOTEPADService</PerNotepadURL>
+	<PersonUDCURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusPERSON_UDCService</PersonUDCURL>
+	<PropNotepadURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusPROPERTYNOTEPADService</PropNotepadURL>
+	<ApptsURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusAPPOINTMENTService</ApptsURL>
+	<PreInspURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusJOB_INSPECTIONService</PreInspURL>
+	<VoidURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusVOIDService</VoidURL>
+	<RentLedgerURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusRENT_LEDGERService</RentLedgerURL>
+    <RentSubAccountURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusRENT_SUBACCOUNTService</RentSubAccountURL>
+	<TenancyURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusTENANCYService</TenancyURL>
+	<RentBatchHeader>http://tst-orc-t01:38200/orchardWS/services/LIBMSSLF_CREATE_RNTBATCHHDRV2Service</RentBatchHeader>
+	<AddRentTransaction>http://tst-orc-t01:38200/orchardWS/services/LIBMSSLF_CREATE_RNTBATCHDETV4Service</AddRentTransaction>
+	<AuthoriseRentBatch>http://tst-orc-t01:38200/orchardWS/services/LIBMSSLF_AUTHPOST_RNTBATCHHDRService</AuthoriseRentBatch>
+	<AddArrearsActionURL>http://tst-orc-t01:38200/orchardWS/services/EDRPlusARREARS_ACTIONService</AddArrearsActionURL>
+	<RentBatchHeaderv2>http://tst-orc-t01:38200/orchardWS/services/EDRMANEN_HEADER_TRANS_PROService</RentBatchHeaderv2>
+	<AddRentTransactionv2>http://tst-orc-t01:38200/orchardWS/services/EDRMANEN_TRANSACTION_PROCESSINGService</AddRentTransactionv2>
+	<OrchardPropertyNameCSVPath>C:\ManifestSoftware\TEST\DataFiles\MRI\PropertyName.csv</OrchardPropertyNameCSVPath>
+</Orchard>
+
+<CRM>
+	<MoneyConfidenceURL>http://CRM365:8085/api/gcs_financialdetail</MoneyConfidenceURL>
+	<MoneyConfidenceToken>Basic dGVzdDpwYXNz</MoneyConfidenceToken>
+	<CRMURL>https://crm.polestar-cdn.co.uk/Live/</CRMURL>
+	<CreateApptURL>http://CRM365:8085/api/appointment</CreateApptURL>
+	<CRMAuthToken>Basic T3B0aXZvV1M6Qmx1ZSBIb3VzZSBDdXR0bGVmaXNo</CRMAuthToken>
+	<CRMIncidentURL>http://CRM365:8085/api/incident</CRMIncidentURL>
+	<CRMAccountCommsURL>http://CRM365:8085/api/opt_myaccount</CRMAccountCommsURL>
+	<CRMVoucherReqURL>http://CRM365:8085/api/gcs_voucherrequest</CRMVoucherReqURL>
+	<CRMMoneyConfURL>http://CRM365:8085/api/gcs_financialdetail</CRMMoneyConfURL>
+	<CRM1stTouchURL>http://CRM365.nebula.dev:8080/1stTouchCrm.svc</CRM1stTouchURL>
+	<FTouchUpdContURL>http://www.goldcrestsolutions.co.uk/Amicus/FirstTouchCRMUpdate/1/FirstTouchCrmService/updateContact</FTouchUpdContURL>
+	<FTouchCloseTaskURL>http://www.goldcrestsolutions.co.uk/Amicus/FirstTouchCRMUpdate/1/FirstTouchCrmService/closeTask</FTouchCloseTaskURL>
+	<CRMCreateTaskURL>http://www.goldcrestsolutions.co.uk/Amicus/FirstTouchCRMUpdate/1/FirstTouchCrmService/createTask</CRMCreateTaskURL>
+	<CRMAssignQueueURL>http://www.goldcrestsolutions.co.uk/Amicus/FirstTouchCRMUpdate/1/FirstTouchCrmService/assignQueue</CRMAssignQueueURL>
+	<CRMSurveyRespURL>http://CRM365:8085/api/gcs_survey_responses</CRMSurveyRespURL>
+	<TCNoAccessURL>http://devcrm16.nebula.dev:8080/1stTouchCrm.svc</TCNoAccessURL>
+	<TCNoAccessSOAPAction>http://www.goldcrestsolutions.co.uk/Amicus/FirstTouchCRMUpdate/1/FirstTouchCrmService/createUnderOccupying</TCNoAccessSOAPAction>
+	<!--<TCNoAccessCaseID>1B71F1FB-DB7D-E711-80C4-0050568552FA</TCNoAccessCaseID>-->
+	<TCNoAccessCaseID>911EEC48-65C7-EB11-A829-0050569C2CF9</TCNoAccessCaseID>
+	<CRMAnnotationURL>http://CRM365:8085/api/annotation</CRMAnnotationURL>	
+</CRM>
+	
+<Lettings>
+	<SQLInstance>LettingsDB</SQLInstance>
+	<SQLDB>Lettings_Application_DW</SQLDB>
+	<LogFile>C:\ManifestSoftware\LETTINGS\Temp\Logfile_IFCAddNewApp.txt</LogFile>
+	<TempSOAPLog>C:\ManifestSoftware\LETTINGS\Temp\TempSoap.txt</TempSOAPLog>
+	<TempSOAPMain>C:\ManifestSoftware\LETTINGS\Temp\TempSoapMAIN.txt</TempSOAPMain>
+	<TempSOAPJoint>C:\ManifestSoftware\LETTINGS\Temp\TempSoapJOINT.txt</TempSOAPJoint>
+	<TempSOAPTenancy>C:\ManifestSoftware\LETTINGS\Temp\TempSoapTenancy.txt</TempSOAPTenancy>
+</Lettings>
+
+<TrueCompliance>
+	<Username>support@manifest-software.co.uk</Username>
+	<Password>qXbWLrVv5YnMsAKA</Password>
+	<TokenURL>https://staging-api.truecomp.co.uk/public/authenticate</TokenURL>
+	<PropertiesURL>https://staging-api.truecomp.co.uk/public/unit</PropertiesURL>
+	<AddComplianceStreamURL>https://staging-api.truecomp.co.uk/public/compliance-stream/attach</AddComplianceStreamURL>
+	<RemoveComplianceStreamURL>https://staging-api.truecomp.co.uk/public/compliance-stream/detach</RemoveComplianceStreamURL>
+	<CertificatesURL>https://staging-api.truecomp.co.uk/public/certificate</CertificatesURL>
+	<ErrorEmailList>nick@manifest-software.co.uk; tc_api@optivo.org.uk; kevin.may@southernhousing.org.uk</ErrorEmailList>
+	<SwordfishDropDir>\\filer01\interfaces\TrueCompliance\In\Certificates\</SwordfishDropDir>
+	<ErrorNotificationLimit>10</ErrorNotificationLimit>
+</TrueCompliance>
+
+<Apex>
+	<SIMATTNORFile>C:\ManifestSoftware\TEST\DataFiles\Apex\SIMATTNOR\True_compliance_SIM_attributes.csv</SIMATTNORFile>
+	<ApexSIMATTNORFolder>\\apexshares\ApexData\Live\CHTGSERV\</ApexSIMATTNORFolder>
+	<SIMATTNORArchive>C:\ManifestSoftware\TEST\DataFiles\Apex\SIMATTNOR\</SIMATTNORArchive>
+	<SIMJOBNONFile>C:\ManifestSoftware\TEST\DataFiles\Apex\SIMJOBNON\True_compliance_SIM_jobs.csv</SIMJOBNONFile>
+	<ApexSIMJOBNONFolder>\\apexshares\ApexData\Live\CHTGSERV\</ApexSIMJOBNONFolder>
+	<SIMJOBNONArchive>C:\ManifestSoftware\TEST\DataFiles\Apex\SIMJOBNON\</SIMJOBNONArchive>
+	<SIMINFNONFile>C:\ManifestSoftware\TEST\DataFiles\Apex\SIMINFNON\True_compliance_SIM_info.csv</SIMINFNONFile>
+	<ApexSIMINFNONFolder>\\apexshares\ApexData\Live\CHTGSERV\</ApexSIMINFNONFolder>
+	<SIMINFNONArchive>C:\ManifestSoftware\TEST\DataFiles\Apex\SIMINFNON\</SIMINFNONArchive>
+	<SIMENTNONFile>C:\ManifestSoftware\TEST\DataFiles\Apex\SIMENTNON\True_compliance_noaccess.csv</SIMENTNONFile>
+	<ApexSIMENTNONFolder>\\apexshares\ApexData\Live\CHTGSERV\</ApexSIMENTNONFolder>
+	<SIMENTNONArchive>C:\ManifestSoftware\TEST\DataFiles\Apex\SIMENTNON\</SIMENTNONArchive>
+</Apex>
+
+<PayPoint>
+	<FTPServer>51.140.249.103</FTPServer>
+	<FTPUsername>MSSOptivo</FTPUsername>
+	<FTPPassword>Password!</FTPPassword>
+	<FTPPort>22</FTPPort>
+	<FTPRemoteDir>/*.*</FTPRemoteDir>
+	<FTPLocalDir>C:\ManifestSoftware\TEST\DataFiles\PayPoint\EODInbound\</FTPLocalDir>
+	<ErrorEmailList>Will.Brimble@optivo.org.uk; Ben.Wood@optivo.org.uk; matt.toynbee@optivo.org.uk; kevin.may@optivo.org.uk; Claire.Brooks@optivo.org.uk</ErrorEmailList>
+	<EODProcessingFolder>C:\ManifestSoftware\TEST\DataFiles\PayPoint\EODInbound\*.*</EODProcessingFolder>
+	<EODArchiveFolder>C:\ManifestSoftware\TEST\DataFiles\PayPoint\EODInbound\Archive</EODArchiveFolder>
+	<PayByLinkURL>https://multipay-sandbox.azure-api.net/paybylink/v1/request-for-payment</PayByLinkURL>
+	<PayByLinkSubscriptionKey>a0658bd2b99b407485d067bb64fa263e</PayByLinkSubscriptionKey>
+	<PayByLinkAccountType>BillPay</PayByLinkAccountType>
+	<PayByLinkRequestReason>Late payment</PayByLinkRequestReason>
+	<PayByLinkSMSTemplateID>74460440-3832-4a13-adf9-1c541d7af520</PayByLinkSMSTemplateID>
+	<LargeTransactionAmount>5000.00</LargeTransactionAmount>
+	<EODErrorReport>matt.toynbee@optivo.org.uk; peter.harling@optivo.org.uk;Will.Brimble@optivo.org.uk; Ben.Wood@optivo.org.uk; Claire.Brooks@optivo.org.uk; Jo.Phelps@optivo.org.uk</EODErrorReport>
+	<LargeTransactionEmail>mattt@blaze-is.com; Will.Brimble@optivo.org.uk; Ben.Wood@optivo.org.uk; matt.toynbee@optivo.org.uk; kevin.may@optivo.org.uk; Claire.Brooks@optivo.org.uk; Jo.Phelps@optivo.org.uk</LargeTransactionEmail>
+	<IncomeTeamMailbox>Will.Brimble@optivo.org.uk; Ben.Wood@optivo.org.uk; matt.toynbee@optivo.org.uk; kevin.may@optivo.org.uk; Claire.Brooks@optivo.org.uk; Jo.Phelps@optivo.org.uk</IncomeTeamMailbox>
+	<CancelledDDRep>C:\ManifestSoftware\TEST\DataFiles\PayPoint\WeeklyCancelledDDReport\WeeklyCancelledDDReport.xlsx</CancelledDDRep>
+	<CancelledDDRepArchive>C:\ManifestSoftware\TEST\DataFiles\PayPoint\WeeklyCancelledDDReport\</CancelledDDRepArchive>
+	<NewDDInstructionArrearsActionCode>DD</NewDDInstructionArrearsActionCode>
+	<DDAmendInstructionArrearsActionCode>DDS</DDAmendInstructionArrearsActionCode>
+	<DDCancelledArrearsActionCode>DDC</DDCancelledArrearsActionCode>
+	<DDFailedArrearsActionCode>DDI</DDFailedArrearsActionCode>
+	<IndemnityClaimReceivedArrearsActionCode>INCR</IndemnityClaimReceivedArrearsActionCode>
+	<IndemnityClaimCancelledArrearsActionCode>INCC</IndemnityClaimCancelledArrearsActionCode>
+	<NewDDType>'instructionCreated'</NewDDType>
+	<AmendedDDType>'instructionSuspended','instructionAmended','instructionReinstated','instructionResumed','scheduleAmended','InstructionInvalidated'</AmendedDDType>
+	<AmendedDDEODType>'instructionSuspended','instructionAmended','instructionReinstated','instructionResumed','scheduleAmended','InstructionInvalidated'</AmendedDDEODType>
+	<DDCancelledType>'instructionCancelled'</DDCancelledType>
+	<DDEODCancelledType>'InstructionCancelled'</DDEODCancelledType>
+	<IndemnityClaimCancelled>'indemnityClaimCancelled'</IndemnityClaimCancelled>
+	<IndemnityClaimEODCancelled>'IndemnityClaimCancelled'</IndemnityClaimEODCancelled>
+	<IndemnityClaimReceived>'indemnityClaimReceived'</IndemnityClaimReceived>
+	<IndemnityClaimEODReceived>'IndemnityClaimReceived'</IndemnityClaimEODReceived>
+	<DDPaymentCollectedType>'paymentCollected'</DDPaymentCollectedType>
+	<DDEODPaymentCollectedType>'PaymentCollected'</DDEODPaymentCollectedType>
+	<PaymentRejectedType>'paymentRejected'</PaymentRejectedType>
+	<PaymentRejectedEODType>'PaymentRejected'</PaymentRejectedEODType>
+	<InstructionCreated>'instructionCreated'</InstructionCreated>
+	<InstructionCreatedEOD>'InstructionCreated'</InstructionCreatedEOD>
+	<FailedDDTransactionCode>DDR4</FailedDDTransactionCode>
+	<FailedDDTransactionCodePayerDeceased>DDR3</FailedDDTransactionCodePayerDeceased>
+	<MissingEODTemplate>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\Template\missingEODfiles.xlsx</MissingEODTemplate>
+	<MissingEODProcessing>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\missingEODfiles.xlsx</MissingEODProcessing>
+	<MissingEODProcessingFolder>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\</MissingEODProcessingFolder>
+	<MissingEODArchive>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\ArchiveSent\</MissingEODArchive>	
+	<MissingEODInstructionTemplate>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\Template\missingEODDDinstructionfiles.xlsx</MissingEODInstructionTemplate>
+	<MissingEODInstructionProcessing>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\missingEODDDinstructionfiles.xlsx</MissingEODInstructionProcessing>
+	<MissingEODInstructionProcessingFolder>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\</MissingEODInstructionProcessingFolder>
+	<MissingEODInstructionArchive>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\ArchiveSent\</MissingEODInstructionArchive>
+	<MissingEODPaymentTemplate>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\Template\missingEODDDpaymentfiles.xlsx</MissingEODPaymentTemplate>
+	<MissingEODPaymentProcessing>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\missingEODDDpaymentfiles.xlsx</MissingEODPaymentProcessing>
+	<MissingEODPaymentProcessingFolder>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\</MissingEODPaymentProcessingFolder>
+	<MissingEODPaymentArchive>C:\ManifestSoftware\TEST\DataFiles\PayPoint\MissingEODTrans\ArchiveSent\</MissingEODPaymentArchive>	
+	<EODZipDirectory>C:\ManifestSoftware\TEST\DataFiles\PayPoint\EODInbound\Zips\</EODZipDirectory>
+	<EODZipPassword>HKLQ3UbhIF0Fw2rdB+qVzpPPCynuwO3QUmgBMShyC7d8mwFoSQI36Rygnoz7oYx4</EODZipPassword>
+	<EODArchiveFileCheck>C:\ManifestSoftware\TEST\DataFiles\PayPoint\EODInbound\Archive\*.*</EODArchiveFileCheck>
+	<PayPointIIN>98260273</PayPointIIN>
+	<PayPointPaymentType>01</PayPointPaymentType>
+	<PayPointBarcodeCodeType>CODE128</PayPointBarcodeCodeType>
+	<BarcodeOutput>C:\ManifestSoftware\TEST\DataFiles\PAYPOINTBARCODE\Output\</BarcodeOutput>
+	<BarcodeTemplateFolder>C:\ManifestSoftware\TEST\DataFiles\PAYPOINTBARCODE\Template</BarcodeTemplateFolder>
+	<PaymentCardTemplate>PaymentCard</PaymentCardTemplate>
+	<PayPointEODCopyFolder>\\S19CSDC1602045\FileStore\Finance\Transactions\Rents\Paypoint</PayPointEODCopyFolder>
+	<!--Suspense ten ref TBC-->
+	<SuspenseTenancyRef>209441</SuspenseTenancyRef>
+	<TodaysErrorFile>C:\ManifestSoftware\TEST\DataFiles\PayPoint\TodaysErrors\TodaysPPErrors.csv</TodaysErrorFile>
+	<TodaysErrorArchive>C:\ManifestSoftware\TEST\DataFiles\PayPoint\TodaysErrors\</TodaysErrorArchive>
+</PayPoint>
+
+<DASH>
+	<StartThreadURL>https://amicusdev-self.achieveservice.com/api/startthread?apiKey=93ec58d4445420ad0361c0ae54a49dc41c65c6d23ce33842c6434847d128dfe7e6b0aad537e3b4b286bcfec3b23846b86970eb01d2a0b806c2194fe44f353344</StartThreadURL>
+	<StartThreadKey>93ec58d4445420ad0361c0ae54a49dc41c65c6d23ce33842c6434847d128dfe7e6b0aad537e3b4b286bcfec3b23846b86970eb01d2a0b806c2194fe44f353344</StartThreadKey>
+	<FillTaskURL>https://amicusdev-self.achieveservice.com/api/filltask?apiKey=a219ef55156d5ee568a15ecfd187ed836e68b031ebeacb2c1ed1f93fe00f3b326f364a6f29f6050b7006420981973680d80b241be5a2b1cda58007d977c78a45</FillTaskURL>
+	<FillTaskKey>a219ef55156d5ee568a15ecfd187ed836e68b031ebeacb2c1ed1f93fe00f3b326f364a6f29f6050b7006420981973680d80b241be5a2b1cda58007d977c78a45</FillTaskKey>
+	<XREFProcessID>AF-Process-a6692880-804f-4edf-ad8f-b3f480ae0bb8</XREFProcessID>
+	<XREFucrn>737727601</XREFucrn>
+</DASH>
+
+<MYACCOUNT>
+	<XREFDel_StartThreadURL>https://amicusdev-self.achieveservice.com/api/startthread/?apiKey=c457b78c114444c0324e263d91218ef073827b50aca229712a1003b8bf6a5d81a06f35f31e407547ae491b70d2fc9a3050015aac1d7e5eec5d7415293f584379</XREFDel_StartThreadURL>
+	<XREFDel_StartThreadKey>c457b78c114444c0324e263d91218ef073827b50aca229712a1003b8bf6a5d81a06f35f31e407547ae491b70d2fc9a3050015aac1d7e5eec5d7415293f584379</XREFDel_StartThreadKey>
+	<XREFDel_ProcessID>AF-Process-6d1b7d2a-5019-4d7d-bb15-2c0d815a9eda</XREFDel_ProcessID>
+	<XREFDel_UCRN>743195385</XREFDel_UCRN>
+	<XREFCreate_StartThreadURL>https://amicusdev-self.achieveservice.com/api/startthread?apiKey=6ab38be2123f7b27f2531a2629e29841c165ec2e61dcda8e44c55a8d4b215dd06d268ea5a67118eea4c3db0375a96e5bc91984432e09f1f091a9ccac1f24c003</XREFCreate_StartThreadURL>
+	<XREFCreate_StartThreadKey>6ab38be2123f7b27f2531a2629e29841c165ec2e61dcda8e44c55a8d4b215dd06d268ea5a67118eea4c3db0375a96e5bc91984432e09f1f091a9ccac1f24c003</XREFCreate_StartThreadKey>
+	<XREFCreate_ProcessID>AF-Process-db163306-bf87-47db-8802-527938c36baf</XREFCreate_ProcessID>
+	<XREFCreate_UCRN>743195385</XREFCreate_UCRN>
+</MYACCOUNT>
+
+</MUARTParameters>

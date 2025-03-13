@@ -1,0 +1,53 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=SMTWTFS
+ACTIVESTARTTIME=14:57
+ACTIVEENDTIME=14:58
+TIMER=3600
+DESCRIPTION=Download and process DD EOD files
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\PayPoint\
+$$
+
+//Download and process EOD files to SQL
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCDownloadEODFiles.txt()
+
+//Process DD EOD new DD instructions to Orchard
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCAddNewEODDDInstruction.txt()
+
+//DD EOD Instruction/ Schedule Updated
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEODDDUpdated.txt()
+
+//DD EOD Cancelled
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEODDDCancelled.txt()
+
+//Pre processing for EOD payments
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCDDEODEventTransactionsPreProcessing.txt()
+
+//Failed EOD DD collection to Orchard
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCFailedEODDDsToOrchard2.txt()
+
+//Process DD EOD payments to Orchard
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCDDEODPaymentsToOrchardBULK.txt()
+
+//DD EOD payments Suspesnse
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCDDEODPaymentsToOrchardBULKSUSPENSE.txt()
+
+//Post processing for EOD payments
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCDDEODEventTransactionsPostProcessing.txt()
+
+//Process DD EOD Indemnity claimed received to Orchard
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCDDEODIndemnityClaimReceived.txt()
+
+//Process DD EOD Indemnity claimed cancelled to Orchard
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCDDEODIndemnityClaimCancelled.txt()
+
+//Check for if we have a event record but no corresponding EOD file
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCProcessMissingEODTransactions.txt()
+
+//Zip and password protect all processed EOD files
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCZipArchivedEODFiles.txt()
+
+// Try to send EOD errors to Suspense Account
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCDDEODErrorsPaymentsToOrchardBULKSUSPENSE.txt()

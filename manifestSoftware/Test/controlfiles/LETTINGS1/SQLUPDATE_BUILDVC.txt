@@ -1,0 +1,285 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Download a table containing all ways of contacting each Tenant
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$
+
+
+TRUNCATE TABLE CRMOISVisualCues;
+
+INSERT INTO [dbo].[CRMOISVisualCues]
+           ([Per_num]
+           ,[Type]
+           ,[Code]
+           ,[Value]
+           ,[UDCnotes]
+           ,[Image]
+           ,[CRM_Name]
+           ,[CRM_Guid]
+           ,[updated_date]
+		   ,[UDCDesc])
+--UDC Comms Needs
+SELECT     
+OISPersonID as per_num,
+udctypedescription AS Type,
+udctypecode AS Code,
+UDCValue AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Comms Need' and CRM_OIS_Lookups.Type ='Visualcue'
+Where (udctypecode = 'COMM') AND (udcvalue in ('C5','C6','C7','C8','C10','C11','C12','C13','C14','C16'))
+
+UNION
+SELECT     
+OISPersonID as per_num,
+udctypedescription AS Type,
+udctypecode AS Code,
+UDCValue AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Comms Need' and CRM_OIS_Lookups.Type ='Visualcue'
+Where (udctypecode = 'POWATT')
+
+UNION --UDC Contact Warning
+SELECT     
+OISPersonID as per_num,
+udctypedescription AS Type,
+udctypecode AS Code,
+UDCValue AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Contact Warning' and CRM_OIS_Lookups.Type ='Visualcue'
+Where (udctypecode = 'COMM') AND (UDCValue in ('C1','C4','C18','C19'))
+
+UNION --UDC Personal Security
+SELECT     
+OISPersonID as per_num,
+udctypedescription AS Type,
+udctypecode AS Code,
+UDCValue AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Personal Security' and CRM_OIS_Lookups.Type ='Visualcue'
+Where (udctypecode = 'COMM') AND (UDCValue in ('C9'))
+
+UNION --UDC No visual cue
+SELECT     
+OISPersonID as per_num,
+udctypedescription AS Type,
+udctypecode AS Code,
+UDCValue AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Comms Need' and CRM_OIS_Lookups.Type ='Visualcue'
+Where (udctypecode = 'COMM') AND (UDCValue in ('C15'))
+
+UNION 
+
+SELECT     
+OISPersonID as per_num,
+'Vuln' AS Type,
+udctypecode AS Code,
+'Learning Difficulty' as [Value],
+'' as UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+null as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Support concern' and CRM_OIS_Lookups.Type ='Visualcue'
+WHERE UDCTypecdeDesc = 'Learning Difficulty'
+
+UNION 
+SELECT     
+OISPersonID as per_num,
+'Vuln' AS Type,
+udctypecode AS Code,
+UDCValue AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Sight difficulties' and CRM_OIS_Lookups.Type ='Visualcue'
+Where (udctypecode = 'DISAB') AND (UDCValue = 'A2')
+
+UNION 
+SELECT     
+OISPersonID as per_num,
+'Vuln' AS Type,
+udctypecode AS Code,
+'Hearing probs/Signer' as [Value],
+'' as UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,	 	 
+null as updated_date
+,[UDCTypecdeDesc]
+from OISUDC 
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Hearing Difficulties' and CRM_OIS_Lookups.Type ='Visualcue'
+where UDCTypecdeDesc = 'Hearing probs/Signer'
+
+UNION 
+
+SELECT     
+OISPersonID as per_num,
+'Vuln' AS Type,
+udctypecode AS Code,
+UDCValue AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Wheelchair' and CRM_OIS_Lookups.Type ='Visualcue'
+Where (udctypecode = 'DISAB') AND (UDCValue = 'A4')
+
+UNION
+SELECT     
+OISPersonID as per_num,
+'Vuln' AS Type,
+udctypecode AS Code,
+'Restricted Mobility' as [Value],
+'' as UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,	 	 
+null as updated_date
+,[UDCTypecdeDesc]
+from OISUDC 
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Poor Mobility' and CRM_OIS_Lookups.Type ='Visualcue'
+where UDCTypecdeDesc = 'Restricted Mobility'
+
+UNION
+SELECT
+OISPersonID as per_num,
+'Vuln' AS Type,
+udctypecode AS Code,
+'Level Access essentl' as [Value],
+'' as UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,	 	 
+null as updated_date
+,[UDCTypecdeDesc]
+from OISUDC 
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Poor Mobility' and CRM_OIS_Lookups.Type ='Visualcue'
+where UDCTypecdeDesc = 'Level Access essentl'
+
+UNION
+SELECT
+OISPersonID as per_num,
+'Vuln' AS Type,
+udctypecode AS Code,
+'Progressive illness' as [Value],
+'' as UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,	 	 
+null as updated_date
+,[UDCTypecdeDesc]
+from OISUDC 
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Welfare concern' and CRM_OIS_Lookups.Type ='Visualcue'
+where UDCTypecdeDesc = 'Progressive illness'
+
+UNION 
+SELECT
+OISPersonID as per_num,
+'Vuln' AS Type,
+udctypecode AS Code,
+'Other-see Comms need' as [Value],
+'' as UDCnotes,
+'' as [Image],
+'' As CRM_Name,
+'' as CRM_Guid,	 	 
+null as updated_date
+,[UDCTypecdeDesc]
+from OISUDC
+where UDCTypecdeDesc = 'Other-see Comms need'
+
+UNION --UDC Long Term Illness
+SELECT     
+OISPersonID as per_num,
+'Vuln' AS Type,
+udctypecode AS Code,
+UDCValue AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Welfare concern' and CRM_OIS_Lookups.Type ='Visualcue'
+Where (udctypecode = 'DISAB') AND (udcvalue = 'A8')
+
+UNION --UDC Personal Security
+SELECT     
+OISPersonID as per_num,
+udctypedescription AS Type,
+udctypecode AS Code,
+'Joint Visit' AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Personal Security' and CRM_OIS_Lookups.Type ='Visualcue'
+Where (udctypecode = 'JOINT') 
+
+UNION --UDC Resident Involvement
+SELECT     
+OISPersonID as per_num,
+udctypedescription AS Type,
+udctypecode AS Code,
+UDCValue AS [Value],
+UDCnotes,
+CRM_Code as [Image],
+CRM_Name,
+CRM_Guid,
+UDCStartDate as updated_date
+,[UDCTypecdeDesc]
+FROM  dbo.OISUDC
+join CRM_OIS_Lookups on CRM_OIS_Lookups.CRM_Name = 'Resident Involvement' and CRM_OIS_Lookups.Type ='Visualcue'
+Where udctypecode IN ('RESIN','RESIN2','VIEW') ;

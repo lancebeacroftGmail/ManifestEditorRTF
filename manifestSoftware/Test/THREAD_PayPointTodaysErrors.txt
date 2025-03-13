@@ -1,0 +1,13 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=SMTWTFS
+ACTIVESTARTTIME=12:25
+ACTIVEENDTIME=12:26
+TIMER=3600
+DESCRIPTION=
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\PayPoint\
+$$
+
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCTodaysErrors.txt()

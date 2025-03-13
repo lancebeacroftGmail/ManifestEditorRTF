@@ -1,0 +1,18 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=-F-----
+ACTIVESTARTTIME=20:00
+ACTIVEENDTIME=20:01
+TIMER=3600
+DESCRIPTION=
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\PayPoint\
+$$
+
+//Produce weekly cancelled DD summary
+//disabled as requested by Optivo 11/07/2022
+//C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCWeeklyCancelledDDSummary.txt()
+
+//Clear down all records older than 1 week
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCWeeklyTableCleardown.txt()

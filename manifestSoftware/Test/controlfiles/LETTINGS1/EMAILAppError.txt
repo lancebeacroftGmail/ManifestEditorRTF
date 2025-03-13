@@ -1,0 +1,44 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal
+FORMAT=EXCHGEMAIL
+DESCRIPTION=Send Email to Exchange 2013
+RESULT=
+$$ERROR,nvarchar(10),,,,ERROR$$
+
+PARAMETERS=
+$$URL,nvarchar(100),,,,Folder to get email from$$
+$$FROMADDRESS,nvarchar(100),,,,Email address sending the email$$
+$$OAUTHAPPID,nvarchar(100),,,BLAZEAES,$$
+$$OAUTHCLIENTSECRET,nvarchar(100),,,BLAZEAES,$$
+$$OAUTHTENANTID,nvarchar(100),,,BLAZEAES,$$
+$$TOADDRESS,nvarchar(100),,,,Destination Email address$$
+$$BODYTYPE,nvarchar(100),,,,$$
+$$SUBJECT,nvarchar(100),,,,Subject$$
+$$MESSAGE,nvarchar(100),,,,$$
+$$CASEID,nvarchar(100),,,,$$
+$$OISERROR,nvarchar(100),,,,$$
+$$PATHANDFILENAME1,nvarchar(100),,,,Attachment 1 to 10$$
+$$
+
+<b>This is an automated Email (Please do not reply to this email)</b>
+
+An error occured adding an application:
+
+<b>$$MESSAGE,nvarchar(100),,,,$$</b>
+
+Case ID: <b>$$CASEID,nvarchar(100),,,,$$</b>
+
+Error: <b>$$OISERROR,nvarchar(100),,,,$$</b>
+
+Kind regards
+
+
+<p style="color:#4392F1">Manifest Software Solutions
+E: <a href="mailto:support@manifest-software.co.uk">support@manifest-software.co.uk</a>
+W: <a href="https://manifestsoftware.co.uk/">manifestsoftware.co.uk</a>
+<img src="http://localhost/MUARTOnline/TEST/MUARTWebServices/mss.jpg" alt="MSS" title="MSS" width="240" height="6420% of ">
+Proudly working in partnership with:
+<img src="http://localhost/MUARTOnline/TEST/MUARTWebServices/customer.jpg" alt="Optivo" title="Optivo" width="80" height="80">
+</p>

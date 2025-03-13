@@ -1,0 +1,51 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Download a table containing all ways of contacting each Tenant
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$SQLLSN,nvarchar(100),,,,Linked Server Name$$
+$$SQLTIMEOUTSECS,nvarchar(100),,,,SQL Timeout optional$$
+$$Personno,nvarchar(100),,,,$$
+$$
+
+DELETE FROM OISTenantCommunications
+WHERE [OISTenantID] = '$$Personno,nvarchar(100),,,,$$';
+
+INSERT INTO OISTenantCommunications
+(
+       OISTenantID
+      ,[CommsEntityID]
+      ,[CommsMethodID]
+      ,[CommsMethod]
+      ,[CommsDetails]
+)
+
+select [num], acomms_ID, [TYPEID], [name], [commsdata] from openquery(ORCHHMS,
+'
+select DISTINCT per.num,
+acommstyp.ID as TypeID,
+per.ttl,
+per.fnam,
+per.snam,
+aCommsEntity."acomms_ID",
+acommstyp.Name,
+acomms.commsdata
+FROM 
+pub.per
+LEFT JOIN PUB."aCommsEntity" ON per."num"=aCommsEntity.entityinstid
+LEFT JOIN PUB.aCommsTyp ON acommsentity.acommstyp_id_use = acommstyp.ID
+LEFT JOIN PUB.aComms ON acommsentity.acomms_id = acomms.ID
+WHERE aComms_ID is not null
+AND char_length(CommsData) > 0
+AND EntityTyp_ID = 1
+AND per.num = $$Personno,nvarchar(100),,,,$$
+'
+);

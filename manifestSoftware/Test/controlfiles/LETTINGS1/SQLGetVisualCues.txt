@@ -1,0 +1,47 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Get Visual Cues/UDCs
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$DETAIL.PersonNo,nvarchar(10),,Per_num,,$$
+$$DETAIL.CUEDesc,nvarchar(10),,UDCDesc,,$$
+$$DETAIL.CRM_Name,nvarchar(10),,CRM_Name,,$$
+$$DETAIL.CRM_Guid,nvarchar(10),,CRM_Guid,,$$
+$$DETAIL.ContactField,nvarchar(10),,ContactField,,$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$PersonID,nvarchar(100),,,,$$
+$$
+
+SELECT distinct
+      [Per_num]
+	  , STUFF((SELECT  ',' + CASE WHEN UDCDesc = 'Resident Password' THEN (UDCDesc+': '+UDCnotes) ELSE UDCDesc END
+            FROM CRMOISVisualCues EE
+            WHERE  EE.CRM_Name=E.CRM_Name and EE.Per_num = E.Per_num
+            ORDER BY Code
+        FOR XML PATH('')), 1, 1, '') AS UDCDesc
+     --,[UDCnotes]
+      ,[CRM_Name]
+      ,[CRM_Guid]
+,CASE WHEN CRM_Name = 'Hearing Difficulties' Then 'gcs_hearingdifficulties'
+WHEN CRM_Name = 'Personal Security' Then 'gcs_personalsecurity'
+WHEN CRM_Name = 'Resident Involvement' Then 'gcs_residentinvolvement'
+WHEN CRM_Name = 'Sight Difficulties' Then 'gcs_sightdifficulties'
+WHEN CRM_Name = 'Support Concern' Then 'gcs_supportconcern'
+WHEN CRM_Name = 'Wheelchair' Then 'gcs_wheelchair'
+WHEN CRM_Name = 'Contact Warning' Then 'gcs_contactwarning'
+WHEN CRM_Name = 'Welfare Concern' Then 'gcs_welfareconcern'
+WHEN CRM_Name = 'Poor Mobility' Then 'gcs_poormobility'
+WHEN CRM_Name = 'Comms Need' Then 'gcs_commsneeds'
+ELSE '' End As ContactField
+FROM [dbo].[CRMOISVisualCues] E
+where E.per_num = $$PersonID,nvarchar(100),,,,$$
+  
+  

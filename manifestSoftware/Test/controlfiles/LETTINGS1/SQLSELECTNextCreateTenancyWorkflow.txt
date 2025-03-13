@@ -1,0 +1,53 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Select next Dash Verify request
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.QueueID,nvarchar(10),,QueueID,,$$
+$$HEADER.ID,nvarchar(10),,ID,,$$
+$$HEADER.BatchGUID,nvarchar(10),,BatchGUID,,$$
+$$HEADER.ApplicationNumber,nvarchar(10),,ApplicationNumber,,$$
+$$HEADER.HouseholdGroupCode,nvarchar(10),,HouseholdGroupCode,,$$
+$$HEADER.SignupCompletedDate,nvarchar(10),,SignupCompletedDate,,$$
+$$HEADER.SwipeEffectiveDate,nvarchar(10),,SwipeEffectiveDate,,$$
+$$HEADER.SwipeReqType,nvarchar(10),,SwipeReqType,,$$
+$$HEADER.TenancyReasonCode,nvarchar(10),,TenancyReasonCode,,$$
+$$HEADER.TenancyStartDate,nvarchar(10),,TenancyStartDate,,$$
+$$HEADER.PropertySequenceNumber,nvarchar(10),,PropertySequenceNumber,,$$
+$$HEADER.TenancyNumber,nvarchar(10),,TenancyNumber,,$$
+$$HEADER.TenancyPK,nvarchar(10),,TenancyPK,,$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$PROCESSNAME,nvarchar(100),,@ProcessName,,ProcessName$$
+$$
+
+SELECT TOP 1 
+	   q.[QueueID]
+      ,l.[ID]
+      ,l.[BatchGUID]
+      ,l.[ApplicationNumber]
+      ,l.[HouseholdGroupCode]
+	  ,CONVERT(date,l.[SignupCompletedDate],103)
+      ,CONVERT(VARCHAR(30), CONVERT(date,l.[SignupCompletedDate],103), 126) as [SignupCompletedDate]
+      ,CONVERT(VARCHAR(30), CONVERT(date,l.[SwipeEffectiveDate],103), 126) as [SwipeEffectiveDate]
+      ,l.[SwipeReqType]
+      ,l.[TenancyReasonCode]
+      ,CONVERT(VARCHAR(30), l.[TenancyStartDate], 126) as [TenancyStartDate]
+      ,l.[PropertySequenceNumber]
+      ,l.[TenancyNumber]
+	  ,l.[TenancyPK]
+FROM [let].[LettingsProcessQueue] q
+INNER JOIN [let].[CreateTenancyRequestLog] l
+ON
+l.[BatchGUID] = q.[SourceBatchGUID]
+WHERE 
+[ProcessName] = @ProcessName
+AND
+[PreProcessed] = 0 

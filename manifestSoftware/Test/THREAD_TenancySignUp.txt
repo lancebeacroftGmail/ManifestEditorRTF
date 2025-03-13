@@ -1,0 +1,29 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=-MTWTF-
+ACTIVESTARTTIME=08:00
+ACTIVEENDTIME=18:15
+TIMER=300
+DESCRIPTION=Lettings Stage 1
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\
+$$
+//
+// Check every 5 minutes
+//
+
+// Create Data in MRI
+C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\IFCCreateTenancyMRI.txt()
+
+// Verify Account in Dash
+C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\IFCCreateTenancyDashVerify.txt()
+
+// Create Data in CRM On Prem
+C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\IFCCreateTenancyCRMOnPrem.txt()
+
+// Prepare Data for CRM D365
+C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\IFCCreateTenancyDynamics365.txt()
+
+// CRM D365 Sync
+C:\ManifestSoftware\TEST\ControlFiles\Dynamics365\IFCDynamicsDataSync_TenancySignUp.txt()

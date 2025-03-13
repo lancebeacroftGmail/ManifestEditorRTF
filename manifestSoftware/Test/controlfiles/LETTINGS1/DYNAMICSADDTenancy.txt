@@ -1,0 +1,63 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=UA
+FORMAT=DYNAMICS
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$RESPONSE,nvarchar(100),,,,$$
+
+PARAMETERS=
+$$CRMCLIENTID,nvarchar(100),,,,$$
+$$CRMDOMAIN,nvarchar(100),,,,$$
+$$CRMUSER,nvarchar(100),,,,$$
+$$CRMPASSWORD,nvarchar(100),,,BLAZEAES,$$
+$$CRMSERVICEURL,nvarchar(100),,,,$$
+$$CRMENTITY,nvarchar(100),,,,$$
+$$CRMACTION,nvarchar(100),,,,$$
+$$TenancyID,nvarchar(100),,,,$$
+$$PersonNo,nvarchar(100),,,,$$
+$$PropertyNo,nvarchar(100),,,,$$
+$$TenureCode,nvarchar(100),,,,$$
+$$TenureDescription,nvarchar(100),,,,$$
+$$Nonrentval,nvarchar(100),,,,$$
+$$Rentval,nvarchar(100),,,,$$
+$$StartDate,nvarchar(100),,,,$$
+$$BenefitValue,nvarchar(100),,,,$$
+$$TenancyType,nvarchar(100),,,,$$
+$$TenancyTypeCode,nvarchar(100),,,,$$
+$$CHECKDIGIT,nvarchar(100),,,,$$
+$$Contactguid,nvarchar(100),,,,$$
+$$Propertyguid,nvarchar(100),,,,$$
+$$Grossrent,nvarchar(100),,,,$$
+$$NetRent,nvarchar(100),,,,$$
+$$
+{
+			"gcs_tenurecode": "$$TenureCode,nvarchar(100),,,,$$",
+			"gcs_name": "$$TenancyID,nvarchar(100),,,,$$",
+			"gcs_renttenancycharges": 0.0,
+			"gcs_nonrentpropertiescharges": $$Nonrentval,nvarchar(100),,,,$$,
+			"gcs_propseqno": "$$PropertyNo,nvarchar(100),,,,$$",
+			"gcs_tenancytypedesc": "$$TenancyType,nvarchar(100),,,,$$",
+			"gcs_grossrent": $$Grossrent,nvarchar(100),,,,$$,
+			"gcs_nonrenttenancycharges": 0.0,
+			"gcs_nonrentpropertiescharges_base": $$Nonrentval,nvarchar(100),,,,$$,
+			"exchangerate": 1.0,
+			"gcs_netrent_base": $$NetRent,nvarchar(100),,,,$$,
+			"gcs_totalbenefits": $$BenefitValue,nvarchar(100),,,,$$,
+			"gcs_tenuredesc": "$$TenureDescription,nvarchar(100),,,,$$",
+			"gcs_tenancytypecode": "$$TenancyTypeCode,nvarchar(100),,,,$$",
+			"gcs_tenancynumber": "$$TenancyID,nvarchar(100),,,,$$ $$CHECKDIGIT,nvarchar(100),,,,$$",
+			"gcs_rentpropertiescharges": $$Rentval,nvarchar(100),,,,$$,
+			"gcs_netrent": $$NetRent,nvarchar(100),,,,$$,
+			"gcs_startdate": "$$StartDate,nvarchar(100),,,,$$",
+			"gcs_nonrenttenancycharges_base": $$Nonrentval,nvarchar(100),,,,$$,
+			"gcs_grossrent_base": $$Grossrent,nvarchar(100),,,,$$,
+			"gcs_alertrelevantudc": false,
+			"gcs_arcpernum": "$$PersonNo,nvarchar(100),,,,$$",
+			"gcs_rentpropertiescharges_base": $$Rentval,nvarchar(100),,,,$$,
+			"gcs_nonrentpropertycharges_base": $$Nonrentval,nvarchar(100),,,,$$,
+			"gcs_persontenancyid@odata.bind":"/contacts($$Contactguid,nvarchar(100),,,,$$)",
+			"gcs_propertyid@odata.bind":"/gcs_properties($$Propertyguid,nvarchar(100),,,,$$)"
+}

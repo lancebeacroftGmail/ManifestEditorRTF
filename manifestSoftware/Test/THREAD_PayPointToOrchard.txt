@@ -1,0 +1,24 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=-MTWTFS
+ACTIVESTARTTIME=06:00
+ACTIVEENDTIME=22:00
+TIMER=300
+//SQLTOWATCH=C:\ManifestSoftware\TEST\ControlFiles\PayPoint\SQLWatcherTrigger("ManifestDB","ManifestTest","manifest","go1glqQspCgWFZ4+43FRwA==")
+DESCRIPTION=Process any transactions to Orchard
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\PayPoint\
+$$
+
+//Preprocessing of transactions to work out if the SA is valid or not
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEventTransactionsPreProcessing.txt()
+
+//Process event streamer transactions to Orchard
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEventTransactionsToOrchardBULK.txt()
+
+//Process event streamer suspense transactions to Orchard
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEventTransactionsToOrchardBulkSuspense.txt()
+
+//Event post processing
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEventTransactionsPostProcessing.txt()

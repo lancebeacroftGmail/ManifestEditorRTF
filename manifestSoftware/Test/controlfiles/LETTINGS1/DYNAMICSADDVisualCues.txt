@@ -1,0 +1,31 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=UA
+FORMAT=DYNAMICS
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$RESPONSE,nvarchar(100),,,,$$
+
+PARAMETERS=
+$$CRMCLIENTID,nvarchar(100),,,,$$
+$$CRMDOMAIN,nvarchar(100),,,,$$
+$$CRMUSER,nvarchar(100),,,,$$
+$$CRMPASSWORD,nvarchar(100),,,BLAZEAES,$$
+$$CRMSERVICEURL,nvarchar(100),,,,$$
+$$CRMENTITY,nvarchar(100),,,,$$
+$$CRMACTION,nvarchar(100),,,,$$
+$$EntityType,nvarchar(100),,,,$$
+$$ContactentityID,nvarchar(100),,,,$$
+$$Visualcuetext,nvarchar(100),,,,$$
+$$VisualCueGUID,nvarchar(100),,,,$$
+$$
+{
+	"gcs_visualcueid@odata.bind": "/gcs_visualclues($$VisualCueGUID,nvarchar(100),,,,$$)",	
+	"gcs_entity": "$$EntityType,nvarchar(100),,,,$$",
+	
+	"gcs_text": "$$Visualcuetext,nvarchar(100),,,,$$;",
+	
+	"gcs_entityid": "$$ContactentityID,nvarchar(100),,,,$$"
+}

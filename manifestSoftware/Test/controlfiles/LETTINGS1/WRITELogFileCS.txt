@@ -1,0 +1,19 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Windows Folder
+FORMAT=TEXTFILE
+DESCRIPTION=Write to a file
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,File name in folder$$
+$$ACTIONIFEXISTS,nvarchar(10),,,,$$
+$$DATE,MEMO,,,,$$
+$$CONTENTS,MEMO,,,,$$
+$$
+$$DATE,MEMO,,,,$$
+
+$$CONTENTS,MEMO,,,,$$
+---------------------------------------------------------------------------

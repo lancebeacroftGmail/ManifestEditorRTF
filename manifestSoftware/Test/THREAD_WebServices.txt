@@ -1,0 +1,16 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=-MTWTF-
+ACTIVESTARTTIME=09:00
+ACTIVEENDTIME=17:05
+TIMER=3600
+DESCRIPTION=Check Orchard batch jobs
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\
+$$
+//
+// Check batch data up to date every hour was 0900-1705 13600
+//
+
+C:\ManifestSoftware\TEST\ControlFiles\OISWebServices\IFCGetVoidDetail.txt()

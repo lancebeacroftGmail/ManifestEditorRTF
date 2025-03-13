@@ -1,0 +1,23 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Select the rent and service charges
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.rent,nvarchar(10),,rent,,$$
+$$HEADER.service_charges,nvarchar(10),,service_charges,,$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$PersonID,nvarchar(100),,,,$$
+$$
+
+SELECT [rent]
+      ,[service_charges]
+FROM [dbo].[OPV_Lettings_Weekly_Rent]
+WHERE [main_app_personid] = '$$PersonID,nvarchar(100),,,,$$'

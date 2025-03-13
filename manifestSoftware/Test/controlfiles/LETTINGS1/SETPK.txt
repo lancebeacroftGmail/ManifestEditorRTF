@@ -1,0 +1,16 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=2SMS
+FORMAT=SET
+DESCRIPTION=Build message one
+
+RESULT=
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+$$VALUE,MEMO,,,SQLSTRING,The Answer$$
+
+PARAMETERS=
+$$ACTION,nvarchar(10),,,,CLEAR to initialize$$
+$$PK,MEMO,,,,$$
+$$
+$$PK,MEMO,,,,$$

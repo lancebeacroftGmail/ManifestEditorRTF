@@ -1,0 +1,15 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=-MTWTF-
+ACTIVESTARTTIME=01:30
+ACTIVEENDTIME=01:31
+TIMER=3600
+DESCRIPTION=
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\
+$$
+
+C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\IFCDownloadAllCertificates.txt()
+
+C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\IFCProcessCertificates.txt()

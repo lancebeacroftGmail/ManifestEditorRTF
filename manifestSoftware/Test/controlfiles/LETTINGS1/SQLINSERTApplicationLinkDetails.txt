@@ -1,0 +1,34 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$PERSONID,nvarchar(100),,@PERSONID,,$$
+$$UCRN,nvarchar(100),,@UCRN,,$$
+$$CASEID,nvarchar(100),,@CASEID,,$$
+$$DESCRIPTION,nvarchar(1000),,@DESCRIPTION,,$$
+$$EMAIL,nvarchar(100),,@EMAIL,,$$
+$$
+
+/*
+-- =======================================================================================================================================
+--	Author:			Southern Housing
+--	Description:	Updates FirmStep 
+-- =======================================================================================================================================
+--	Change log:
+--	Version			Date		Author				Description
+--  -------			----------	----------------	----------------------------------------------------
+--	v1.1			28/04/2023	Kevin May		    Changed Description and Email to use parameters that will handle native SQL - fixing an 
+--                                                  issue with apostrophes in names.
+-- =======================================================================================================================================
+*/
+
+EXEC dbo.AHSP_Insert_MyAccount_Link_data  @UCRN, @PERSONID,@CASEID,@DESCRIPTION,@EMAIL,'1'

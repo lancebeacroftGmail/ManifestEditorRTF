@@ -1,0 +1,19 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=SMTWTFS
+//ACTIVESTARTTIME=09:41
+//ACTIVEENDTIME=09:42
+ACTIVESTARTTIME=02:00
+ACTIVEENDTIME=02:01
+TIMER=3600
+DESCRIPTION=
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\
+$$
+
+//Produce LGSR import files
+C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\IFCProduceApexImportLGSR.txt()
+
+//Send all no accesses to CRM as a case
+C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\IFCAddNoAccessToCRM.txt()

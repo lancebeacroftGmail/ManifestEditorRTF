@@ -1,0 +1,74 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Windows Folder
+FORMAT=TEXTFILE
+DESCRIPTION=Write to a file
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,File name in folder$$
+$$ACTIONIFEXISTS,nvarchar(10),,,,$$
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$Personno,nvarchar(100),,,,$$
+$$TncyStart,nvarchar(100),,,,$$
+$$FirstName,nvarchar(100),,,SQLSTRING,$$
+$$Surname,nvarchar(100),,,SQLSTRING,$$
+$$PropertyID,nvarchar(100),,,,$$
+$$Address1,nvarchar(100),,,SQLSTRING,$$
+$$Address2,nvarchar(100),,,SQLSTRING,$$
+$$Town,nvarchar(100),,,SQLSTRING,$$
+$$County,nvarchar(100),,,SQLSTRING,$$
+$$PostCode,nvarchar(100),,,,$$
+$$Mobile,nvarchar(100),,,,$$
+$$Rent,nvarchar(100),,,,$$
+$$ServiceCharge,nvarchar(100),,,,$$
+$$PIN,nvarchar(100),,,,$$
+$$Contr,nvarchar(100),,,SQLSTRING,$$
+$$ContrTel,nvarchar(100),,,,$$
+$$ContrURL,nvarchar(100),,,SQLSTRING,$$
+$$
+
+INSERT INTO [dbo].[WrapData]
+           ([personNum]
+           ,[tenancyStartDate]
+           ,[firstName]
+           ,[surname]
+           ,[propertyID]
+           ,[address1]
+           ,[address2]
+           ,[town]
+           ,[county]
+           ,[postcode]
+           ,[rent]
+           ,[serviceCharge]
+           ,[gasContractor]
+           ,[gasPhoneNumber]
+           ,[gasWebsite]
+           ,[mobNo]
+           ,[PIN]
+	   ,[recordAddedDate])
+
+     VALUES
+           ($$Personno,nvarchar(100),,,,$$
+           ,'$$TncyStart,nvarchar(100),,,,$$'
+           ,'$$FirstName,nvarchar(100),,,SQLSTRING,$$'
+           ,'$$Surname,nvarchar(100),,,SQLSTRING,$$'
+           ,'$$PropertyID,nvarchar(100),,,,$$'
+           ,'$$Address1,nvarchar(100),,,SQLSTRING,$$'
+           ,'$$Address2,nvarchar(100),,,SQLSTRING,$$'
+           ,'$$Town,nvarchar(100),,,SQLSTRING,$$'
+           ,'$$County,nvarchar(100),,,SQLSTRING,$$'
+           ,'$$PostCode,nvarchar(100),,,,$$'
+           ,$$Rent,nvarchar(100),,,,$$
+           ,case when '$$ServiceCharge,nvarchar(100),,,,$$' = '' then '0.00' else '$$ServiceCharge,nvarchar(100),,,,$$' end
+           ,'$$Contr,nvarchar(100),,,SQLSTRING,$$'
+	   ,'$$ContrTel,nvarchar(100),,,,$$' 
+	   ,'$$ContrURL,nvarchar(100),,,SQLSTRING,$$'
+	   ,'$$Mobile,nvarchar(100),,,,$$'         
+	   ,'$$PIN,nvarchar(100),,,,$$'
+	   ,GETDATE())

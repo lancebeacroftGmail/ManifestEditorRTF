@@ -1,0 +1,50 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=SMTWTFS
+ACTIVESTARTTIME=10:28
+ACTIVEENDTIME=10:29
+TIMER=3600
+DESCRIPTION=Download and process EOD files
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\PayPoint\
+$$
+
+//Download and process EOD files to SQL
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCDownloadEODFiles.txt()
+
+//pre processor eod
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEODEventTransactionsPreProcessing.txt()
+
+//pre processor offline eod
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCOfflineEODTransactionsPreProcessing.txt()
+
+//Process EOD transactions to Orchard
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEODTransactionsToOrchardBULK.txt()
+
+//Process offline EOD transactions to Orchard
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCOfflineEODTransactionsToOrchardBULK.txt()
+
+//Process EOD transactions to Orchard Suspense
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEODTransactionsToOrchardBULKSUSPENSE.txt()
+
+//Process offline EOD transactions to Orchard Suspense
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCOfflineEODTransactionsBULKSUSPENSE.txt()
+
+//Post process EOD
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEODEventTransactionsPostProcessing.txt()
+
+//Post process offline EOD
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCOfflineEODTransactionsPostProcessing.txt()
+
+//Zip and password protect all processed EOD files
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCZipArchivedEODFiles.txt()
+
+// Try to send EOD errors to Suspense Account
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCEODErrorsTransactionsBULKSUSPENSE.txt()
+
+// Try to send Offline EOD errors to Suspense Account
+C:\ManifestSoftware\TEST\ControlFiles\PayPoint\IFCOfflineEODErrorsTransactionsBULKSUSPENSE.txt()
+
+
+

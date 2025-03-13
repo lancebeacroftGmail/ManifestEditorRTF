@@ -1,0 +1,122 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=INTERFACE
+FROM=Orchard Housing Database
+TIMER=900
+DESCRIPTION=Creates Tenancy record in Orchard 
+TRIGGER=
+TRIGGERFIELDS=
+$$
+
+/*
+-- =======================================================================================================================================
+--	Author:			Matt Toynbee
+--	Description:	Creates Tenancy record in Orchard
+-- =======================================================================================================================================
+--	Change log:
+--	Version			Date		Author				Description
+--  -------			----------	----------------	----------------------------------------------------
+--	v1.1			
+-- =======================================================================================================================================
+*/
+
+// Param1 = OrchardLogin
+// Param2 = LoginPassword
+// Param3 = APPLICATION_NO
+// Param4 = HOUSEHOLD_GROUP_CODE
+// Param5 = SIGNUP_COMP_DATE
+// Param6 = SWIPE_EFFECTIVE_DATE
+// Param7 = SWIPE_REQ_TYPE
+// Param8 = TENANCY_REASON_CODE,
+// Param9 = TEN_START_DATE,
+// Param10 = TEN_TENURE_TYPE_CODE
+// Param11 = PROPERTY_SEQ_NUM
+
+P=ReadThreadParameters("C:\ManifestSoftware\TEST\ControlFiles\THREADPARAMS.xml")
+
+// Create Log GUID
+SQLG=SQLSELECTNEWGUID($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$)
+
+// Create process queue entries
+SQLQ=SQLINSERTPendingCreateTenancyRequests($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$)
+
+NEXTRECORD:
+
+// Select next Tenancy to create in MRI
+TEN=SQLSELECTNextCreateTenancyWorkflow($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,"Create Tenancy MRI")
+
+IFGOTO($$TEN.HEADER.QueueID$$,"=","","END:")
+
+// Log Data
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyMRI","SQLSELECTNextCreateMRITenancyRequest","QueueID",$$TEN.HEADER.QueueID$$)
+
+// Mark record as pre-processed
+SQLP=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"Pre-Processed","","")
+
+//Check if there is a tenancy for this application number
+APPCHK=OISCheckTenancyFromAppNum($$P.HEADER.OISWSCreateTenancyURL$$,$$P.HEADER.OISWSUser$$,$$P.HEADER.OISWSPassword$$,"Y","Y",$$TEN.HEADER.ApplicationNumber$$)
+
+// Log Response from MRI
+LOGRESP=SQLINSERTMSSRequestResponse($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$SQLG.HEADER.GUID$$,"IFCCreateTenancyMRI","OISCheckTenancyFromAppNum - Response",$$APPCHK.RESPONSE$$)
+
+// Log Error from MRI
+LOGERR=SQLINSERTMSSRequestResponse($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$SQLG.HEADER.GUID$$,"IFCCreateTenancyMRI","OISCheckTenancyFromAppNum - Error",$$APPCHK.ERROR$$)
+
+// Log Data
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyMRI","OISCheckTenancyFromAppNum","PK",$$APPCHK.HEADER.PK$$)
+
+// Mark as errored
+SQLERR=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"Error","OISCheckTenancyFromAppNum",$$APPCHK.ERROR$$)
+
+// If error reported - go to next record
+IFGOTO($$SQLERR.HEADER.QueueID$$,"<>","","NEXTRECORD:")
+
+// Set parameter returned
+SETPK=SETPK("SET",$$APPCHK.HEADER.PK$$)
+
+//if there is goto END:
+IFGOTO($$APPCHK.HEADER.PK$$,"<>","","MARKASPROCESSED:")
+
+//Create Tenancy In MRI
+TENANCYADD=OISCreateTenancy($$P.HEADER.OISWSCreateTenancyURL$$,$$P.HEADER.OISWSUser$$,$$P.HEADER.OISWSPassword$$,"Y","Y",$$TEN.HEADER.ApplicationNumber$$,$$TEN.HEADER.HouseholdGroupCode$$,$$TEN.HEADER.SignupCompletedDate$$,$$TEN.HEADER.SwipeEffectiveDate$$,$$TEN.HEADER.SwipeReqType$$,$$TEN.HEADER.TenancyReasonCode$$,$$TEN.HEADER.TenancyStartDate$$,$$P.PARAM10$$,$$TEN.HEADER.PropertySequenceNumber$$,"300")
+
+// Log Response from MRI
+LOGRESP=SQLINSERTMSSRequestResponse($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$SQLG.HEADER.GUID$$,"IFCCreateTenancyMRI","OISCreateTenancy - Response",$$TENANCYADD.RESPONSE$$)
+
+// Log Error from MRI
+LOGERR=SQLINSERTMSSRequestResponse($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$SQLG.HEADER.GUID$$,"IFCCreateTenancyMRI","OISCreateTenancy - Error",$$TENANCYADD.ERROR$$)
+
+// Log Data
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyMRI","OISCreateTenancy","PK",$$TENANCYADD.HEADER.PK$$)
+
+// Mark as errored
+SQLERR=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"Error","OISCreateTenancy",$$TENANCYADD.ERROR$$)
+
+// If error reported - notify business
+IFGOTO($$SQLERR.HEADER.QueueID$$,"<>","","NEXTRECORD:")
+
+// Add Tenancy PK to log
+SQLUPD=SQLUPDATETenancyRequestLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.ID$$,"TenancyPK",$$TENANCYADD.HEADER.PK$$)
+
+MARKASPROCESSED:
+
+// Mark as processed
+SQLP=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"Processed","","")
+
+GOTO("NEXTRECORD:")
+//
+// Add Tenancy ERROR
+//
+
+//REPORTERROR:
+
+// Create Email Notification
+//SETERROREMAIL=SETERROREMAIL("CLEAR","","","","","","","")
+//SETERROREMAIL=SETERROREMAIL("SET","MRI Create Tenancy","create an MRI Tenancy","Application Number:",$$TEN.HEADER.ApplicationNumber$$,"","",$$TENANCYADD.ERROR$$)
+
+//Send notification to notification queue
+//NOTIF=SQLINSERTNotification($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,"Email","Create Tenancy Errors","SOUTHERN HOUSING TEST - Create Tenancy Error",$$SETERROREMAIL.VALUE$$)
+
+END:
+
+STOPIFEMPTY("")

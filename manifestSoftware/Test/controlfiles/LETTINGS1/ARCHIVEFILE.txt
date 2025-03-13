@@ -1,0 +1,17 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal command
+FORMAT=ARCHIVEFILE
+DESCRIPTION=Archive a folder
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$NEWPATHANDFILENAME,nvarchar(100),,,,New file name after its moved$$
+PARAMETERS=
+$$FILETOARCHIVE,nvarchar(100),,,,Full path and name of file to archive$$
+$$ARCHIVEFOLDER,nvarchar(100),,,,Full path to move file to$$
+$$FILEPREFIX,nvarchar(100),,,,Alternative prefix instead of ARCHIVEFILE$$
+$$
+HEADER=N
+DETAIL=N
+TRAILER=N

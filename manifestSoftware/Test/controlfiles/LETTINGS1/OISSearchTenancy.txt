@@ -1,0 +1,35 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=OISWS
+DESCRIPTION=Modify property (only DoubleBeds)
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+$$HEADER.APPNO,nvarchar(100),,Envelope.Body.findMUAVW_CREATE_TENANCYResponse.results.MUAVW_CREATE_TENANCYSearchResult.APPLICATION_NO,,$$
+$$HEADER.PROPSEQNO,nvarchar(100),,Envelope.Body.findMUAVW_CREATE_TENANCYResponse.results.MUAVW_CREATE_TENANCYSearchResult.PROPERTY_SEQ_NO,,$$
+$$HEADER.TENANCYNO,nvarchar(100),,Envelope.Body.findMUAVW_CREATE_TENANCYResponse.results.MUAVW_CREATE_TENANCYSearchResult.TENANCY_NO,,$$
+$$HEADER.STARTDATE,nvarchar(100),,Envelope.Body.findMUAVW_CREATE_TENANCYResponse.results.MUAVW_CREATE_TENANCYSearchResult.TEN_START_DATE,,$$
+
+PARAMETERS=
+$$URL,nvarchar(500),,,,URL of the web service$$
+$$USERNAME,nvarchar(100),,,,User ID for Web Service$$
+$$PASSWORD,nvarchar(100),,,,Password for Web Service$$
+$$ALLOWERROR,nvarchar,,,,Y to allow an error and set ERROR result$$
+$$REMOVEEMPTYTAGS,nvarchar,,,,Y to remove empty tags$$
+$$PK,nvarchar(100),,,,$$
+$$
+
+$$OISWSHeader.UAZ,INCLUDE,,,BLAZEAES,$$
+
+      <ser:findMUAVW_CREATE_TENANCY>
+         <ser:criteria>
+          <typ:MUA_CREATE_TENANCYPK>
+               <typ:operator>=</typ:operator>
+               <typ:value>$$PK,nvarchar(100),,,,$$</typ:value>
+            </typ:MUA_CREATE_TENANCYPK>
+         </ser:criteria>
+      </ser:findMUAVW_CREATE_TENANCY>
+
+$$OISWSTrailer.UAZ,INCLUDE,,,BLAZEAES,$$

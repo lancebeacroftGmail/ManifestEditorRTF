@@ -1,0 +1,41 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal
+FORMAT=SET
+DESCRIPTION=Set email template
+RESULT=
+$$VALUE,MEMO,,,,VALUE$$
+
+PARAMETERS=
+$$ACTION,nvarchar(100),,,,$$
+$$PROCESSNAME,nvarchar(100),,,,$$
+$$ACTIONNAME,nvarchar(100),,,,$$
+$$FieldName1,nvarchar(100),,,,$$
+$$FieldValue1,nvarchar(100),,,,$$
+$$FieldName2,nvarchar(100),,,,$$
+$$FieldValue2,nvarchar(100),,,,$$
+$$ERRORMSG,nvarchar(100),,,,$$
+$$
+
+<div style="font-family:Arial;font-size:16px">
+<b>*** This is an automated message and replies are not monitored ***</b>
+<br /><br />
+There was an error during the $$PROCESSNAME,nvarchar(100),,,,$$, while attempting to $$ACTIONNAME,nvarchar(100),,,,$$ for:
+<br /><br />
+$$FieldName1,nvarchar(100),,,,$$ $$FieldValue1,nvarchar(100),,,,$$
+<br />
+$$FieldName2,nvarchar(100),,,,$$ $$FieldValue2,nvarchar(100),,,,$$
+<br /><br />
+The error response from the system was:
+<br /><br />
+$$ERRORMSG,nvarchar(100),,,HTML,$$
+<br /><br />
+Kind regards,
+<br /><br />
+Manifest Software Solutions
+
+</div>
+
+
+

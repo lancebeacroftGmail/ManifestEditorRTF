@@ -1,0 +1,22 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal Command
+FORMAT=JSONPARSE
+DESCRIPTION=
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$DETAIL.guid,nvarchar(100),,.systemuserid,,$$
+$$DETAIL.gcs_name,nvarchar(100),,.fullname,,$$
+
+PARAMETERS=
+$$JSON,nvarchar(100),,,,$$
+$$STRUCTURE,nvarchar(100),,,,$$
+$$ARRAYNAME,nvarchar(100),,,,$$
+
+$$
+HEADER=N
+DETAIL=Y
+$$DETAIL.guid,nvarchar(100),,.systemuserid,,$$
+$$DETAIL.gcs_name,nvarchar(100),,.fullname,,$$
+TRAILER=N

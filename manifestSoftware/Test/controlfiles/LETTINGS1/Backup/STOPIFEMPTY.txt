@@ -1,0 +1,11 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=LOGIC
+FROM=Internal command
+FORMAT=STOPIFEMPTY
+DESCRIPTION=Check if parameter is empty
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=$$VARIABLE,nvarchar(100),,,,Variable to check if empty$$
+$$
+

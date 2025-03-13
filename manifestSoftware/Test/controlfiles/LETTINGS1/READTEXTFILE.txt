@@ -1,0 +1,16 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal Command
+FORMAT=TEXTFILE
+DESCRIPTION=Get contents of a file
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$FILECONTENTS,nvarchar(10),,,,$$
+
+PARAMETERS=
+$$PATHANDFILENAME,nvarchar(100),,,,Path to file$$
+$$
+HEADER=N
+DETAIL=N
+TRAILER=N

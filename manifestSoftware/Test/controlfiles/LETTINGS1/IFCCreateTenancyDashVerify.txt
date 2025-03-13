@@ -1,0 +1,151 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=INTERFACE
+FROM=Orchard Housing Database
+TIMER=900
+DESCRIPTION=Creates Tenancy record in Orchard 
+TRIGGER=
+TRIGGERFIELDS=
+$$
+
+/*
+-- =======================================================================================================================================
+--	Author:			Matt Toynbee
+--	Description:	Creates Tenancy record in Orchard
+-- =======================================================================================================================================
+--	Change log:
+--	Version			Date		Author				Description
+--  -------			----------	----------------	----------------------------------------------------
+--	v1.1			
+-- =======================================================================================================================================
+*/
+
+P=ReadThreadParameters("C:\ManifestSoftware\TEST\ControlFiles\THREADPARAMS.xml")
+
+// Create Log GUID
+SQLG=SQLSELECTNEWGUID($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$)
+
+// Create process queue entries
+SQLQ=SQLINSERTPendingCreateTenancyRequests($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$)
+
+NEXTRECORD:
+
+// Select next Tenancy to create in MRI
+TEN=SQLSELECTNextCreateTenancyWorkflow($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,"Dash Verify")
+
+// If no more records to process, finish process.
+IFGOTO($$TEN.HEADER.QueueID$$,"=","","END:")
+
+// Mark record as pre-processed
+SQLP=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"Pre-Processed","","")
+
+//
+// DASH VERIFY
+//
+
+OISTEN=OISSearchTenancy($$P.HEADER.OISWSCreateTenancyURL$$,$$P.HEADER.OISWSUser$$,$$P.HEADER.OISWSPassword$$,"Y","Y",$$TEN.HEADER.TenancyPK$$)
+
+// Log Response from MRI
+LOGRESP=SQLINSERTMSSRequestResponse($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$SQLG.HEADER.GUID$$,"IFCCreateTenancyDashVerify","OISSearchTenancy - Response",$$OISTEN.RESPONSE$$)
+
+// Log Error from MRI
+LOGERR=SQLINSERTMSSRequestResponse($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$SQLG.HEADER.GUID$$,"IFCCreateTenancyDashVerify","OISSearchTenancy - Error",$$OISTEN.ERROR$$)
+
+// Mark as errored
+SQLERR=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"Error","OISSearchTenancy",$$OISTEN.ERROR$$)
+
+// Log Data
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyDashVerify","OISSearchTenancy","TENANCYNO",$$OISTEN.HEADER.TENANCYNO$$)
+
+// Check if mandatory data missing
+SQLMAND=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"MandatoryParam","OISSearchTenancy",$$OISTEN.HEADER.TENANCYNO$$)
+
+IFGOTO($$SQLMAND.HEADER.QueueID$$,"<>","","NEXTRECORD:")
+
+// Add Tenancy Number to log
+SQLUPD=SQLUPDATETenancyRequestLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.ID$$,"TenancyNumber",$$OISTEN.HEADER.TENANCYNO$$)
+
+//update contact details 
+PERNO=SQLGetAllPersonNo($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$OISTEN.HEADER.TENANCYNO$$)
+
+// Log Data
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyDashVerify","SQLGetAllPersonNo","PersonNo",$$PERNO.DETAIL.PersonNo$$)
+
+// Insert into OISTenantCommunications
+MERGEDATA=SQLUPDATE_BUILDCOMMS_Single($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,"ORCHHMS","800",$$PERNO.DETAIL.PersonNo$$)
+
+//Add Lead tenant data first 
+LEAD:
+
+//Find the person number for this tenancy
+LEADPER=SQLSELECTLeadPersonNum($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$OISTEN.HEADER.TENANCYNO$$)
+
+// Log Data
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyDashVerify","SQLSELECTLeadPersonNum","PersonNum",$$LEADPER.HEADER.PersonNum$$)
+
+//Update Tenant Comms with their details
+TENCOMMS=SQLMergeTenantComms($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,"800",$$LEADPER.HEADER.PersonNum$$)
+
+//Get the lead tenant details
+LEADTEN=SQLGetLeadTenant($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$OISTEN.HEADER.TENANCYNO$$)
+
+// Log Data
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyDashVerify","SQLGetLeadTenant","PersonNo",$$LEADTEN.HEADER.PersonNo$$)
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyDashVerify","SQLGetLeadTenant","PropertyNo",$$LEADTEN.HEADER.PropertyNo$$)
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyDashVerify","SQLGetLeadTenant","TenancyID",$$LEADTEN.HEADER.TenancyID$$)
+
+// Check if mandatory data missing
+SQLMAND=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"MandatoryParam","SQLGetLeadTenant",$$LEADTEN.HEADER.PersonNo$$)
+
+IFGOTO($$SQLMAND.HEADER.QueueID$$,"<>","","NEXTRECORD:")
+
+//Update the Occ Num in AHT_Lettings_Application_stage2
+UPDATEOCC=SQLUPDATEApplicationOcc_num($$P.HEADER.LettingsSQLInstance$$,$$P.HEADER.LettingsSQLDB$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$,$$LEADTEN.HEADER.PropertyNo$$,$$LEADTEN.HEADER.TenancyID$$)
+
+//Get UCRN from AHT_Lettings_Application
+UCRN=SQLGetUCRN($$P.HEADER.LettingsSQLInstance$$,$$P.HEADER.LettingsSQLDB$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$)
+
+// Log Data
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyDashVerify","SQLGetUCRN","CASEID",$$UCRN.HEADER.CASEID$$)
+
+// Execute SP OPSP_DocMerge_Lettings_GenerateDeclarationDocs
+GENDOCS=SQLCreateTenancyDeclarationDocs("CustomerExperienceDB","CustomerExperienceViews",$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$UCRN.HEADER.CASEID$$)
+
+// Verify Stage 1 in Dash
+WS1CREATE=WSVerifyStage1($$P.HEADER.StartThreadURL$$,"application/json","POST","*/*","Y",$$P.HEADER.XREFProcessID$$,$$P.HEADER.XREFucrn$$,$$LEADTEN.HEADER.EMAIL$$,$$UCRN.HEADER.UCRN$$,$$LEADTEN.HEADER.TenancyID$$,$$LEADTEN.HEADER.PersonNo$$)
+
+//Parse the response
+PARSE=JSONParseStage1($$WS1CREATE.RESPONSE$$,"OBJECT")
+PARSEDATA=JSONParseStage1Data($$PARSE.HEADER.Data$$,"OBJECT")
+
+// Check if mandatory data missing
+SQLMAND=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"MandatoryParam","WSVerifyStage1",$$PARSEDATA.HEADER.CaseID$$)
+
+IFGOTO($$SQLMAND.HEADER.QueueID$$,"<>","","NEXTRECORD:")
+
+// Wait 10 secs for case to process in DASH
+WAIT(10)
+
+// Verify Stage 2
+WS2CREATE=WSVerifyStage2($$P.HEADER.FillTaskURL$$,"application/json","POST","*/*","Y",$$P.HEADER.XREFucrn$$,$$PARSEDATA.HEADER.CaseID$$)
+
+//Select the address for the tenancy
+WADDRESS=SQLSELECTAddress($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PropertyNo$$)
+
+// Log Data
+SQLAUD=SQLINSERTLettingsAuditLog($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,$$TEN.HEADER.BatchGUID$$,"IFCCreateTenancyDashVerify","SQLSELECTAddress","PostCode",$$WADDRESS.HEADER.PostCode$$)
+
+// Set Link Description
+LINKDESCRIPTION=SETLinkDescription("SET",$$LEADTEN.HEADER.FirstName$$,$$LEADTEN.HEADER.Surname$$,$$LEADTEN.HEADER.PropertyNo$$,$$WADDRESS.HEADER.PostCode$$)
+
+// Execute AHSP_Insert_MyAccount_Link_data
+LINKSQL=SQLINSERTApplicationLinkDetails($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$,$$UCRN.HEADER.UCRN$$,$$UCRN.HEADER.CASEID$$,$$LINKDESCRIPTION.VALUE$$,$$LEADTEN.HEADER.EMAIL$$)
+
+// Mark as processed
+SQLP=SQLUPDATELettingsProcessQueue($$P.HEADER.SQLInstance$$,$$P.HEADER.SQLDatabase$$,$$P.HEADER.SQLUser$$,$$P.HEADER.SQLPassword$$,$$TEN.HEADER.QueueID$$,"Processed","","")
+
+GOTO("NEXTRECORD:")
+
+END:
+
+STOPIFEMPTY("")

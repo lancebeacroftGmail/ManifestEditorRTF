@@ -1,0 +1,57 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=OISWS
+DESCRIPTION=Modify property (only DoubleBeds)
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+PARAMETERS=
+$$URL,nvarchar(500),,,,URL of the web service$$
+$$USERNAME,nvarchar(100),,,,User ID for Web Service$$
+$$PASSWORD,nvarchar(100),,,,Password for Web Service$$
+$$ALLOWERROR,nvarchar,,,,Y to allow an error and set ERROR result$$
+$$REMOVEEMPTYTAGS,nvarchar,,,,Y to remove empty tags$$
+$$APPLICATION_NO,nvarchar(100),,,,$$
+$$HOUSEHOLD_GROUP_CODE,nvarchar(100),,,,$$
+$$SIGNUP_COMP_DATE,nvarchar(100),,,,$$
+$$SWIPE_EFFECTIVE_DATE,nvarchar(100),,,,$$
+$$SWIPE_REQ_TYPE,nvarchar(100),,,,$$
+$$TENANCY_REASON_CODE,nvarchar(100),,,,$$
+$$TEN_START_DATE,nvarchar(100),,,,$$
+$$TEN_TENURE_TYPE_CODE,nvarchar(100),,,,$$
+
+
+$$
+
+$$OISWSHeader.UAZ,INCLUDE,,,BLAZEAES,$$
+
+<ser:add>
+         <ser:addAttributes>
+            <!--Optional:-->
+            <typ:APPLICATION_NO>$$APPLICATION_NO,nvarchar(100),,,,$$</typ:APPLICATION_NO>
+            <!--Optional:-->
+            <typ:HOUSEHOLD_GROUP_CODE>$$HOUSEHOLD_GROUP_CODE,nvarchar(100),,,,$$</typ:HOUSEHOLD_GROUP_CODE>
+            <!--Optional:-->
+            <typ:SIGNUP_COMP_DATE>$$SIGNUP_COMP_DATE,nvarchar(100),,,,$$</typ:SIGNUP_COMP_DATE>
+            <!--Optional:-->
+            <typ:SWIPE_EFFECTIVE_DATE>$$SWIPE_EFFECTIVE_DATE,nvarchar(100),,,,$$</typ:SWIPE_EFFECTIVE_DATE>
+            <!--Optional:-->
+            <typ:SWIPE_PROCESSED></typ:SWIPE_PROCESSED>
+            <!--Optional:-->
+            <typ:SWIPE_REQ_TYPE>$$SWIPE_REQ_TYPE,nvarchar(100),,,,$$</typ:SWIPE_REQ_TYPE>
+            <!--Optional:-->
+            <typ:TENANCY_NO></typ:TENANCY_NO>
+            <!--Optional:-->
+            <typ:TENANCY_PROCESSED></typ:TENANCY_PROCESSED>
+            <!--Optional:-->
+            <typ:TENANCY_REASON_CODE>$$TENANCY_REASON_CODE,nvarchar(100),,,,$$</typ:TENANCY_REASON_CODE>
+            <!--Optional:-->
+            <typ:TEN_START_DATE>$$TEN_START_DATE,nvarchar(100),,,,$$</typ:TEN_START_DATE>
+            <!--Optional:-->
+            <typ:TEN_TENURE_TYPE_CODE>$$TEN_TENURE_TYPE_CODE,nvarchar(100),,,,$$</typ:TEN_TENURE_TYPE_CODE>
+         </ser:addAttributes>
+</ser:add>
+
+$$OISWSTrailer.UAZ,INCLUDE,,,BLAZEAES,$$

@@ -1,0 +1,19 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal Command
+FORMAT=GETDATETIME
+DESCRIPTION=Get current date in numerous formats
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$TIMESTAMP,nvarchar(10),,,,Full Date and Time$$
+$$DD/MM/YYYY,nvarchar(10),,,,Full Date and Time$$
+$$HH:MM:SS,nvarchar(10),,,,Full Date and Time$$
+$$XML,nvarchar(10),,,,Full Date and Time$$
+$$XMLUTC,nvarchar(10),,,,Full Date and Time$$
+$$SQL,nvarchar(10),,,,Full Date and Time$$
+PARAMETERS=$$INPUTDATE,nvarchar(100),,,,Date to convert to another format (optional)$$
+$$
+HEADER=N
+DETAIL=N
+TRAILER=N

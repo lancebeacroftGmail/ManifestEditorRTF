@@ -1,0 +1,15 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Wrap
+ACTIVEDAYS=-MTWTF-
+ACTIVESTARTTIME=08:00
+ACTIVEENDTIME=17:30
+TIMER=0
+DESCRIPTION=
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\TCChris\
+$$
+
+C:\ManifestSoftware\TEST\ControlFiles\TCChris\IFCUpdateTCChris.txt()
+
+C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\IFCLGSRTest.txt()

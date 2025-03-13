@@ -1,0 +1,26 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=-MTWTF-
+//ACTIVESTARTTIME=16:10
+//ACTIVEENDTIME=16:30
+ACTIVESTARTTIME=21:00
+ACTIVEENDTIME=21:01
+TIMER=3600
+DESCRIPTION=
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\
+$$
+
+//Get a fresh copy of data from all systems
+C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\IFCGetAllData.txt()
+
+//Update TC with additions, deletions and updates
+C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\IFCUpdateTrueCompliance.txt()
+
+//Get a fresh copy of data from all systems
+//Commented out 16/02/2022 following issue with data retrieval
+//C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\IFCGetAllData.txt()
+
+//TEST
+//C:\ManifestSoftware\TEST\ControlFiles\TrueCompliance\IFCLGSRTEST.txt()

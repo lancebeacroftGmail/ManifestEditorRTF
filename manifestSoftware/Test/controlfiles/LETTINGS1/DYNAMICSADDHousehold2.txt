@@ -1,0 +1,36 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=UA
+FORMAT=DYNAMICS
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$RESPONSE,nvarchar(100),,,,$$
+
+PARAMETERS=
+$$CRMCLIENTID,nvarchar(100),,,,$$
+$$CRMDOMAIN,nvarchar(100),,,,$$
+$$CRMUSER,nvarchar(100),,,,$$
+$$CRMPASSWORD,nvarchar(100),,,BLAZEAES,$$
+$$CRMSERVICEURL,nvarchar(100),,,,$$
+$$CRMENTITY,nvarchar(100),,,,$$
+$$CRMACTION,nvarchar(100),,,,$$
+$$TenancyID,nvarchar(100),,,,$$
+$$StartDate,nvarchar(100),,,,$$
+$$PersonNo,nvarchar(100),,,,$$
+$$PersonType,nvarchar(100),,,,$$
+$$ContactId,nvarchar(100),,,,$$
+$$TenancyId,nvarchar(100),,,,$$
+$$Relationship,nvarchar(100),,,,$$
+$$
+{
+			"gcs_occupancynumber": "$$TenancyID,nvarchar(100),,,,$$",	
+			"gcs_startdate": "$$StartDate,nvarchar(100),,,,$$",
+		
+			"gcs_name": "$$PersonNo,nvarchar(100),,,,$$",		
+			"gcs_personstatus": "$$PersonType,nvarchar(100),,,,$$",
+			"gcs_personhouseholdid@odata.bind":"/gcs_households($$ContactId,nvarchar(100),,,,$$)",
+			"gcs_tenancyid@odata.bind":"/gcs_tenancies($$TenancyId,nvarchar(100),,,,$$)",
+			"gcs_relationsdescription":"$$Relationship,nvarchar(100),,,,$$"
+			}

@@ -1,0 +1,31 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Find the address for a tenant
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.Address1,nvarchar(10),,Address1,,$$
+$$HEADER.Address2,nvarchar(10),,Address2,,$$
+$$HEADER.Address3,nvarchar(10),,Address3,,$$
+$$HEADER.Address4,nvarchar(10),,Address4,,$$
+$$HEADER.Address5,nvarchar(10),,Address5,,$$
+$$HEADER.PostCode,nvarchar(10),,PostCode,,$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$PropRef,nvarchar(100),,,,$$
+$$
+
+SELECT [Address1]
+      ,[Address2]
+      ,[Address3]
+      ,[Address4]
+      ,[Address5]
+      ,[PostCode]
+FROM [dbo].[OISProperty]
+WHERE ID = '$$PropRef,nvarchar(100),,,,$$'

@@ -1,0 +1,35 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Select next Dash Verify request
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.QueueID,nvarchar(10),,QueueID,,$$
+$$HEADER.ID,nvarchar(10),,ID,,$$
+$$HEADER.BatchGUID,nvarchar(10),,BatchGUID,,$$
+$$HEADER.TenancyPK,nvarchar(10),,TenancyPK,,$$
+$$HEADER.TenancyNumber,nvarchar(10),,TenancyNumber,,$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$
+
+SELECT TOP 1 
+       q.[QueueID]
+      ,l.[ID]
+	  ,l.[BatchGUID]
+      ,l.[TenancyPK]
+	  ,l.[TenancyNumber]
+FROM [let].[LettingsProcessQueue] q
+INNER JOIN [let].[CreateTenancyRequestLog] l
+ON
+l.[BatchGUID] = q.[SourceBatchGUID]
+WHERE 
+[ProcessName] = 'Dash Verify'
+AND
+[PreProcessed] = 0 

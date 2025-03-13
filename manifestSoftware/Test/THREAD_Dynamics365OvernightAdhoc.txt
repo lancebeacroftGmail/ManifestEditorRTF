@@ -1,0 +1,21 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=-----F-
+ACTIVESTARTTIME=11:17
+ACTIVEENDTIME=11:18
+TIMER=3600
+DESCRIPTION=Dynamics 365 Overnight Thread
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\Dynamics365\
+$$
+
+//Download and process EOD files to SQL
+//C:\ManifestSoftware\TEST\ControlFiles\Dynamics365\IFCSyncDynamicsKeyReferencesRecent.txt()
+
+//Overnight Sync
+//C:\ManifestSoftware\TEST\ControlFiles\Dynamics365\IFCDynamicsDataSync.txt()
+
+//reporting
+//C:\ManifestSoftware\TEST\ControlFiles\MSSReporting\IFCDynamicsSummaryReport.txt()
+

@@ -1,0 +1,34 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Get Visual Cues/UDCs
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$DETAIL.PersonNo,nvarchar(10),,per-num,,$$
+
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$TenancyID,nvarchar(100),,,,$$
+$$
+
+select distinct [per-num] from openquery(ORCHHMS,'
+select 
+"per-num"
+from pub.prhst
+where prhst."occ-num" = ''$$TenancyID,nvarchar(100),,,,$$''')
+union
+
+select distinct [per-num]from openquery(ORCHHMS,'
+select 
+"per-num"
+from pub.arrhouse
+where "prhst-occ-num" = ''$$TenancyID,nvarchar(100),,,,$$''')
+
+  
+  

@@ -1,0 +1,93 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Get Applications To Create In Orchard
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$DETAIL.TenancyID,nvarchar(10),,TenancyID,,$$
+$$DETAIL.PersonNo,nvarchar(10),,Personno,,$$
+$$DETAIL.PropertyNo,nvarchar(10),,PropertyNo,,$$
+$$DETAIL.Title,nvarchar(10),,Title,,$$
+$$DETAIL.FirstName,nvarchar(10),,FirstName,,$$
+$$DETAIL.Surname,nvarchar(10),,Surname,,$$
+$$DETAIL.NINO,nvarchar(10),,NINO,,$$
+$$DETAIL.DOB,nvarchar(10),,DOB,,$$
+$$DETAIL.GenderCode,nvarchar(10),,GenderCode,,$$
+$$DETAIL.LeadTenant,nvarchar(10),,LeadTenant,,$$
+$$DETAIL.TenureCode,nvarchar(10),,TenureCode,,$$
+$$DETAIL.TenureDescription,nvarchar(10),,TenureDescription,,$$
+$$DETAIL.Nonrentval,nvarchar(10),,Nonrentval,,$$
+$$DETAIL.Rentval,nvarchar(10),,RentVal,,$$
+$$DETAIL.StartDate,nvarchar(10),,StartDate,,$$
+$$DETAIL.Checkdigit,nvarchar(10),,Checkdigit,,$$
+$$DETAIL.EMAIL,nvarchar(10),,EMAIL,,$$
+$$DETAIL.MOBTEL,nvarchar(10),,MOBTEL,,$$
+$$DETAIL.MOBTEL2,nvarchar(10),,MOBTEL2,,$$
+$$DETAIL.HOMETEL,nvarchar(10),,HOMETEL,,$$
+$$DETAIL.WORKTEL,nvarchar(10),,WORKTEL,,$$
+$$DETAIL.Language,nvarchar(10),,Language,,$$
+$$DETAIL.Ethnicity,nvarchar(10),,Ethnicity,,$$
+$$DETAIL.Religion,nvarchar(10),,Religion,,$$
+$$DETAIL.Relationship,nvarchar(10),,Relationship,,$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$TenancyID,nvarchar(100),,,,$$
+$$
+
+
+select Personno,TenancyID,Title, FirstName,Surname,(CONVERT(VARCHAR,DOB)+'T06:00:00Z') As DOB,NINO,GenderCode,
+CASE WHEN GenderCode = 0 Then 'Female' WHEN GenderCode = 1 Then 'Male' ELSE 'Unknown' END As Gender,Relationship,
+TenureCode,TenureDescription, Nonrentval,RentVal,(CONVERT(VARCHAR,StartDate)+'T12:00:00Z') As StartDate,Checkdigit
+,LANG.CRM_Guid As Language, ETH.CRM_Guid As Ethnicity, REL.CRM_Guid As Religion
+,EMAIL.CommsDetails As EMAIL,MOBTEL.CommsDetails As MOBTEL,MOBTEL2.CommsDetails As MOBTEL2, HOMETEL.CommsDetails As HOMETEL, WORKTEL.CommsDetails As WORKTEL
+from openquery(ORCHHMS,'select distinct
+per.num As Personno,
+tncy."prhst-occ-num" As TenancyID,
+per.ttl As Title,
+per.fnam As FirstName,
+per.snam As Surname,
+per.dob As DOB,
+per."ni-number" As NINO,
+per.sex As GenderCode,
+prhst."tenu-cde" As TenureCode,
+tenu.dsc as TenureDescription,
+nonrnt."chg-val" As Nonrentval,
+rnt."chg-val" As Rentval,
+tncy."comm-dat" As StartDate,
+tncy."check-digit" As Checkdigit,
+per."eth-cde" As EthnicCode,
+per."lang-cde" As LanguageCode,
+per."religion-cde" As ReligionCode,
+rel.dsc As Relationship
+FROM 
+pub.arrhouse
+LEFT JOIN pub.per ON arrhouse."per-num" = per.num
+LEFT JOIN pub.tncy ON arrhouse."prhst-occ-num" = tncy."prhst-occ-num"
+LEFT JOIN pub.prhst ON prhst."per-num" = per.num
+LEFT JOIN pub.tenu on tenu.cde = prhst."tenu-cde"
+LEFT JOIN pub.rntpropchgs As nonrnt on nonrnt."pr-seq-no" = prhst."pr-seq-no"
+LEFT JOIN pub.rntpropchgs As rnt on rnt."pr-seq-no" = prhst."pr-seq-no"
+LEFT OUTER JOIN pub.eth on eth.cde = per."eth-cde"
+LEFT OUTER JOIN pub.lang on lang.cde = per."lang-cde"
+LEFT OUTER JOIN pub.anation on anation.cde = per."nat-cde"
+LEFT OUTER JOIN pub.SPCulRel on per."religion-cde" = SPCulRel.cde
+LEFT OUTER JOIN pub.asexorient on per."sex-orientation-cde" = asexorient.cde
+LEFT OUTER JOIN pub.apermarsts on apermarsts.cde = per."apermarsts-cde"
+LEFT OUTER JOIN pub.rel on arrhouse."rel-cde" = rel.cde
+where per.num is not null
+And arrhouse."str-dte" is not null
+And tncy."prhst-occ-num" =''$$TenancyID,nvarchar(100),,,,$$''')
+Left Join [dbo].[OISTenantCommunications] EMAIL on EMAIL.OISTenantID = PersonNo and EMAIL.CommsMethod = 'Email'
+Left Join [dbo].[OISTenantCommunications] MOBTEL on MOBTEL.OISTenantID = PersonNo and MOBTEL.CommsMethod = 'Mob Tel'
+Left Join [dbo].[OISTenantCommunications] MOBTEL2 on MOBTEL2.OISTenantID = PersonNo and MOBTEL2.CommsMethod = 'Mob Tel 2'
+Left Join [dbo].[OISTenantCommunications] HOMETEL on HOMETEL.OISTenantID = PersonNo and HOMETEL.CommsMethod = 'Home Tel'
+Left Join [dbo].[OISTenantCommunications] WORKTEL on WORKTEL.OISTenantID = PersonNo and WORKTEL.CommsMethod = 'Work Tel'
+Left join [dbo].[CRM_OIS_Lookups] LANG on LANG.OIS_Code = LanguageCode and LANG.Type = 'LANGUAGE'
+Left join [dbo].[CRM_OIS_Lookups] ETH on ETH.OIS_Code = EthnicCode and LANG.Type = 'ETHNICITY'
+Left join [dbo].[CRM_OIS_Lookups] REL on REL.OIS_Code = ReligionCode and LANG.Type = 'RELIGION'

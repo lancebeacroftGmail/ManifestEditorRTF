@@ -1,0 +1,19 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Get Applications To Create In Orchard
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$CASEID,nvarchar(100),,,,$$
+$$
+
+UPDATE AHT_Lettings_Application_stage2
+SET posted_to_orchard = null
+WHERE case_id = '$$CASEID,nvarchar(100),,,,$$'

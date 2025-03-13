@@ -1,0 +1,46 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=OISWS
+DESCRIPTION=Find Tenancy For Person and Property
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+$$HEADER.TENANCYNO,nvarchar(500),,Envelope.Body.findPlusTENANCYResponse.results.PlusTENANCYSearchResult.TENANCYNUMBER,,$$
+
+PARAMETERS=
+$$URL,nvarchar(500),,,,URL of the web service$$
+$$USERNAME,nvarchar(100),,,,User ID for Web Service$$
+$$PASSWORD,nvarchar(100),,,,Password for Web Service$$
+$$ALLOWERROR,nvarchar,,,,Y to allow an error and set ERROR result$$
+$$REMOVEEMPTYTAGS,nvarchar,,,,Y to remove empty tags$$
+$$PERSONNUMBER,int,,,,PersonNumber$$
+$$PROPERTYNUMBER,int,,,,PropertyNumber$$
+$$CURRENTTENANCY,nvarchar(100),,,,CurrentTenancy$$
+$$
+
+$$OISWSHeader.UAZ,INCLUDE,,,BLAZEAES,$$
+
+<ser:findPlusTENANCY>
+<ser:criteria>
+            <typ:CURRENTTENANCY>
+               <typ:operator>=</typ:operator>
+               <typ:value>$$CURRENTTENANCY,nvarchar(100),,,,CurrentTenancy$$</typ:value>
+            </typ:CURRENTTENANCY>
+            <typ:PERSONNUMBER>
+               <typ:operator>=</typ:operator>
+               <typ:value>$$PERSONNUMBER,int,,,,PersonNumber$$</typ:value>
+            </typ:PERSONNUMBER>
+            <typ:PROPERTYSEQUENC>
+               <typ:operator>=</typ:operator>
+               <typ:value>$$PROPERTYNUMBER,int,,,,PropertyNumber$$</typ:value>
+            </typ:PROPERTYSEQUENC>
+</ser:criteria>
+</ser:findPlusTENANCY>
+			   
+$$OISWSTrailer.UAZ,INCLUDE,,,BLAZEAES,$$
+
+
+
+

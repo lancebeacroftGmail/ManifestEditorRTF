@@ -1,0 +1,124 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=INTERFACE
+FROM=Orchard Housing Database
+TIMER=900
+DESCRIPTION=
+TRIGGER=
+TRIGGERFIELDS=
+$$
+//
+// Check file
+//
+
+TP=ReadThreadParameters("C:\ManifestSoftware\TEST\ControlFiles\THREADPARAMS.xml")
+
+STARTTIME=GetDate()
+D=GetDate()
+P=GETPARAMETERS()
+
+PARAM9=GETDATE()
+
+PARSE=JSONParseTncy($$P.PARAM1$$,"OBJECT")
+
+PERNO=SQLGetAllPersonNo($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$PARSE.HEADER.id$$)
+
+//PERNO=SQLGetAllPersonNo($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,"271975")
+
+MERGEDATA=SQLUPDATE_BUILDCOMMS_Single($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,"ORCHHMS","800",$$PERNO.DETAIL.PersonNo$$)
+
+//Add Lead tenant data first 
+LEAD:
+LEADTEN=SQLGetLeadTenant($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$PARSE.HEADER.id$$)
+
+JOINT:
+//search OIS for Joint Tenant info
+JOINTTEN=SQLGetJointTenant($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.TenancyID$$)
+
+WRAP:
+
+//
+// CS New section added to call the SP to create a PIN for Wrap
+//
+
+//Check if lead tenant has a mobile number
+IFGOTO($$LEADTEN.HEADER.MOBTEL$$,"<>","","GENPINS:")
+
+//No mobile found so email error
+LTNOMOB=EMAILWrapNoTenMob("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"chriss@blaze-is.com","HTML","OPTIVO TEST NO MOBILE ON NEW LEAD TENANT",$$LEADTEN.HEADER.TenancyID$$,$$LEADTEN.HEADER.PersonNo$$,$$LEADTEN.HEADER.FirstName$$,$$LEADTEN.HEADER.Surname$$,$$PARAM9.SQL$$,$$LEADTEN.HEADER.PropertyNo$$)
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","Lead Ten No Mob")
+
+//Generate PIN for joint tenant
+GOTO("JTEN:")
+
+//
+//Lead tenant stuff
+//
+
+GENPINS:
+
+//Select the address for the tenancy
+WADDRESS=SQLSELECTAddress($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PropertyNo$$)
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","find address")
+
+//Get contractor UDC details
+CONTR=SQLSELECTContractorUDCDetails($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PropertyNo$$)
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","find contractor")
+
+//Generate the lead tenant PIN
+LTGENPIN=SQLGeneratePIN($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$)
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","gen lt pin")
+
+//Find the PIN for lead tenant
+LTGETPIN=SQLGetPIN($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$)
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","select lt pin")
+
+//Add lead tenant data to SQL
+LTSQL=SQLINSERTTenantToWrap($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$,$$PARAM9.SQL$$,$$LEADTEN.HEADER.FirstName$$,$$LEADTEN.HEADER.Surname$$,$$LEADTEN.HEADER.PropertyNo$$,$$WADDRESS.HEADER.Address1$$,$$WADDRESS.HEADER.Address2$$,$$WADDRESS.HEADER.Address3$$,$$WADDRESS.HEADER.Address4$$,$$WADDRESS.HEADER.PostCode$$,$$LEADTEN.HEADER.MOBTEL$$,$$LEADTEN.HEADER.Rentval$$,$$LEADTEN.HEADER.Nonrentval$$,$$LTGETPIN.HEADER.PIN$$,$$CONTR.HEADER.Contractor$$,$$CONTR.HEADER.ContractorTel$$,$$CONTR.HEADER.ContractorURL$$)
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","Lead Ten add to SQL")
+
+//
+//Joint tenant stuff
+//
+
+JTEN:
+//Check if there is a joint tenant
+IFGOTO($$JOINTTEN.HEADER.PersonNo$$,"=","","END2:")
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","check joint ten")
+
+//Check if joint tenant has a mobile number
+IFGOTO($$JOINTTEN.HEADER.MOBTEL$$,"<>","","JTPIN:")
+
+//No mobile found so email error
+JTNOMOB=EMAILWrapNoTenMob("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"chriss@blaze-is.com","HTML","OPTIVO TEST NO MOBILE ON NEW JOINT TENANT",$$JOINTTEN.HEADER.TenancyID$$,$$JOINTTEN.HEADER.PersonNo$$,$$JOINTTEN.HEADER.FirstName$$,$$JOINTTEN.HEADER.Surname$$,$$PARAM9.SQL$$,$$JOINTTEN.HEADER.PropertyNo$$)
+
+//Go to the end
+GOTO("END2:")
+
+JTPIN:
+
+//Generate the joint tenant PIN
+JTGENPIN=SQLGeneratePIN($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.PersonNo$$)
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","gen jt pin")
+
+//Find the PIN for joint tenant
+JTGETPIN=SQLGetPIN($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.PersonNo$$)
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","find jt pin")
+
+//Add joint tenant data to SQL
+JTSQL=SQLINSERTTenantToWrap($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.PersonNo$$,$$PARAM9.SQL$$,$$JOINTTEN.HEADER.FirstName$$,$$JOINTTEN.HEADER.Surname$$,$$LEADTEN.HEADER.PropertyNo$$,$$WADDRESS.HEADER.Address1$$,$$WADDRESS.HEADER.Address2$$,$$WADDRESS.HEADER.Address3$$,$$WADDRESS.HEADER.Address4$$,$$WADDRESS.HEADER.PostCode$$,$$JOINTTEN.HEADER.MOBTEL$$,$$JOINTTEN.HEADER.Rentval$$,$$JOINTTEN.Nonrentval$$,$$JTGETPIN.HEADER.PIN$$,$$CONTR.HEADER.Contractor$$,$$CONTR.HEADER.ContractorTel$$,$$CONTR.HEADER.ContractorURL$$)
+
+//W1=WRITEFile("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\params.txt","UPDATE","add jt to SQL")
+
+END2:
+
+STOPIFEMPTY("")

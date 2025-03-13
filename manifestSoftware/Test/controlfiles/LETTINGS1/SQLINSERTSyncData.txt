@@ -1,0 +1,450 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Insert the tenants to the Wrap table
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$BatchGUID,nvarchar(100),,@BatchGUID,,$$
+$$TenancyNumber,nvarchar(100),,,,$$
+$$SQLTIMEOUTSECS,nvarchar(100),,,,SQL Timeout optional$$
+$$
+
+--TRUNCATE TABLE [let].[CRM_AlertsSync]
+--TRUNCATE TABLE [let].[CRM_ContactSync]
+--TRUNCATE TABLE [let].[CRM_ContactTenancyLinkSync]
+--TRUNCATE TABLE [let].[CRM_HouseholdSync]
+--TRUNCATE TABLE [let].[CRM_TenancySync]
+
+-- Lead and Joint Tenants
+
+INSERT INTO [let].[CRM_ContactSync]
+           ([BatchGUID]
+           ,[num]
+           ,[pr_seq_no]
+           ,[occ_num]
+           ,[ttl]
+           ,[fnam]
+           ,[snam]
+		   ,[lead_tenant]
+           ,[ni_number]
+           ,[dob]
+           ,[sex]
+           ,[eth_cde]
+           ,[pref_lang]
+           ,[religion]
+           ,[tenu_cde]
+           ,[arrears_area_dsc]
+           ,[mobile_no]
+           ,[age]
+           ,[Dynamics_Resident_Type]
+           ,[Common_Area]
+           ,[Common_Region]
+           ,[Resident Involvement]
+           ,[day_tel_num]
+           ,[home_tel]
+           ,[c_address1]
+           ,[c_address2]
+           ,[c_address3]
+           ,[c_postcode]
+		   ,[person_status]
+		   ,[rel_desc])
+
+SELECT   @BatchGUID
+		,[Personno]
+		,[PropertyNo]
+		,[TenancyID]
+		,CASE when Title = 'Mast' then 'Master' when Title = 'Rabb' then 'Rabbi' when Title = 'Col' then 'Colonel' when Title = 'Col.' then 'Colonel' when Title = 'Fao' then '' Else [Title] END As [Title]
+		,[FirstName]
+		,[Surname]
+		,[LeadTenant]
+		,[NINO]
+		,[DOB]
+		,CASE WHEN [GenderCode] = 0 Then 'Female' WHEN [GenderCode] = 1 Then 'Male' ELSE 'Unknown' END As [Gender]
+		,[EthnicCode]
+		,[LanguageCode]
+		,[ReligionCode]
+		,[TenureCode]
+		,NULL -- [arrears_area_dsc]
+		,MOBTEL.CommsDetails As MOBTEL
+		,DATEDIFF(YEAR,[DOB],GETDATE()) as [age]
+		,'Current Resident' as CustomerType
+		,NULL -- [Common_Area]
+		,NULL -- [Common_Region]
+		,NULL -- [Resident Involvement]
+		,WORKTEL.CommsDetails As WORKTEL
+		,HOMETEL.CommsDetails As HOMETEL
+		,NULL -- [c_address1]
+		,NULL -- [c_address2]
+		,NULL -- [c_address3]
+		,NULL -- [c_postcode]
+		,CASE WHEN [LeadTenant] = 1 THEN 'Lead Tenant' ELSE 'Joint Tenant' END AS [person_status]
+		,NULL as [rel_desc]
+ FROM OPENQUERY(ORCHHMS, '
+ select
+  prhst."occ-num" As TenancyID
+ ,per.num As PersonNo
+ ,prhst."pr-seq-no" As PropertyNo
+ ,per.ttl As Title
+ ,per.fnam As FirstName
+ ,per.snam As Surname
+ ,prhst."lead-tenant" As LeadTenant
+ ,per."ni-number" As NINO
+ ,per.dob As DOB
+ ,per.sex As GenderCode
+ ,prhst."tenu-cde" As TenureCode
+ ,tenu.dsc as TenureDescription
+ ,tncy."comm-dat" As StartDate
+ ,tncy."check-digit" As Checkdigit
+ ,per."eth-cde" As EthnicCode
+ ,per."lang-cde" As LanguageCode
+ ,per."religion-cde" As ReligionCode
+ FROM
+ pub.prhst
+ LEFT JOIN pub.tncy ON prhst."occ-num" = tncy."prhst-occ-num"
+ LEFT JOIN pub.per ON prhst."per-num" = per.num
+ LEFT JOIN pub.tenu on tenu.cde = prhst."tenu-cde"
+ Where 
+ prhst."occ-num" = ''$$TenancyNumber,nvarchar(100),,,,$$''')
+ LEFT OUTER JOIN [dbo].[OISTenantCommunications] EMAIL on EMAIL.OISTenantID = PersonNo and EMAIL.CommsMethod = 'Email'
+ LEFT OUTER JOIN [dbo].[OISTenantCommunications] MOBTEL on MOBTEL.OISTenantID = PersonNo and MOBTEL.CommsMethod = 'Mob Tel'
+ LEFT OUTER JOIN [dbo].[OISTenantCommunications] MOBTEL2 on MOBTEL2.OISTenantID = PersonNo and MOBTEL2.CommsMethod = 'Mob Tel 2'
+ LEFT OUTER JOIN [dbo].[OISTenantCommunications] HOMETEL on HOMETEL.OISTenantID = PersonNo and HOMETEL.CommsMethod = 'Home Tel'
+ LEFT OUTER JOIN [dbo].[OISTenantCommunications] WORKTEL on WORKTEL.OISTenantID = PersonNo and WORKTEL.CommsMethod = 'Work Tel'
+ GROUP BY
+ TenancyID
+ ,Personno
+ ,PropertyNo
+ ,Title
+ ,TenureDescription
+ ,FirstName
+ ,Surname
+ ,NINO
+ ,DOB
+ ,GenderCode
+ ,TenureCode
+ ,LeadTenant
+ ,StartDate
+ ,Checkdigit
+,[EthnicCode]
+,[LanguageCode]
+,[ReligionCode]
+ ,EMAIL.CommsDetails
+ ,MOBTEL.CommsDetails
+ ,MOBTEL2.CommsDetails
+ ,HOMETEL.CommsDetails
+ ,WORKTEL.CommsDetails;
+
+
+
+ --
+ -- HOUSEHOLDER CONTACTS
+ --
+ 
+ INSERT INTO [let].[CRM_ContactSync]
+           ([BatchGUID]
+           ,[num]
+           ,[pr_seq_no]
+           ,[occ_num]
+           ,[ttl]
+           ,[fnam]
+           ,[snam]
+           ,[ni_number]
+           ,[dob]
+           ,[sex]
+           ,[eth_cde]
+           ,[pref_lang]
+           ,[religion]
+           ,[tenu_cde]
+           ,[arrears_area_dsc]
+           ,[mobile_no]
+           ,[age]
+           ,[Dynamics_Resident_Type]
+           ,[Common_Area]
+           ,[Common_Region]
+           ,[Resident Involvement]
+           ,[day_tel_num]
+           ,[home_tel]
+           ,[c_address1]
+           ,[c_address2]
+           ,[c_address3]
+           ,[c_postcode]
+		   ,[person_status]
+		   ,[rel_desc])
+
+
+select @BatchGUID
+	  ,[Personno]
+	  ,[TenancyID]
+	  ,[Title]
+	  ,[FirstName]
+	  ,[Surname]
+	  ,[NINO]
+	  ,[DOB]
+	  ,CASE WHEN GenderCode = 0 Then 'Female' WHEN GenderCode = 1 Then 'Male' ELSE 'Unknown' END As [Gender]
+	  ,[EthnicCode]
+	  ,[LanguageCode]
+	  ,[ReligionCode]
+	  ,[TenureCode]
+	  ,NULL -- [arrears_area_dsc]
+	  ,MOBTEL.CommsDetails As MOBTEL
+	  ,DATEDIFF(YEAR,[DOB],GETDATE()) as [age]
+	  ,'Current Resident'
+	  ,NULL -- [Common_Area]
+	  ,NULL -- [Common_Region]
+	  ,NULL -- [Resident Involvement]
+	  ,WORKTEL.CommsDetails As WORKTEL
+	  ,HOMETEL.CommsDetails As HOMETEL
+	  ,NULL -- [c_address1]
+	  ,NULL -- [c_address2]
+	  ,NULL -- [c_address3]
+	  ,NULL -- [c_postcode]
+	  ,[Relationship]
+	  ,'Other' as [person_status]
+	  ,[Relationship]
+from openquery(ORCHHMS,'select distinct
+ prhst."occ-num" As TenancyID
+ ,per.num As PersonNo
+ ,prhst."pr-seq-no" As PropertyNo
+ ,per.ttl As Title
+ ,per.fnam As FirstName
+ ,per.snam As Surname
+ ,prhst."lead-tenant" As LeadTenant
+ ,per."ni-number" As NINO
+ ,per.dob As DOB
+ ,per.sex As GenderCode
+ ,prhst."tenu-cde" As TenureCode
+ ,tenu.dsc as TenureDescription
+ ,tncy."comm-dat" As StartDate
+ ,tncy."check-digit" As Checkdigit
+ ,per."eth-cde" As EthnicCode
+ ,per."lang-cde" As LanguageCode
+ ,per."religion-cde" As ReligionCode
+ ,rel.dsc As Relationship
+
+FROM 
+pub.arrhouse
+LEFT JOIN pub.per ON arrhouse."per-num" = per.num
+LEFT JOIN pub.tncy ON arrhouse."prhst-occ-num" = tncy."prhst-occ-num"
+LEFT JOIN pub.prhst ON prhst."occ-num" = tncy."prhst-occ-num"
+LEFT JOIN pub.tenu on tenu.cde = prhst."tenu-cde"
+LEFT OUTER JOIN pub.eth on eth.cde = per."eth-cde"
+LEFT OUTER JOIN pub.lang on lang.cde = per."lang-cde"
+LEFT OUTER JOIN pub.anation on anation.cde = per."nat-cde"
+LEFT OUTER JOIN pub.SPCulRel on per."religion-cde" = SPCulRel.cde
+LEFT OUTER JOIN pub.asexorient on per."sex-orientation-cde" = asexorient.cde
+LEFT OUTER JOIN pub.apermarsts on apermarsts.cde = per."apermarsts-cde"
+LEFT OUTER JOIN pub.rel on arrhouse."rel-cde" = rel.cde
+where per.num is not null
+And arrhouse."str-dte" is not null
+and prhst."end-dte" is null
+and tncy."term-dat" is null
+And tncy."prhst-occ-num" =''$$TenancyNumber,nvarchar(100),,,,$$''')
+Left Join [dbo].[OISTenantCommunications] EMAIL on EMAIL.OISTenantID = PersonNo and EMAIL.CommsMethod = 'Email'
+Left Join [dbo].[OISTenantCommunications] MOBTEL on MOBTEL.OISTenantID = PersonNo and MOBTEL.CommsMethod = 'Mob Tel'
+Left Join [dbo].[OISTenantCommunications] MOBTEL2 on MOBTEL2.OISTenantID = PersonNo and MOBTEL2.CommsMethod = 'Mob Tel 2'
+Left Join [dbo].[OISTenantCommunications] HOMETEL on HOMETEL.OISTenantID = PersonNo and HOMETEL.CommsMethod = 'Home Tel'
+Left Join [dbo].[OISTenantCommunications] WORKTEL on WORKTEL.OISTenantID = PersonNo and WORKTEL.CommsMethod = 'Work Tel';
+
+
+-----------------------------------------------------------------------------------
+-- Alerts (UDCs)
+-----------------------------------------------------------------------------------
+
+WITH OrchardUDCs
+As
+(
+	select 'PERSON' AS Entity, 
+	CASE [audctyp-class]
+	WHEN 'CODE' THEN [audc-code]
+	WHEN 'CHARACTER' THEN [audc-char]
+	WHEN 'DATE' THEN Convert(nvarchar,[audc-date],103)
+	WHEN 'LOGICAL' THEN convert(nvarchar, [audc-log])
+	WHEN 'DECIMAL' THEN convert(nvarchar, [audc-dec])
+	ELSE ''
+	END AS UDCValue,
+	* from openquery([ORCHHMS],
+	'
+	select 
+	prhst."occ-num", 
+	prhst."pr-seq-no", 
+	prhst."per-num", 
+	audcper."audc-id", 
+	audcper."audctyp-cde", 
+	audctyp."audctyp-dsc", 
+	audctyp."audctyp-class", 
+	audc."audc-date", 
+	audc."audc-char", 
+	audc."audc-dec", 
+	audc."audc-log", 
+	audc.notes, 
+	audc."valid-from-dte", 
+	audc."valid-to-dte", 
+	audc."audc-code",
+	audctypcde."audctypcde-cde",
+	audctypcde."audctypcde-dsc"
+	from 
+	pub.prhst 
+	join pub.audcper on audcper."per-num" = prhst."per-num" 
+	LEFT JOIN pub.tncy ON prhst."occ-num" = tncy."prhst-occ-num" 
+	join pub.audc on audc."audc-id" = audcper."audc-id" 
+	join pub.audctyp on audctyp."audctyp-cde" = audc."audctyp-cde" 
+	left outer join PUB.audctypcde on audc."audctyp-cde" = audctypcde."audctyp-cde" and audc."audc-code" = audctypcde."audctypcde-cde"
+	where (prhst."end-dte" is null OR prhst."end-dte" >= SYSDATE) 
+	and (tncy."term-dat" is null OR tncy."term-dat" >= SYSDATE) 
+	and (audc."valid-to-dte" is null OR audc."valid-to-dte" >= SYSDATE)
+	and prhst."occ-num" = ''$$TenancyNumber,nvarchar(100),,,,$$''
+	')
+)
+,
+CRMPersonAlerts ([num],[UDCID],[AlertType],[validFrom],[validTo],[Description])
+as
+(
+	SELECT DISTINCT [per-num],[audc-id] ,'Wheelchair',[valid-from-dte],[valid-to-dte],[notes] FROM OrchardUDCs WHERE ([audctyp-cde] = 'DISAB') AND [audctypcde-cde] in ('A4')
+	UNION
+	SELECT DISTINCT [per-num],[audc-id] ,'Comms Need',[valid-from-dte],[valid-to-dte],[notes] FROM OrchardUDCs WHERE ([audctyp-cde] = 'POWATT') 
+	UNION
+	SELECT DISTINCT [per-num],[audc-id],'Contact warning' ,[valid-from-dte],[valid-to-dte],[notes] FROM OrchardUDCs WHERE ([audctyp-cde] = 'COMM') AND [audctypcde-cde] in ('C1','C4','C18','C19')
+	UNION
+	SELECT DISTINCT [per-num],[audc-id],'Hearing Difficulties' ,[valid-from-dte],[valid-to-dte],[notes] FROM OrchardUDCs WHERE ([audctyp-cde] = 'DISAB') AND [audctypcde-cde] in ('A3')
+	UNION
+	SELECT DISTINCT [per-num],[audc-id],'Personal Security',[valid-from-dte],[valid-to-dte],[notes] FROM OrchardUDCs WHERE ([audctyp-cde] = 'HAZARD') AND [audctypcde-cde] in ('08')
+	UNION
+	SELECT DISTINCT [per-num],[audc-id],'Poor Mobility' ,[valid-from-dte],[valid-to-dte],[notes] FROM OrchardUDCs WHERE ([audctyp-cde] = 'DISAB') AND [audctypcde-cde] in ('A5')
+	UNION
+	SELECT DISTINCT [per-num],[audc-id],'Sight Difficulties' ,[valid-from-dte],[valid-to-dte],[notes] FROM OrchardUDCs WHERE ([audctyp-cde] = 'DISAB') AND [audctypcde-cde] in ('A2')
+	UNION
+	SELECT DISTINCT [per-num],[audc-id],'Support Concern',[valid-from-dte],[valid-to-dte],[notes] FROM OrchardUDCs WHERE ([audctyp-cde] = 'DISAB') AND [audctypcde-cde] in ('A1')
+	UNION
+	SELECT DISTINCT [per-num],[audc-id],'Welfare Concern',[valid-from-dte],[valid-to-dte],[notes] FROM OrchardUDCs WHERE ([audctyp-cde] = 'DISAB') AND [audctypcde-cde] in ('A7')
+)
+
+INSERT INTO [let].[CRM_AlertsSync]
+           ([BatchGUID]
+           ,[UDCID]
+           ,[num]
+           ,[validFrom]
+           ,[validTo]
+           ,[Description]
+           ,[AlertType])
+
+SELECT DISTINCT @BatchGUID,[UDCID],cpa.[num],[validFrom],[validTo],[Description],[AlertType]
+FROM
+CRMPersonAlerts cpa
+
+-------------------------------------------------------------------------------------------------------
+-- TENANCY
+-------------------------------------------------------------------------------------------------------
+
+
+INSERT INTO [let].[CRM_TenancySync]
+           ([BatchGUID]
+           ,[occ_num]
+           ,[pr_seq_no]
+           ,[JointTenantNum]
+           ,[arcPerNum]
+           ,[ttncytyp_dsc]
+           ,[term_dat]
+           ,[comm_dat]
+           ,[Tenancy_number]
+           ,[tenu_cde]
+           ,[CorrespAddr1]
+           ,[CorrespAddr2]
+           ,[CorrespAddr3]
+           ,[CorrespAddr4]
+           ,[CorrespPostcode])
+
+
+SELECT   @BatchGUID
+		,[TenancyID]
+		,[PropertyNo]
+		,jt.num -- [JointTenantNum]
+		,ld.num -- [arcPerNum]
+		,NULL -- [ttncytyp_dsc]
+		,NULL as [term_dat]
+		,[StartDate]
+		,[TenancyID]
+		,[TenureCode]
+		,NULL as [CorrespAddr1]
+		,NULL as [CorrespAddr2]
+		,NULL as [CorrespAddr3]
+		,NULL as [CorrespAddr4]
+		,NULL as [CorrespPostcode]
+		
+FROM OPENQUERY(ORCHHMS, '
+select
+prhst."occ-num" as TenancyID,
+prhst."pr-seq-no" As PropertyNo,
+prhst."tenu-cde" As TenureCode,
+tncy."comm-dat" As StartDate
+FROM
+pub.prhst
+LEFT JOIN pub.tncy ON prhst."occ-num" = tncy."prhst-occ-num"
+Where 
+prhst."lead-tenant" = 1
+and 
+prhst."occ-num" = ''$$TenancyNumber,nvarchar(100),,,,$$''')
+INNER JOIN [let].[CRM_ContactSync] ld
+ON
+ld.BatchGUID = @BatchGUID
+AND 
+ld.[lead_tenant] = 1
+LEFT OUTER JOIN [let].[CRM_ContactSync] jt
+ON
+jt.BatchGUID = @BatchGUID
+AND 
+jt.[lead_tenant] = 0
+
+
+-----------------------------------------------------------------------------------------------------
+-- HOUSEHOLD
+-----------------------------------------------------------------------------------------------------
+
+INSERT INTO [let].[CRM_HouseholdSync]
+           ([BatchGUID]
+           ,[arcPerNum]
+           ,[rel_desc]
+           ,[occ_num]
+           ,[occ_start_date]
+           ,[person_status])
+SELECT cs.[BatchGUID]
+      ,cs.[num]
+	  ,cs.[rel_desc]
+      ,cs.[occ_num]
+	  ,ts.[comm_dat]
+	  ,cs.[person_status]  
+FROM [let].[CRM_ContactSync] cs
+INNER JOIN [let].[CRM_TenancySync] ts
+ON
+ts.BatchGUID = cs.BatchGUID
+WHERE cs.[BatchGUID] = @BatchGUID;
+
+-----------------------------------------------------------------------------------------------------
+-- CONTACT TENANCY LINK
+-----------------------------------------------------------------------------------------------------
+
+INSERT INTO [let].[CRM_ContactTenancyLinkSync]
+           ([BatchGUID]
+           ,[num]
+           ,[occ_num])
+SELECT [BatchGUID]
+      ,[arcPerNum]
+      ,[occ_num]
+FROM [let].[CRM_HouseholdSync]
+WHERE [BatchGUID] = @BatchGUID;
+
+/*
+SELECT * FROM [let].[CRM_ContactSync];
+SELECT * FROM [let].[CRM_TenancySync];
+SELECT * FROM [let].[CRM_HouseholdSync];
+SELECT * FROM [let].[CRM_AlertsSync];
+SELECT * FROM [let].[CRM_ContactTenancyLinkSync];
+*/
+

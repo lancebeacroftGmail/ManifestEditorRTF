@@ -1,0 +1,15 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=DOSCOMMAND
+DESCRIPTION=Execute DOS Command
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+PARAMETERS=
+$$TIME,nvarchar(100),,,,$$
+$$
+timeout /t $$TIME,nvarchar(100),,,,$$
+
+

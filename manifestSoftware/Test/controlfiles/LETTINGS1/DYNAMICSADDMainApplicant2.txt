@@ -1,0 +1,38 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=UA
+FORMAT=DYNAMICS
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$RESPONSE,nvarchar(100),,,,$$
+
+PARAMETERS=
+$$CRMCLIENTID,nvarchar(100),,,,$$
+$$CRMDOMAIN,nvarchar(100),,,,$$
+$$CRMUSER,nvarchar(100),,,,$$
+$$CRMPASSWORD,nvarchar(100),,,BLAZEAES,$$
+$$CRMSERVICEURL,nvarchar(100),,,,$$
+$$CRMENTITY,nvarchar(100),,,,$$
+$$CRMACTION,nvarchar(100),,,,$$
+$$PERSON_NO,nvarchar(100),,,,$$
+$$PERSON_DOB,nvarchar(100),,,,$$
+$$PERSON_TITLE,nvarchar(100),,,,$$
+$$PERSON_EMAIL,nvarchar(100),,,,$$
+$$PERSON_LASTNAME,nvarchar(100),,,,$$
+$$PERSON_TEL1,nvarchar(100),,,,$$
+$$PERSON_TEL2,nvarchar(100),,,,$$
+$$FIRSTNAME,nvarchar(100),,,,$$
+
+$$
+{
+	"gcs_archousepersonnum": $$PERSON_NO,nvarchar(100),,,,$$,
+	"gcs_uid": '$$PERSON_NO,nvarchar(100),,,,$$',
+	"gcs_dob": '$$PERSON_DOB,nvarchar(100),,,,$$',
+	"emailaddress1": "$$PERSON_EMAIL,nvarchar(100),,,,$$",
+	"firstname": "$$FIRSTNAME,nvarchar(100),,,,$$",
+	"lastname": "$$PERSON_LASTNAME,nvarchar(100),,,,$$",
+        "telephone2": '$$PERSON_TEL1,nvarchar(100),,,,$$',
+	"mobilephone": '$$PERSON_TEL2,nvarchar(100),,,,$$'
+}

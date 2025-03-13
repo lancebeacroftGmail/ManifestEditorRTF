@@ -1,0 +1,16 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=-MTWTF-
+ACTIVESTARTTIME=08:00
+ACTIVEENDTIME=18:15
+TIMER=300
+DESCRIPTION=Lettings Stage 1
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\
+$$
+//
+// Check every 5 minutes
+//
+
+C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\IFCAddNewApplications.txt()

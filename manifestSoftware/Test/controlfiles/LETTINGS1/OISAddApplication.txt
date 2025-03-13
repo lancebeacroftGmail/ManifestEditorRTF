@@ -1,0 +1,154 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=OISWS
+DESCRIPTION=
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+$$HEADER.PK,nvarchar(100),,Envelope.Body.addResponse.primaryKey.MUA_PERSON_APPLPK,,$$
+PARAMETERS=
+$$URL,nvarchar(500),,,,URL of the web service$$
+$$USERNAME,nvarchar(100),,,,User ID for Web Service$$
+$$PASSWORD,nvarchar(100),,,,Password for Web Service$$
+$$ALLOWERROR,nvarchar,,,,Y to allow an error and set ERROR result$$
+$$REMOVEEMPTYTAGS,nvarchar,,,,Y to remove empty tags$$
+$$ADDRESS1,nvarchar(100),,,,$$
+$$ADDRESS2,nvarchar(100),,,,$$
+$$ADDRESS3,nvarchar(100),,,,$$
+$$ADDRESS4,nvarchar(100),,,,$$
+$$ADD_START_DATE,nvarchar(100),,,,$$
+$$APPLICATION_NO,nvarchar(100),,,,$$
+$$APP_DATE,nvarchar(100),,,,$$
+$$APP_REASON_CODE,nvarchar(100),,,,$$
+$$APP_TYPE_CODE,nvarchar(100),,,,$$
+$$CURRENT_TENURE,nvarchar(100),,,,$$
+$$DAY_PHONE,nvarchar(100),,,,$$
+$$DOB,nvarchar(100),,,,$$
+$$EMAIL,nvarchar(100),,,,$$
+$$ETHNIC_CODE,nvarchar(100),,,,$$
+$$EXT_APP_REF,nvarchar(100),,,,$$
+$$FORNAME,nvarchar(100),,,,$$
+$$GENDER,nvarchar(100),,,,$$
+$$HOME_PHONE,nvarchar(100),,,,$$
+$$HOUSEHOLD_GROUP,nvarchar(100),,,,$$
+$$INITIAL,nvarchar(100),,,,$$
+$$MOBILE_PHONE,nvarchar(100),,,,$$
+$$MOBILE_PHONE2,nvarchar(100),,,,$$
+$$NATIONALITY_CODE,nvarchar(100),,,,$$
+$$NIN,nvarchar(100),,,,$$
+$$PERSON_APP_STATUS,nvarchar(100),,,,$$
+$$PERSON_NO,nvarchar(100),,,,$$
+$$POST_CODE,nvarchar(100),,,,$$
+$$RELATIONSHIP_CODE,nvarchar(100),,,,$$
+$$RELIGION_CODE,nvarchar(100),,,,$$
+$$SEX_ORIENTATION_CODE,nvarchar(100),,,,$$
+$$SURNAME,nvarchar(100),,,,$$
+$$TITLE,nvarchar(100),,,,$$
+$$EXP_TEN_COMM_DATE,nvarchar(100),,,,$$
+$$OFFER_DATE,nvarchar(100),,,,$$
+$$OFFERLETTERID,nvarchar(10),,,,$$
+$$OFFERREASONID,nvarchar(10),,,,$$
+$$OFFERTENURETYPE,nvarchar(10),,,,$$
+$$OFFERTYPE,nvarchar(10),,,,$$
+$$PRSEQNO,nvarchar(10),,,,$$
+
+
+$$
+
+$$OISWSHeader.UAZ,INCLUDE,,,BLAZEAES,$$
+
+<ser:add>
+         <ser:addAttributes>
+            <!--Optional:-->
+            <typ:ADDRESS1>$$ADDRESS1,nvarchar(100),,,,$$</typ:ADDRESS1>
+            <!--Optional:-->
+            <typ:ADDRESS2>$$ADDRESS2,nvarchar(100),,,,$$</typ:ADDRESS2>
+            <!--Optional:-->
+            <typ:ADDRESS3>$$ADDRESS3,nvarchar(100),,,,$$</typ:ADDRESS3>
+            <!--Optional:-->
+            <typ:ADDRESS4>$$ADDRESS4,nvarchar(100),,,,$$</typ:ADDRESS4>
+            <!--Optional:-->
+            <typ:ADD_START_DATE>$$ADD_START_DATE,nvarchar(100),,,,$$</typ:ADD_START_DATE>
+            <!--Optional:-->
+            <typ:APPLICATION_NO>$$APPLICATION_NO,nvarchar(100),,,,$$</typ:APPLICATION_NO>
+            <!--Optional:-->
+            <typ:APP_DATE>$$APP_DATE,nvarchar(100),,,,$$</typ:APP_DATE>
+            <!--Optional:-->
+            <typ:APP_REASON_CODE>$$APP_REASON_CODE,nvarchar(100),,,,$$</typ:APP_REASON_CODE>
+            <!--Optional:-->
+            <typ:APP_TYPE_CODE>$$APP_TYPE_CODE,nvarchar(100),,,,$$</typ:APP_TYPE_CODE>
+            <!--Optional:-->
+            <typ:CURRENT_TENURE>$$CURRENT_TENURE,nvarchar(100),,,,$$</typ:CURRENT_TENURE>
+            <!--Optional:-->
+            <typ:DAY_PHONE>$$DAY_PHONE,nvarchar(100),,,,$$</typ:DAY_PHONE>
+            <!--Optional:-->
+            <typ:DOB>$$DOB,nvarchar(100),,,,$$</typ:DOB>
+            <!--Optional:-->
+            <typ:EMAIL>$$EMAIL,nvarchar(100),,,,$$</typ:EMAIL>
+            <!--Optional:-->
+            <typ:ETHNIC_CODE>$$ETHNIC_CODE,nvarchar(100),,,,$$</typ:ETHNIC_CODE>
+            <!--Optional:-->
+            <typ:EXP_TEN_COMM_DATE>$$EXP_TEN_COMM_DATE,nvarchar(100),,,,$$</typ:EXP_TEN_COMM_DATE>
+            <typ:EXT_APP_REF>$$EXT_APP_REF,nvarchar(100),,,,$$</typ:EXT_APP_REF>
+            <!--Optional:-->
+            <typ:FORNAME>$$FORNAME,nvarchar(100),,,,$$</typ:FORNAME>
+            <!--Optional:-->
+            <typ:GENDER>$$GENDER,nvarchar(100),,,,$$</typ:GENDER>
+            <!--Optional:-->
+            <typ:HOME_PHONE>$$HOME_PHONE,nvarchar(100),,,,$$</typ:HOME_PHONE>
+            <!--Optional:-->
+            <typ:HOUSEHOLD_GROUP>$$HOUSEHOLD_GROUP,nvarchar(100),,,,$$</typ:HOUSEHOLD_GROUP>
+            <!--Optional:-->
+            <typ:INITIAL>$$INITIAL,nvarchar(100),,,,$$</typ:INITIAL>
+            <!--Optional:-->
+            <typ:MOBILE_PHONE>$$MOBILE_PHONE,nvarchar(100),,,,$$</typ:MOBILE_PHONE>
+            <!--Optional:-->
+            <typ:MOBILE_PHONE2>$$MOBILE_PHONE2,nvarchar(100),,,,$$</typ:MOBILE_PHONE2>
+            <!--Optional:-->
+            <typ:NATIONALITY_CODE>$$NATIONALITY_CODE,nvarchar(100),,,,$$</typ:NATIONALITY_CODE>
+
+<typ:OFFER_DATE>$$OFFER_DATE,nvarchar(100),,,,$$</typ:OFFER_DATE>
+
+<typ:OFFER_LETTER>$$OFFERLETTERID,nvarchar(10),,,,$$</typ:OFFER_LETTER>
+
+<typ:OFFER_REASON>$$OFFERREASONID,nvarchar(100),,,,$$</typ:OFFER_REASON>
+
+<typ:OFFER_TENURE_TYPE>$$OFFERTENURETYPE,nvarchar(100),,,,$$</typ:OFFER_TENURE_TYPE>
+
+<typ:OFFER_TYPE>$$OFFERTYPE,nvarchar(100),,,,$$</typ:OFFER_TYPE>
+
+            <!--Optional:-->
+            <typ:NIN>$$NIN,nvarchar(100),,,,$$</typ:NIN>
+            <!--Optional:-->
+
+<typ:PER_UDC1>$$RELIGION_CODE,nvarchar(100),,,,$$</typ:PER_UDC1>
+<typ:PER_UDC2>$$SEX_ORIENTATION_CODE,nvarchar(100),,,,$$</typ:PER_UDC2>
+
+            <typ:PERSON_APP_STATUS>$$PERSON_APP_STATUS,nvarchar(100),,,,$$</typ:PERSON_APP_STATUS>
+            <!--Optional:-->
+            <typ:PERSON_NO>$$PERSON_NO,nvarchar(100),,,,$$</typ:PERSON_NO>
+            <!--Optional:-->
+            <typ:POST_CODE>$$POST_CODE,nvarchar(100),,,,$$</typ:POST_CODE>
+            <!--Optional:-->
+            <typ:PROCCESSED_PERSON></typ:PROCCESSED_PERSON>
+            <!--Optional:-->
+            <typ:PROCESSED_APP></typ:PROCESSED_APP>
+
+            <typ:PROPERTY_SEQ_NO>$$PRSEQNO,nvarchar(10),,,,$$</typ:PROPERTY_SEQ_NO>
+
+            <!--Optional:-->
+            <typ:RELATIONSHIP_CODE>$$RELATIONSHIP_CODE,nvarchar(100),,,,$$</typ:RELATIONSHIP_CODE>
+            <!--Optional:-->
+            <typ:RELIGION_CODE></typ:RELIGION_CODE>
+            <!--Optional:-->
+            <typ:SEX_ORIENTATION_CODE></typ:SEX_ORIENTATION_CODE>
+            <!--Optional:-->
+            <typ:SURNAME>$$SURNAME,nvarchar(100),,,,$$</typ:SURNAME>
+            <!--Optional:-->
+            <typ:TITLE>$$TITLE,nvarchar(100),,,,$$</typ:TITLE>
+         </ser:addAttributes>
+      </ser:add>
+
+$$OISWSTrailer.UAZ,INCLUDE,,,BLAZEAES,$$

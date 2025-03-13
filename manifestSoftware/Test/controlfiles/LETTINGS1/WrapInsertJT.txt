@@ -1,0 +1,40 @@
+
+INSERT INTO [dbo].[WrapData]
+           ([personNum]
+           ,[tenancyStartDate]
+           ,[firstName]
+           ,[surname]
+           ,[propertyID]
+           ,[address1]
+           ,[address2]
+           ,[town]
+           ,[county]
+           ,[postcode]
+           ,[rent]
+           ,[serviceCharge]
+           ,[gasContractor]
+           ,[gasPhoneNumber]
+           ,[gasWebsite]
+           ,[mobNo]
+           ,[PIN]
+	   ,[recordAddedDate])
+
+     VALUES
+           (238293
+           ,'2022-09-28 00:00:00'
+           ,'Fred'
+           ,'Orchard'
+           ,'37638'
+           ,'FLAT 11 Mill Court'
+           ,'Peregrine Drive'
+           ,'Sittingbourne'
+           ,'Kent'
+           ,'ME10 4UN'
+           ,100.00
+           ,case when '0.00' = '' then '0.00' else '0.00' end
+           ,'Swale Heating                                               '
+	   ,'03301 230 266       ' 
+	   ,'www.swaleheating.com                                                                                '
+	   ,'07912938310'         
+	   ,'R8AJK7'
+	   ,GETDATE())

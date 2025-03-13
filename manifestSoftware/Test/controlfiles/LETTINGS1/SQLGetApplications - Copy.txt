@@ -1,0 +1,72 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Get Applications To Create In Orchard
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.case_id,nvarchar(10),,case_id,,$$
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$
+
+SELECT 
+TOP 1
+app.case_id,
+app.case_id AS EXTERNAL_APP_REF,
+case_start_date AS APP_DATE,
+app2.householdGroupID,		--Is this the code?
+app2.Application_ReasonID AS APPLICATION_REASON_CODE,
+app2.Application_TypeID AS APPLICATION_TYPE_CODE,
+
+main_app_personid,
+Trans_main_Title AS MAIN_APP_TITLE,	--Title description not Orchard code
+nominee_fname AS MAIN_APP_FORENAME,
+'' AS MAIN_APP_INITIAL,
+nominee_sname AS MAIN_APP_SURNAME,
+main_app_dob,
+main_app_gender,
+main_app_mstatus,
+main_app_NINumber,
+main_app_housenameno + main_app_streetroad AS MAIN_APP_ADDRESS1,
+main_app_town AS MAIN_APP_ADDRESS2,
+main_app_county AS MAIN_APP_ADDRESS3,
+'' AS MAIN_APP_ADDRESS4,
+main_app_postcode AS MAIN_APP_POSTCODE,
+app.main_app_address_startdate AS MAIN_APP_ADDRESS_START_DATE,
+app2.tenureTypeID AS MAIN_APP_CURRENT_TENURECODE,
+app.nominee_email AS MAIN_APP_EMAIL,
+nominee_homeno AS MAIN_HOMETEL,
+nominee_mobileno AS MAIN_MOBILETEL,
+
+-- Joint Applicant
+
+joint_app_personid,
+app.Trans_joint_Title AS JOINT_APP_TITLE,
+app.joint_app_fname AS JOINT_APP_FORENAME,
+'' AS JOINT_APP_INITIAL,
+app.joint_app_sname AS JOINT_APP_SURNAME,
+joint_app_dob,
+joint_app_gender,		--Male or Female
+joint_app_mstatus,		--Married etc.
+joint_app_NINumber,
+joint_app_housenameno + joint_app_streetroad AS JOINT_APP_ADDRESS1,
+joint_app_town AS JOINT_APP_ADDRESS2,
+joint_app_county AS JOINT_APP_ADDRESS3,
+'' AS JOINT_APP_ADDRESS4,
+joint_app_postcode AS JOINT_APP_POSTCODE,
+app.joint_app_address_startdate AS JOINT_APP_ADDRESS_START_DATE,
+'' AS JOINT_APP_CURRENT_TENURECODE,
+joint_app_email AS JOINT_APP_EMAIL,
+joint_app_homeno AS JOINT_HOMETEL,
+joint_app_mobileno AS JOINT_MOBILETEL
+
+
+FROM LETTINGSDB.Lettings_Application_DW.dbo.OPV_Lettings1_Translated AS app
+LEFT JOIN LETTINGSDB.Lettings_Application_DW.dbo.OPV_Lettings2_Translated AS app2 ON app.case_id COLLATE DATABASE_DEFAULT = app2.case_id COLLATE DATABASE_DEFAULT
+WHERE app2.posted_to_orchard is null
+ORDER BY app.case_id

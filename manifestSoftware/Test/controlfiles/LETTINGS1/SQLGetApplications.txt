@@ -1,0 +1,147 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Get Applications To Create In Orchard
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.case_id,nvarchar(10),,case_id,,$$
+$$HEADER.EXTERNAL_APP_REF,nvarchar(10),,EXTERNAL_APP_REF,,$$
+$$HEADER.APP_DATE,nvarchar(10),,APP_DATE,,$$
+$$HEADER.householdGroupID,nvarchar(10),,householdGroupID,,$$
+$$HEADER.APPLICATION_REASON_CODE,nvarchar(10),,APPLICATION_REASON_CODE,,$$
+$$HEADER.APPLICATION_TYPE_CODE,nvarchar(10),,APPLICATION_TYPE_CODE,,$$
+$$HEADER.EXPECTEDCOMMDATE,nvarchar(10),,expectedCommencementDate,,$$
+$$HEADER.OFFERDATE,nvarchar(10),,offerDate,,$$
+$$HEADER.OFFERLETTERID,nvarchar(10),,offerLetterID,,$$
+$$HEADER.OFFERREASONID,nvarchar(10),,offerReasonID,,$$
+$$HEADER.OFFERTENURETYPE,nvarchar(10),,offerTenureType,,$$
+$$HEADER.OFFERTYPE,nvarchar(10),,offerType,,$$
+$$HEADER.PRSEQNO,nvarchar(10),,pr_seq_no,,$$
+$$HEADER.main_app_personid,nvarchar(10),,main_app_personid,,$$
+$$HEADER.MAIN_APP_TITLE,nvarchar(10),,MAIN_APP_TITLE,,$$
+$$HEADER.MAIN_APP_FORENAME,nvarchar(10),,MAIN_APP_FORENAME,,$$
+$$HEADER.MAIN_APP_INITIAL,nvarchar(10),,MAIN_APP_INITIAL,,$$
+$$HEADER.MAIN_APP_SURNAME,nvarchar(10),,MAIN_APP_SURNAME,,$$
+$$HEADER.main_app_dob,nvarchar(10),,main_app_dob,,$$
+$$HEADER.main_app_gender,nvarchar(10),,main_app_gender,,$$
+$$HEADER.main_app_mstatus,nvarchar(10),,main_app_mstatus,,$$
+$$HEADER.main_app_NINumber,nvarchar(10),,main_app_NINumber,,$$
+$$HEADER.MAIN_APP_ADDRESS1,nvarchar(10),,MAIN_APP_ADDRESS1,,$$
+$$HEADER.MAIN_APP_ADDRESS2,nvarchar(10),,MAIN_APP_ADDRESS2,,$$
+$$HEADER.MAIN_APP_ADDRESS3,nvarchar(10),,MAIN_APP_ADDRESS3,,$$
+$$HEADER.MAIN_APP_ADDRESS4,nvarchar(10),,MAIN_APP_ADDRESS4,,$$
+$$HEADER.MAIN_APP_POSTCODE,nvarchar(10),,MAIN_APP_POSTCODE,,$$
+$$HEADER.MAIN_APP_ADDRESS_START_DATE,nvarchar(10),,MAIN_APP_ADDRESS_START_DATE,,$$
+$$HEADER.MAIN_APP_CURRENT_TENURECODE,nvarchar(10),,MAIN_APP_CURRENT_TENURECODE,,$$
+$$HEADER.MAIN_APP_EMAIL,nvarchar(10),,MAIN_APP_EMAIL,,$$
+$$HEADER.MAIN_HOMETEL,nvarchar(10),,MAIN_HOMETEL,,$$
+$$HEADER.MAIN_MOBILETEL,nvarchar(10),,MAIN_MOBILETEL,,$$
+$$HEADER.MAIN_ETHNICITY,nvarchar(10),,MAIN_ETHNICITY,,$$
+$$HEADER.MAIN_NATIONALITY,nvarchar(10),,MAIN_NATIONALITY,,$$
+$$HEADER.MAIN_RELIGION,nvarchar(10),,MAIN_RELIGION,,$$
+$$HEADER.MAIN_SEX_ORIENTATION,nvarchar(10),,MAIN_SEX_ORIENTATION,,$$
+$$HEADER.joint_app_personid,nvarchar(10),,joint_app_personid,,$$
+$$HEADER.JOINT_APP_TITLE,nvarchar(10),,JOINT_APP_TITLE,,$$
+$$HEADER.JOINT_APP_FORENAME,nvarchar(10),,JOINT_APP_FORENAME,,$$
+$$HEADER.JOINT_APP_INITIAL,nvarchar(10),,JOINT_APP_INITIAL,,$$
+$$HEADER.JOINT_APP_SURNAME,nvarchar(10),,JOINT_APP_SURNAME,,$$
+$$HEADER.joint_app_dob,nvarchar(10),,joint_app_dob,,$$
+$$HEADER.joint_app_gender,nvarchar(10),,joint_app_gender,,$$
+$$HEADER.joint_app_mstatus,nvarchar(10),,joint_app_mstatus,,$$
+$$HEADER.joint_app_NINumber,nvarchar(10),,joint_app_NINumber,,$$
+$$HEADER.JOINT_APP_ADDRESS1,nvarchar(10),,JOINT_APP_ADDRESS1,,$$
+$$HEADER.JOINT_APP_ADDRESS2,nvarchar(10),,JOINT_APP_ADDRESS2,,$$
+$$HEADER.JOINT_APP_ADDRESS3,nvarchar(10),,JOINT_APP_ADDRESS3,,$$
+$$HEADER.JOINT_APP_ADDRESS4,nvarchar(10),,JOINT_APP_ADDRESS4,,$$
+$$HEADER.JOINT_APP_POSTCODE,nvarchar(10),,JOINT_APP_POSTCODE,,$$
+$$HEADER.JOINT_APP_ADDRESS_START_DATE,nvarchar(10),,JOINT_APP_ADDRESS_START_DATE,,$$
+$$HEADER.JOINT_APP_CURRENT_TENURECODE,nvarchar(10),,JOINT_APP_CURRENT_TENURECODE,,$$
+$$HEADER.JOINT_APP_EMAIL,nvarchar(10),,JOINT_APP_EMAIL,,$$
+$$HEADER.JOINT_HOMETEL,nvarchar(10),,JOINT_HOMETEL,,$$
+$$HEADER.JOINT_MOBILETEL,nvarchar(10),,JOINT_MOBILETEL,,$$
+$$HEADER.JOINT_RELATIONSHIP,nvarchar(10),,JOINT_RELATIONSHIP,,$$
+$$HEADER.JOINT_ETHNICITY,nvarchar(10),,JOINT_ETHNICITY,,$$
+$$HEADER.JOINT_NATIONALITY,nvarchar(10),,JOINT_NATIONALITY,,$$
+$$HEADER.JOINT_RELIGION,nvarchar(10),,JOINT_RELIGION,,$$
+$$HEADER.JOINT_SEX_ORIENTATION,nvarchar(10),,JOINT_SEX_ORIENTATION,,$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$
+
+SELECT 
+TOP 1
+app.case_id,
+SUBSTRING(app.case_id,9,20) AS EXTERNAL_APP_REF,
+case_start_date AS APP_DATE,
+app2.householdGroupID,		--Is this the code?
+app2.Application_ReasonID AS APPLICATION_REASON_CODE,
+app2.Application_TypeID AS APPLICATION_TYPE_CODE,
+app2.expectedCommencementDate,
+app2.offerDate,
+app2.offerLetterID,
+app2.offerReasonID,
+app2.offerTenureType,
+app2.offerType,
+app2.pr_seq_no,
+
+main_app_personid,
+Trans_main_Title AS MAIN_APP_TITLE,	--Title description not Orchard code
+nominee_fname AS MAIN_APP_FORENAME,
+'' AS MAIN_APP_INITIAL,
+nominee_sname AS MAIN_APP_SURNAME,
+main_app_dob,
+lower(main_app_gender) as main_app_gender,
+main_app_mstatus,
+main_app_NINumber,
+main_app_housenameno + ' ' + main_app_streetroad AS MAIN_APP_ADDRESS1,
+main_app_town AS MAIN_APP_ADDRESS2,
+main_app_county AS MAIN_APP_ADDRESS3,
+'' AS MAIN_APP_ADDRESS4,
+main_app_postcode AS MAIN_APP_POSTCODE,
+app.main_app_address_startdate AS MAIN_APP_ADDRESS_START_DATE,
+app2.tenureTypeID AS MAIN_APP_CURRENT_TENURECODE,
+app.nominee_email AS MAIN_APP_EMAIL,
+nominee_homeno AS MAIN_HOMETEL,
+nominee_mobileno AS MAIN_MOBILETEL,
+app2.trans_mainapp_ethnicity AS MAIN_ETHNICITY,
+app2.trans_mainapp_nationality AS MAIN_NATIONALITY,
+app2.trans_mainapp_religion AS MAIN_RELIGION,
+app2.trans_mainapp_sorientation AS MAIN_SEX_ORIENTATION,
+
+-- Joint Applicant
+
+joint_app_personid,
+app.Trans_joint_Title AS JOINT_APP_TITLE,
+app.joint_app_fname AS JOINT_APP_FORENAME,
+'' AS JOINT_APP_INITIAL,
+app.joint_app_sname AS JOINT_APP_SURNAME,
+joint_app_dob,
+lower(joint_app_gender) as joint_app_gender,		--Male or Female
+joint_app_mstatus,		--Married etc.
+joint_app_NINumber,
+joint_app_housenameno + ' ' + joint_app_streetroad AS JOINT_APP_ADDRESS1,
+joint_app_town AS JOINT_APP_ADDRESS2,
+joint_app_county AS JOINT_APP_ADDRESS3,
+'' AS JOINT_APP_ADDRESS4,
+joint_app_postcode AS JOINT_APP_POSTCODE,
+app.joint_app_address_startdate AS JOINT_APP_ADDRESS_START_DATE,
+'' AS JOINT_APP_CURRENT_TENURECODE,
+joint_app_email AS JOINT_APP_EMAIL,
+joint_app_homeno AS JOINT_HOMETEL,
+joint_app_mobileno AS JOINT_MOBILETEL,
+app2.Trans_jntapp_ethnicity AS JOINT_ETHNICITY,
+app2.Trans_jntapp_nationality AS JOINT_NATIONALITY,
+app2.Trans_jntapp_religion AS JOINT_RELIGION,
+app2.Trans_jntapp_sorientation AS JOINT_SEX_ORIENTATION,
+app.Trans_relationship_to_main_applicant AS JOINT_RELATIONSHIP
+
+FROM LETTINGSDB.Lettings_Application_DW.dbo.OPV_Lettings1_Translated AS app
+JOIN LETTINGSDB.Lettings_Application_DW.dbo.OPV_Lettings2_Translated AS app2 ON app.case_id COLLATE DATABASE_DEFAULT = app2.case_id COLLATE DATABASE_DEFAULT
+WHERE app2.posted_to_orchard is null
+ORDER BY app.case_id

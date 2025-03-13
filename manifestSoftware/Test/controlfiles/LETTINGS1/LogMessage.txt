@@ -1,0 +1,17 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Orchard Information Systems HMS
+FORMAT=DOSCOMMAND
+DESCRIPTION=Execute DOS Command
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+
+PARAMETERS=
+$$FILENAME,nvarchar(100),,,,$$
+$$MESSAGE,nvarchar(100),,,,$$
+$$MESSAGEVALUE,nvarchar(100),,,,$$
+$$
+
+echo %DATE%_%TIME% $$MESSAGE,,,,,$$ $$MESSAGEVALUE,nvarchar(100),,,,$$ >> $$FILENAME,nvarchar(100),,,,$$

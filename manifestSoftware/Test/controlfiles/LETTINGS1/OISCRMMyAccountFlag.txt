@@ -1,0 +1,37 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Soap Web Services
+FORMAT=SOAPWS
+DESCRIPTION=Sample SOAP Web Service Call
+
+RESULT=
+$$RESPONSE,string,[0-Z],externalRef,encoding,description$$
+$$ERROR,int,[0-Z],externalRef,encoding,description$$
+$$HEADER.RETURNVALUE,nvarchar(500),,Envelope.Body.updateContactResponse.updateContactResult.recordId,,$$
+$$DETAIL.BODY,nvarchar(100),,Envelope.Body,,Result Body$$
+
+PARAMETERS=
+$$URL,nvarchar(500),,,,URL of the web service$$
+$$Content-Type,nvarchar(500),,,,SOAP Content Type$$
+$$SOAPAction,nvarchar(500),,,,SOAP Action$$
+$$CONTACTID,nvarchar(100),,,,CRM Contact ID$$
+$$FLAG,nvarchar(100),,,,MyAccount Signed Up Flag$$
+
+$$
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://www.goldcrestsolutions.co.uk/Amicus/FirstTouchCRMUpdate/1" xmlns:ns1="http://www.goldcrestsolutions.co.uk/Amicus/FirstTouchCRMUpdate/Types/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:updateContact>
+         <ns:update>
+            <ns1:id>
+			$$CONTACTID,nvarchar(100),,,,CRM Contact ID$$
+			</ns1:id>
+            <ns1:signedUpToMyAccount>
+			$$FLAG,nvarchar(100),,,,MyAccount Signed Up Flag$$
+			</ns1:signedUpToMyAccount>
+            </ns:update>
+      </ns:updateContact>
+   </soapenv:Body>
+</soapenv:Envelope>

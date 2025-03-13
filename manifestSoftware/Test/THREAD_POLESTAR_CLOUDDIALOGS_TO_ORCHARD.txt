@@ -1,0 +1,26 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Cloud Dialogs
+ACTIVEDAYS=SMTWTFS
+ACTIVESTARTTIME=00:05
+ACTIVEENDTIME=23:55
+TIMER=60
+DESCRIPTION=Update Orchard
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\CLOUDDIALOGS_TO_ORCHARD\
+$$
+//
+// 
+//
+
+C:\ManifestSoftware\TEST\ControlFiles\POLESTAR_CLOUDDIALOGS_TO_ORCHARD\IFCProcessEvents.txt()
+
+C:\ManifestSoftware\TEST\ControlFiles\POLESTAR_CLOUDDIALOGS_TO_ORCHARD\IFCProcessCompletions.txt()
+
+C:\ManifestSoftware\TEST\ControlFiles\POLESTAR_CLOUDDIALOGS_TO_ORCHARD\IFCProcessEventsRETRY.txt()
+
+C:\ManifestSoftware\TEST\ControlFiles\POLESTAR_CLOUDDIALOGS_TO_ORCHARD\IFCProcessCompletionsRETRY.txt()
+
+C:\ManifestSoftware\TEST\ControlFiles\CLOUDDIALOGS_TO_ORCHARD\IFCProcessVoidEvents.txt()
+
+

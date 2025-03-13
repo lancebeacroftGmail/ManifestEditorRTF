@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<MUARTParameters>
+
+<ManifestDB>
+	<SQLInstance>ManifestDB.shtest.local</SQLInstance>
+	<SQLDatabase>ManifestLive</SQLDatabase>
+	<SQLUser>manifest</SQLUser>
+	<SQLPassword>go1glqQspCgWFZ4+43FRwA==</SQLPassword>
+	<OrchardLinkedServer>ORCHHMS</OrchardLinkedServer>
+</ManifestDB>
+
+<Notifications>
+	<ExchangeURL>https://outlook.office365.com/EWS/Exchange.asmx</ExchangeURL>
+	<ExchangeEmail>UACloud-TEST@manifest-software.co.uk</ExchangeEmail>
+	<EmailNotificationLimit>1000</EmailNotificationLimit>
+	<OAUTHAccount>UACloud-TEST</OAUTHAccount>
+<!-- 	<OAUTHAppID>TfRDLc0yXA2cSz17Ft3/8u3rZDqDLSYAeKOTpsM9xaXAuROV+ADHQ3MzPPzpYgoJ</OAUTHAppID>
+	<OAUTHSecretValue>ln1cSizwOLh2rY6Yh/uRYo9z47bYgbeKTk6eM440ggrwYFC9vBLL1PEk0FNkAfEo</OAUTHSecretValue> -->
+	<OAUTHAppID>hjbRKc9qQQ39tBn7VCIJB4IZGarR/nhEMisSdUV61vV1knxQU03oYRCXEcvgK6xv</OAUTHAppID>
+	<OAUTHSecretValue>KsiRnVEe43OV4mN8a3I4B2EEc/ZA+OqYfKzu/C+eImVuhf/S3NwSto/vPXPsueaX</OAUTHSecretValue>
+	<OAUTHTenancyID>J+9jS6JE6AFosihPinSXeIY+XdMzl6c8HWa8tWHjXowtFh6a5tFY2dWOkTTlxHZM</OAUTHTenancyID>
+</Notifications>
+
+<CloudDialogs>
+	<Integrator>
+		<PropertyFile>C:\SHL Integrator\PropertyData\ToServiceConnect\Property.csv</PropertyFile>
+		<EventsFiles>C:\SHL Integrator\Optivo\Events\*.xml</EventsFiles>
+		<CompletionsFiles>C:\SHL Integrator\Optivo\Completed Orders\*.xml</CompletionsFiles>
+	</Integrator>
+	<WebServices>
+		<Auth>https://connect-api-qa-customer.totalmobile-cloud.com/ws-api/Token</Auth>
+		<SalesOrder>https://connect-api-qa-customer.totalmobile-cloud.com/ws-api/api/SalesOrder</SalesOrder>
+	</WebServices>
+	<DailyReports>
+		<ReportLocation>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\RetryReports\retryreport.csv</ReportLocation>
+		<ReportLocationCancel>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\RetryReports\retrycancelreport.csv</ReportLocationCancel>
+		<EventReportLocation>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\RetryReports\eventreport.csv</EventReportLocation>
+		<CompletionsReportLocation>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\RetryReports\completionsreport.csv</CompletionsReportLocation>
+		<ReportArchive>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\RetryReports\</ReportArchive>
+	</DailyReports>
+</CloudDialogs>
+
+<Orchard>
+	<ContractorCode>80000</ContractorCode>
+	<Contracts>80020,80040,80060</Contracts>
+	<EDRWebServiceUser>ManiHMall</EDRWebServiceUser>
+	<EDRWebServicePassword>manifest01</EDRWebServicePassword>
+	<!--<EDRWebServicePassword>bWFuaWZlc3QwMQ==</EDRWebServicePassword>-->
+	<EDRAddEventURL>http://tdb-orc-03:38200/orchardWS/services/EDRMUAET_REPAIR_INT_4Service</EDRAddEventURL>
+	<EDRCompleteJobURL>http://tdb-orc-03:38200/orchardWS/services/EDRMUAET_REPAIR_INT_3Service</EDRCompleteJobURL>
+	<EDRCompleteSoRURL>http://tdb-orc-03:38200/orchardWS/services/EDRMUAET_REPAIR_INT_2Service</EDRCompleteSoRURL>
+	<EDRUpdateVoidURL>http://tdb-orc-03:38200/orchardWS/services/EDRPlusVOID_EVENTService</EDRUpdateVoidURL>
+	<EDRUpdateVoidNotesURL>http://tdb-orc-03:38200/orchardWS/services/EDRPlusVOID_NOTESService</EDRUpdateVoidNotesURL>
+</Orchard>
+
+<Threads>
+	<Overnight>
+		<TempPropertyFile>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\ToSend\PropertyLead.csv</TempPropertyFile>
+		<ArchiveJobsSent>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\ArchiveJobsSent</ArchiveJobsSent>
+		<CDArchive>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\Archive</CDArchive>
+	</Overnight>
+	<SendJobToContractor>
+		<MUARTWS>http://localhost/MUARTOnline/TEST/MUARTWebServices/webservices/V2/runinterface.asmx</MUARTWS>
+		<AddJobInterfaceToCall>C:\ManifestSoftware\TEST\ControlFiles\ORCHARD_TO_CONTRACTOR\IFCSendJobToContractor.txt</AddJobInterfaceToCall>
+		<CancelJobInterfaceToCall>C:\ManifestSoftware\TEST\ControlFiles\ORCHARD_TO_CONTRACTOR\IFCSendCancelToContractor.txt</CancelJobInterfaceToCall>
+		<EmailErrorTo1>Suzanne.Adams@optivo.org.uk</EmailErrorTo1>
+		<EmailErrorSubject1>OPTIVO TEST - Error adding batch issued job to Service Connect</EmailErrorSubject1>
+	</SendJobToContractor>
+	<SendCancelJobToContractor>
+		<EmailErrorTo1>Suzanne.Adams@optivo.org.uk</EmailErrorTo1>
+		<EmailErrorSubject1>OPTIVO TEST - Error cancelling job in Service Connect</EmailErrorSubject1>
+	</SendCancelJobToContractor>
+	<ProcessEvents>
+		<ArchiveFolder>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\Received\Events</ArchiveFolder>
+		<OrchardErrorsLogFile>C:\ManifestSoftware\TEST\LogFiles\OISERRORS_CD_TO_OIS.txt</OrchardErrorsLogFile>
+		<EmailErrorTo1>Suzanne.Adams@optivo.org.uk</EmailErrorTo1>
+		<EmailErrorSubject1>OPTIVO TEST - Error Practical Completing Job</EmailErrorSubject1>
+		<EmailErrorSubject2>OPTIVO TEST - Error Cloud Dialogs Event File - Error</EmailErrorSubject2>
+	</ProcessEvents>
+	<ProcessCompletions>
+		<ArchiveFolder>C:\ManifestSoftware\TEST\DataFiles\CloudDialogs\Received\Completions</ArchiveFolder>
+		<OrchardErrorsLogFile>C:\ManifestSoftware\TEST\LogFiles\OISERRORS_CD_TO_OIS.txt</OrchardErrorsLogFile>
+		<OrchardXMLDebugFile>C:\ManifestSoftware\TEST\LogFiles\ORCHARDEDRCALL.txt</OrchardXMLDebugFile>
+		<EmailErrorTo1>Suzanne.Adams@optivo.org.uk</EmailErrorTo1>
+		<EmailErrorSubject1>OPTIVO TEST Cloud Dialogs Completion File - Error</EmailErrorSubject1>
+		<EmailErrorSubject2>OPTIVO TEST Cloud Dialogs Completion File - Error</EmailErrorSubject2>
+	</ProcessCompletions>
+	
+</Threads>
+
+</MUARTParameters>

@@ -1,0 +1,71 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=INTERFACE
+FROM=Orchard Housing Database
+TIMER=900
+DESCRIPTION=
+TRIGGER=
+TRIGGERFIELDS=
+$$
+//
+// Check file
+//
+
+
+D=GetDate()
+
+PARAM=ReadThreadParameters("C:\ManifestSoftware\TEST\ControlFiles\PARAMS_CLOUDDIALOGS.xml")
+
+STOPIFEMPTY("")
+
+// Param1 = OrchardLogin
+// Param2 = LoginPassword
+// Param3 = APPLICATION_NO
+// Param4 = HOUSEHOLD_GROUP_CODE
+// Param5 = SIGNUP_COMP_DATE
+// Param6 = SWIPE_EFFECTIVE_DATE
+// Param7 = SWIPE_REQ_TYPE
+// Param8 = TENANCY_REASON_CODE,
+// Param9 = TEN_START_DATE,
+// Param10 = TEN_TENURE_TYPE_CODE
+// Param11 = PROPERTY_SEQ_NUM
+
+
+
+TENANCYADD=OISCreateTenancy("http://devorchardtest.nebula.dev:38200/arcCentreWS/services/EDRMUA_CREATE_TENANCYService","maniHMall","manifest01","Y","Y","32001","C0","2017-09-29T00:00:00+01:00","2017-09-29T00:00:00+01:00","SWIP","04","2017-10-16T00:00:00+01:00","20","51313")
+
+STOPIFEMPTY("")
+
+
+MAINPER=SQLUPDATEApplicationMainPersonID("LettingsDB","Lettings_Application_DW","manifest","go1glqQspCgWFZ4+43FRwA==","FS-Case-59393968","165400")
+
+JOINTPER=SQLUPDATEApplicationJointPersonID("LettingsDB","Lettings_Application_DW","manifest","go1glqQspCgWFZ4+43FRwA==","FS-Case-59393968","165401")
+
+// Needs to also be where UpdatedOrchard is null
+//SQLHH=SQLGetHouseholder("LettingsDB","Lettings_Application_DW","manifest","go1glqQspCgWFZ4+43FRwA==","FS-Case-59393968")
+
+
+
+
+// Convert any datetime fields to XMLUTC
+
+HHDOB=GETDATE("1967-01-23")
+
+// Add householder to Orchard 
+
+//HHDOB=GETDATE($$SQLHH.HEADER.HH_DOB$$)
+
+// Add householder to Orchard 
+
+HHADD=OISAddApplication("http://devorchardtest.nebula.dev:38200/arcCentreWS/services/EDRMUA_PERSON_APPLService","ManiHMall","manifest01","Y","Y","","","","","","","","","","","",$$HHDOB.XMLUTC$$,"","","59393968","Amanda",$$SQLHH.HEADER.HH_GENDER$$,"","","","","","","AA256974B","HOUSEHOLD",$$SQLHH.HEADER.hh_app_personid$$,"",$$SQLHH.HEADER.HH_RELATIONSHIP$$,"","",$$SQLHH.HEADER.HH_SURNAME$$,$$SQLHH.HEADER.HH_TITLE$$,"","","","","","","")
+
+OISREC=OISSearchApplicant("http://devorchardtest.nebula.dev:38200/arcCentreWS/services/EDRMUA_PERSON_APPLService","ManiHMall","manifest01","Y","Y",$$HHADD.HEADER.PK$$)
+
+MAINPER=SQLUPDATEApplicationMainPersonID("ManifestDB","ManifestTest","manifest","go1glqQspCgWFZ4+43FRwA==","FS-Case-59393968","165400")
+
+
+
+
+END:
+
+STOPIFEMPTY("")

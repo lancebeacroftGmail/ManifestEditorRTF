@@ -1,0 +1,25 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=UA
+FORMAT=DYNAMICS
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+$$RESPONSE,nvarchar(100),,,,$$
+
+PARAMETERS=
+$$CRMCLIENTID,nvarchar(100),,,,$$
+$$CRMDOMAIN,nvarchar(100),,,,$$
+$$CRMUSER,nvarchar(100),,,,$$
+$$CRMPASSWORD,nvarchar(100),,,BLAZEAES,$$
+$$CRMSERVICEURL,nvarchar(100),,,,$$
+$$CRMENTITY,nvarchar(100),,,,$$
+$$CRMACTION,nvarchar(100),,,,$$
+$$CRMGUID,nvarchar(100),,,,$$
+$$ReligionGUID,nvarchar(100),,,,$$
+$$CRMENTITYPROPERTY,nvarchar(100),,,,$$
+$$
+{
+  "gcs_personreligionid@odata.bind":"/gcs_religions($$ReligionGUID,nvarchar(100),,,,$$)"
+}

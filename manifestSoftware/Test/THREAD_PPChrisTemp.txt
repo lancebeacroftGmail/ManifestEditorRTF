@@ -1,0 +1,13 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Wrap
+ACTIVEDAYS=-MTWTF-
+ACTIVESTARTTIME=08:00
+ACTIVEENDTIME=17:30
+TIMER=0
+DESCRIPTION=
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\PPChrisTemp\
+$$
+
+C:\ManifestSoftware\TEST\ControlFiles\PPChrisTemp\IFCDDEODEventTransactionsPreProcessing.txt()

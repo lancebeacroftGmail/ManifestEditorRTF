@@ -1,0 +1,19 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=MSS
+ACTIVEDAYS=SMTWTFS
+ACTIVESTARTTIME=00:05
+ACTIVEENDTIME=23:55
+TIMER=60
+DESCRIPTION=Sends error emails
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\MSSNotifications\
+$$
+//
+// 
+//
+
+C:\ManifestSoftware\TEST\ControlFiles\MSSNotifications\IFCProcessEmails.txt()
+
+
+

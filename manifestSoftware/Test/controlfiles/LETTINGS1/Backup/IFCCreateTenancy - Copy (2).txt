@@ -1,0 +1,64 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=INTERFACE
+FROM=Orchard Housing Database
+TIMER=900
+DESCRIPTION=
+TRIGGER=
+TRIGGERFIELDS=
+$$
+//
+// Check file
+//
+
+
+STARTTIME=GetDate()
+
+P=GETPARAMETERS()
+// Param1 = OrchardLogin
+// Param2 = LoginPassword
+// Param3 = APPLICATION_NO
+// Param4 = HOUSEHOLD_GROUP_CODE
+// Param5 = SIGNUP_COMP_DATE
+// Param6 = SWIPE_EFFECTIVE_DATE
+// Param7 = SWIPE_REQ_TYPE
+// Param8 = TENANCY_REASON_CODE,
+// Param9 = TEN_START_DATE,
+// Param10 = TEN_TENURE_TYPE_CODE
+// Param11 = PROPERTY_SEQ_NUM
+
+//
+// Convert Dates into XML UTC
+//
+
+PARAM5=GETDATE($$P.PARAM5$$)
+PARAM6=GETDATE($$P.PARAM6$$)
+PARAM9=GETDATE($$P.PARAM9$$)
+
+//TENANCYDEBUG=OISDEBUGCreateTenancy("C:\ManifestSoftware\LETTINGS\Temp\TempSoapTenancy.txt","NEW","http://devorchardtest.nebula.dev:38200/arcCentreWS/services/EDRMUA_CREATE_TENANCYService",$$P.PARAM1$$,$$P.PARAM2$$,"Y","Y",$$P.PARAM3$$,$$P.PARAM4$$,$$PARAM5.XMLUTC$$,$$PARAM6.XMLUTC$$,$$P.PARAM7$$,$$P.PARAM8$$,$$PARAM9.XMLUTC$$,$$P.PARAM10$$,$$P.PARAM11$$)
+
+//MAINERR=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com","93xXeK4kTifM39vf64MLiw==","alan@manifestsoftware.co.uk","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\LETTINGS\Temp\TempSoapTenancy.txt")
+
+TENANCYADD=OISCreateTenancy("http://devorchardtest.nebula.dev:38200/arcCentreWS/services/EDRMUA_CREATE_TENANCYService","maniHMall","manifest01","Y","Y",$$P.PARAM3$$,$$P.PARAM4$$,$$PARAM5.XMLUTC$$,$$PARAM6.XMLUTC$$,$$P.PARAM7$$,$$P.PARAM8$$,$$PARAM9.XMLUTC$$,$$P.PARAM10$$,$$P.PARAM11$$,"300")
+
+// Check if there was an error
+
+// If no Orchard error continue on
+IFGOTO($$TENANCYADD.ERROR$$,"=","","END:")
+
+//
+// Add Tenancy ERROR
+//
+
+// Send Email
+
+TENANCYDEBUG=OISDEBUGCreateTenancy("C:\ManifestSoftware\LETTINGS\Temp\TempSoapTenancy.txt","NEW","http://devorchardtest.nebula.dev:38200/arcCentreWS/services/EDRMUA_CREATE_TENANCYService",$$P.PARAM1$$,$$P.PARAM2$$,"Y","Y",$$P.PARAM3$$,$$P.PARAM4$$,$$PARAM5.XMLUTC$$,$$PARAM6.XMLUTC$$,$$P.PARAM7$$,$$P.PARAM8$$,$$PARAM9.XMLUTC$$,$$P.PARAM10$$,$$P.PARAM11$$)
+
+MAINERR=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com","93xXeK4kTifM39vf64MLiw==","alan@manifestsoftware.co.uk","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\LETTINGS\Temp\TempSoapTenancy.txt")
+MAINERR2=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com","93xXeK4kTifM39vf64MLiw==","kevin.may@optivo.org.uk","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\LETTINGS\Temp\TempSoapTenancy.txt")
+//MAINERR2=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com","93xXeK4kTifM39vf64MLiw==","paul.wickert@optivo.org.uk","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\LETTINGS\Temp\TempSoapTenancy.txt")
+//MAINERR2=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com","93xXeK4kTifM39vf64MLiw==","Heather.Draper@optivo.org.uk","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\LETTINGS\Temp\TempSoapTenancy.txt")
+
+END:
+
+STOPIFEMPTY("")

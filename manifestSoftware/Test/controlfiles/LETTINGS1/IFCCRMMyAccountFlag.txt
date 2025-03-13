@@ -1,0 +1,71 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=INTERFACE
+FROM=myAccount
+TIMER=900
+DESCRIPTION=Update CRM MyAccount Flag
+TRIGGER=
+TRIGGERFIELDS=
+$$
+//
+// Check file
+//
+TP=ReadThreadParameters("C:\ManifestSoftware\TEST\ControlFiles\THREADPARAMS.xml")
+
+STARTTIME=GetDate()
+
+
+
+
+//OISWS=OISCRMMyAccountFlag($$TP.HEADER.CRM1stTouchURL$$,"text/xml; charset=utf-8",$$TP.HEADER.FTouchUpdContURL$$,"5685430F-1307-E711-80C6-0050568512A0")
+
+
+P=GETPARAMETERS()
+// Param1 = ContactUID
+// Param2 = Flag
+
+
+//
+
+//
+// Initialise session parameters in AmicusHorizonParameters table
+// Set the status to RUNNING so this can be checked on return to the SP as should be OK at the end
+//
+
+SQLS1=SQLSetParameter($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$P.PARAM1$$,"STARTTIME",$$STARTTIME.XML$$)
+
+SQLS2=SQLSetParameter($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$P.PARAM1$$,"STATUS","RUNNING")
+
+SQLS3=SQLSetParameter($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$P.PARAM1$$,"INTERFACE","MyAccountFlag")
+
+
+//
+// Call the web service to update the flag in CRM
+// This captures the web service return value from Orchard
+//
+
+
+OISWS=OISCRMMyAccountFlag($$TP.HEADER.CRM1stTouchURL$$,"text/xml; charset=utf-8",$$TP.HEADER.FTouchUpdContURL$$,$$P.PARAM1$$,$$P.PARAM2$$)
+
+
+//
+// Set any return parameters including data returned from the web service
+// Set the status to OK so this can be checked on return to the SP
+//
+
+
+
+SQLE1=SQLSetParameter($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$P.PARAM1$$,"WSRESULT",$$OISWS.HEADER.RETURNVALUE$$)
+
+
+
+ENDTIME=GetDate()
+
+
+
+SQLE2=SQLSetParameter($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$P.PARAM1$$,"ENDTIME",$$ENDTIME.XML$$)
+
+SQLE3=SQLSetParameter($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$P.PARAM1$$,"STATUS","OK")
+
+STOPIFEMPTY("")
+

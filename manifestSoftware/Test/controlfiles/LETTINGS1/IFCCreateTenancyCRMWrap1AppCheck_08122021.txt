@@ -1,0 +1,573 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=INTERFACE
+FROM=Orchard Housing Database
+TIMER=900
+DESCRIPTION=
+TRIGGER=
+TRIGGERFIELDS=
+$$
+//
+// Check file
+//
+
+TP=ReadThreadParameters("C:\ManifestSoftware\TEST\ControlFiles\THREADPARAMS.xml")
+
+STARTTIME=GetDate()
+D=GetDate()
+P=GETPARAMETERS()
+
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","NEW",$$D.SQL$$,"Start")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,$$P.PARAM3$$)
+
+// Param1 = OrchardLogin
+// Param2 = LoginPassword
+// Param3 = APPLICATION_NO
+// Param4 = HOUSEHOLD_GROUP_CODE
+// Param5 = SIGNUP_COMP_DATE
+// Param6 = SWIPE_EFFECTIVE_DATE
+// Param7 = SWIPE_REQ_TYPE
+// Param8 = TENANCY_REASON_CODE,
+// Param9 = TEN_START_DATE,
+// Param10 = TEN_TENURE_TYPE_CODE
+// Param11 = PROPERTY_SEQ_NUM
+
+//
+// Convert Dates into XML UTC
+//
+
+PARAM5=GETDATE($$P.PARAM5$$)
+PARAM6=GETDATE($$P.PARAM6$$)
+PARAM9=GETDATE($$P.PARAM9$$)
+
+TENANCYDEBUG=OISDEBUGCreateTenancy("C:\ManifestSoftware\TEST\Temp\TempSoapTenancy.txt","NEW",$$TP.HEADER.OISWSCreateTenancyURL$$,$$P.PARAM1$$,$$P.PARAM2$$,"Y","Y",$$P.PARAM3$$,$$P.PARAM4$$,$$PARAM5.XMLUTC$$,$$PARAM6.XMLUTC$$,$$P.PARAM7$$,$$P.PARAM8$$,$$PARAM9.XMLUTC$$,$$P.PARAM10$$,$$P.PARAM11$$)
+
+//Check if there is a tenancy for this app number
+APPCHK=OISCheckTenancyFromAppNum($$TP.HEADER.OISWSCreateTenancyURL$$,$$TP.HEADER.OISWSUser$$,$$TP.HEADER.OISWSPassword$$,"Y","Y",$$P.PARAM3$$)
+
+SETPK=SETPK("SET",$$APPCHK.HEADER.PK$$)
+
+//if there is goto CRM:
+IFGOTO($$APPCHK.HEADER.PK$$,"<>","","CRM:")
+
+TENANCYADD=OISCreateTenancy($$TP.HEADER.OISWSCreateTenancyURL$$,$$TP.HEADER.OISWSUser$$,$$TP.HEADER.OISWSPassword$$,"Y","Y",$$P.PARAM3$$,$$P.PARAM4$$,$$PARAM5.XMLUTC$$,$$PARAM6.XMLUTC$$,$$P.PARAM7$$,$$P.PARAM8$$,$$PARAM9.XMLUTC$$,$$P.PARAM10$$,$$P.PARAM11$$,"300")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"OIS Tenancy Started")
+
+SETPK=SETPK("SET",$$TENANCYADD.HEADER.PK$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"App PK below")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,$$TENANCYADD.HEADER.PK$$)
+
+// Check if there was an error
+
+// If no Orchard error continue on
+IFGOTO($$TENANCYADD.ERROR$$,"=","","CRM:")
+
+//
+// Add Tenancy ERROR
+//
+
+// Send Email
+
+//TENANCYDEBUG=OISDEBUGCreateTenancy("C:\ManifestSoftware\TEST\Temp\TempSoapTenancy.txt","NEW",$$TP.HEADER.OISWSCreateTenancyURL$$,$$P.PARAM1$$,$$P.PARAM2$$,"Y","Y",$$P.PARAM3$$,$$P.PARAM4$$,$$PARAM5.XMLUTC$$,$$PARAM6.XMLUTC$$,$$P.PARAM7$$,$$P.PARAM8$$,$$PARAM9.XMLUTC$$,$$P.PARAM10$$,$$P.PARAM11$$)
+
+MAINERR=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"chris@manifest-software.co.uk","HTML","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\TEST\Temp\TempSoapTenancy.txt")
+MAINERR2=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"kevin.may@optivo.org.uk","HTML","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\TEST\Temp\TempSoapTenancy.txt")
+MAINERR3=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"jo.phelps@optivo.org.uk","HTML","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\TEST\Temp\TempSoapTenancy.txt")
+//MAINERR2=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"paul.wickert@optivo.org.uk","HTML","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\TEST\Temp\TempSoapTenancy.txt")
+//MAINERR2=EMAILAppError("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"Heather.Draper@optivo.org.uk","HTML","OPTIVO TEST ERROR CREATING NEW TENANCY","Failed to add tenancy",$$P.PARAM3$$,$$TENANCYADD.ERROR$$,"C:\ManifestSoftware\TEST\Temp\TempSoapTenancy.txt")
+GOTO("END2:")
+
+CRM:
+
+//get tenant data from Orchard
+//OISTEN=OISSearchTenancy($$TP.HEADER.OISWSCreateTenancyURL$$,$$TP.HEADER.OISWSUser$$,$$TP.HEADER.OISWSPassword$$,"Y","Y",$$TENANCYADD.HEADER.PK$$)
+
+WAIT(1)
+
+OISTEN=OISSearchTenancy($$TP.HEADER.OISWSCreateTenancyURL$$,$$TP.HEADER.OISWSUser$$,$$TP.HEADER.OISWSPassword$$,"Y","Y",$$SETPK.VALUE$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"OISSearchTenancy")
+
+JG=WRITEFile("C:\ManifestSoftware\TEST\LogFiles\NEWOISTenancy.txt","NEW",$$OISTEN.RESPONSE$$)
+
+IFGOTO($$OISTEN.HEADER.TENANCYNO$$,"=","","END2:")
+
+//update contact details 
+PERNO=SQLGetAllPersonNo($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$OISTEN.HEADER.TENANCYNO$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGetAllPersonNo")
+
+JGTMP=WRITEFile("C:\ManifestSoftware\TEST\LogFiles\NEWOISTenancyPersonNo.txt","NEW",$$PERNO.DETAIL.PersonNo$$)
+
+MERGEDATA=SQLUPDATE_BUILDCOMMS_Single($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,"ORCHHMS","800",$$PERNO.DETAIL.PersonNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLUPDATE_BUILDCOMMS_Single")
+
+//Add Lead tenant data first 
+LEAD:
+
+//Find the person number for this tenancy
+LEADPER=SQLSELECTLeadPersonNum($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$OISTEN.HEADER.TENANCYNO$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLSELECTLeadPersonNum")
+
+//Update Tenant Comms with their details
+TENCOMMS=SQLMergeTenantComms($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,"800",$$LEADPER.HEADER.PersonNum$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLMergeTenantComms")
+
+//Get the lead tenant details
+LEADTEN=SQLGetLeadTenant($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$OISTEN.HEADER.TENANCYNO$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGetLeadTenant")
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,$$LEADTEN.HEADER.PersonNo$$)
+
+//LEADTEN=SQLGetLeadTenant("ManifestDB" ,"ManifestTest","manifest",$$TP.HEADER.SQLPassword$$,"326142")
+
+FINDC=DYNAMICSFindContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","contactid",$$LEADTEN.HEADER.PersonNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSFindContact")
+
+JG2=WRITEFile("C:\ManifestSoftware\TEST\LogFiles\Findlead.txt","NEW",$$FINDC.RESPONSE$$)
+
+CONTGUID=JSONGetGUIDContactNEW($$FINDC.RESPONSE$$,"OBJECT")
+
+FINDP=DYNAMICSFindProperty("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_properties","gcs_propertyid,gcs_addressline1,gcs_addressline2,gcs_addressline3,gcs_commonarea,gcs_postcode",$$LEADTEN.HEADER.PropertyNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSFindProperty")
+
+JG3=WRITEFile("C:\ManifestSoftware\TEST\LogFiles\Findleadprop.txt","NEW",$$FINDP.RESPONSE$$)
+
+PROPGUID=JSONGetGUIDProperty($$FINDP.RESPONSE$$,"OBJECT")
+
+//Dynamics doesnt like blanks so default a 0 if nothings returned from OIS for  benefits
+IFGOTO($$LEADTEN.HEADER.BenefitVal$$,"=","","THISONE:")
+
+TCYADD=DYNAMICSADDTenancy("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_tenancies","ADD",$$LEADTEN.HEADER.TenancyID$$,$$LEADTEN.HEADER.PersonNo$$,$$LEADTEN.HEADER.PropertyNo$$,$$LEADTEN.HEADER.TenureCode$$,$$LEADTEN.HEADER.TenureDescription$$,$$LEADTEN.HEADER.Nonrentval$$,$$LEADTEN.HEADER.Rentval$$,$$LEADTEN.HEADER.StartDate$$,$$LEADTEN.HEADER.BenefitVal$$,"Current Tenant","TC",$$LEADTEN.HEADER.Checkdigit$$,$$CONTGUID.HEADER.ID$$,$$PROPGUID.HEADER.ID$$,$$LEADTEN.HEADER.GrossRent$$,$$LEADTEN.HEADER.NetRent$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSADDTenancy not this thisone one")
+
+JG4=WRITEFile("C:\ManifestSoftware\TEST\LogFiles\addten.txt","NEW",$$TCYADD.RESPONSE$$)
+
+//dont add it twice so go here
+GOTO("HERE:")
+
+THISONE:
+TCYADD=DYNAMICSADDTenancy("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_tenancies","ADD",$$LEADTEN.HEADER.TenancyID$$,$$LEADTEN.HEADER.PersonNo$$,$$LEADTEN.HEADER.PropertyNo$$,$$LEADTEN.HEADER.TenureCode$$,$$LEADTEN.HEADER.TenureDescription$$,$$LEADTEN.HEADER.Nonrentval$$,$$LEADTEN.HEADER.Rentval$$,$$LEADTEN.HEADER.StartDate$$,"0.0","Current Tenant","TC",$$LEADTEN.HEADER.Checkdigit$$,$$CONTGUID.HEADER.ID$$,$$PROPGUID.HEADER.ID$$,$$LEADTEN.HEADER.GrossRent$$,$$LEADTEN.HEADER.NetRent$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSADDTenancy the thisone one")
+
+JG5=WRITEFile("C:\ManifestSoftware\TEST\LogFiles\addten.txt","NEW",$$TCYADD.RESPONSE$$)
+
+HERE:
+FINDT=DYNAMICSFindTenancy("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_tenancies","gcs_tenancyid",$$LEADTEN.HEADER.TenancyID$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSFindTenancy in here:")
+
+TENGUID=JSONGetGUIDTenancy($$FINDT.RESPONSE$$,"OBJECT")
+
+//then add or update
+UPDATELEAD:
+//Update contact record
+CONTUPD=DYNAMICSUPDATEContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$CONTGUID.HEADER.ID$$,$$LEADTEN.HEADER.PropertyNo$$,$$LEADTEN.HEADER.TenancyID$$,$$LEADTEN.HEADER.TenureDescription$$,$$LEADTEN.HEADER.PersonNo$$,$$LEADTEN.HEADER.FirstName$$,$$LEADTEN.HEADER.Surname$$,$$LEADTEN.HEADER.NINO$$,$$LEADTEN.HEADER.DOB$$,$$LEADTEN.HEADER.EMAIL$$,$$LEADTEN.HEADER.MOBTEL$$,$$LEADTEN.HEADER.MOBTEL2$$,$$LEADTEN.HEADER.HOMETEL$$,$$LEADTEN.HEADER.WORKTEL$$,$$LEADTEN.HEADER.Language$$,$$LEADTEN.HEADER.Ethnicity$$,$$LEADTEN.HEADER.Religion$$,$$PROPGUID.HEADER.Addr1$$,$$PROPGUID.HEADER.Addr2$$,$$PROPGUID.HEADER.Addr3$$,$$PROPGUID.HEADER.Area$$,$$PROPGUID.HEADER.Postcode$$,$$LEADTEN.HEADER.IncomeOfficer$$,$$LEADTEN.HEADER.CustomerTypeCode$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContact lead")
+
+//add title afterward as cant send a blank
+FINDTITLE:
+CRMTITLE=SQLGetTitle($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.Title$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGetTitle lead")
+
+IFGOTO($$CRMTITLE.HEADER.Title$$,"=","","UPDLANG:")
+
+UPDTITLE=DYNAMICSUPDATEContactTitle("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$CONTGUID.HEADER.ID$$,$$CRMTITLE.HEADER.Title$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContactTitle lead")
+
+UPDLANG:
+IFGOTO($$LEADTEN.HEADER.Language$$,"=","","UPDREL:")
+
+LANG=DYNAMICSUPDATEContactLanguageNew("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$CONTGUID.HEADER.ID$$,$$LEADTEN.HEADER.Language$$,"")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContactLanguageNew lead")
+
+UPDREL:
+IFGOTO($$LEADTEN.HEADER.Religion$$,"=","","UPDETH:")
+
+REL=DYNAMICSUPDATEContactReligion("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$CONTGUID.HEADER.ID$$,$$LEADTEN.HEADER.Religion$$,"")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContactReligion lead")
+
+UPDETH:
+IFGOTO($$LEADTEN.HEADER.Ethnicity$$,"=","","LTHH:")
+
+ETH=DYNAMICSUPDATEContactEthnicity("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$CONTGUID.HEADER.ID$$,$$LEADTEN.HEADER.Ethnicity$$,"")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContactEthnicity lead")
+
+//Add LT household record
+LTHH:
+HHADDLT=DYNAMICSADDHousehold2("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_households","ADD",$$LEADTEN.HEADER.TenancyID$$,$$LEADTEN.HEADER.StartDate$$,$$LEADTEN.HEADER.PersonNo$$,"Lead Tenant",$$CONTGUID.HEADER.ID$$,$$TENGUID.HEADER.ID$$,"")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSADDHousehold2 lead")
+
+
+JOINT:
+
+//Find the person number for this tenancy
+JOINTPER=SQLSELECTJointPersonNum($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.TenancyID$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLSELECTJointPersonNum")
+
+IFGOTO($$JOINTPER.HEADER.PersonNum$$,"=","","HOUSEHOLDERS:")
+
+//Update Tenant Comms with their details
+TENCOMMS=SQLMergeTenantComms($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,"800",$$JOINTPER.HEADER.PersonNum$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLMergeTenantComms joint")
+
+//search OIS for Joint Tenant info
+JOINTTEN=SQLGetJointTenant($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.TenancyID$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGetJointTenant")
+
+IFGOTO($$JOINTTEN.HEADER.PersonNo$$,"=","","HOUSEHOLDERS:")
+
+//find guid first
+JTFIND=DYNAMICSFindContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","contactid",$$JOINTTEN.HEADER.PersonNo$$)
+JTGUID=JSONGetGUIDContactNEW($$JTFIND.RESPONSE$$,"OBJECT")
+IFGOTO($$JTGUID.HEADER.ID$$,"=","","ADDJOINT:")
+
+UPDATEJOINT:
+//Update contact record
+CONTUPD=DYNAMICSUPDATEContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$JTGUID.HEADER.ID$$,$$JOINTTEN.HEADER.PropertyNo$$,$$JOINTTEN.HEADER.TenancyID$$,$$JOINTTEN.HEADER.TenureDescription$$,$$JOINTTEN.HEADER.PersonNo$$,$$JOINTTEN.HEADER.FirstName$$,$$JOINTTEN.HEADER.Surname$$,$$JOINTTEN.HEADER.NINO$$,$$JOINTTEN.HEADER.DOB$$,$$JOINTTEN.HEADER.EMAIL$$,$$JOINTTEN.HEADER.MOBTEL$$,$$JOINTTEN.HEADER.MOBTEL2$$,$$JOINTTEN.HEADER.HOMETEL$$,$$JOINTTEN.HEADER.WORKTEL$$,$$JOINTTEN.HEADER.Language$$,$$JOINTTEN.HEADER.Ethnicity$$,$$JOINTTEN.HEADER.Religion$$,$$PROPGUID.HEADER.Addr1$$,$$PROPGUID.HEADER.Addr2$$,$$PROPGUID.HEADER.Addr3$$,$$PROPGUID.HEADER.Area$$,$$PROPGUID.HEADER.Postcode$$,$$LEADTEN.HEADER.IncomeOfficer$$,$$LEADTEN.HEADER.CustomerTypeCode$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContact joint")
+
+UPDTEN=DYNAMICSUPDATETenancy("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_tenancies","UPDATE",$$TENGUID.HEADER.ID$$,$$JTGUID.HEADER.ID$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATETenancy joint")
+
+GOTO("FINDJTTITLE:")
+
+ADDJOINT:
+//Create Contact in CRM
+JOINTADD=DYNAMICSADDContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","ADD",$$JOINTTEN.HEADER.PropertyNo$$,$$JOINTTEN.HEADER.TenancyID$$,$$JOINTTEN.HEADER.TenureDescription$$,$$JOINTTEN.HEADER.PersonNo$$,$$JOINTTEN.HEADER.FirstName$$,$$JOINTTEN.HEADER.Surname$$,$$JOINTTEN.HEADER.NINO$$,$$JOINTTEN.HEADER.DOB$$,$$JOINTTEN.HEADER.EMAIL$$,$$JOINTTEN.HEADER.MOBTEL$$,$$JOINTTEN.HEADER.MOBTEL2$$,$$JOINTTEN.HEADER.HOMETEL$$,$$JOINTTEN.HEADER.WORKTEL$$,$$JOINTTEN.HEADER.Language$$,$$JOINTTEN.HEADER.Ethnicity$$,$$JOINTTEN.HEADER.Religion$$,$$PROPGUID.HEADER.Addr1$$,$$PROPGUID.HEADER.Addr2$$,$$PROPGUID.HEADER.Addr3$$,$$PROPGUID.HEADER.Area$$,$$PROPGUID.HEADER.Postcode$$,$$LEADTEN.HEADER.IncomeOfficer$$,$$LEADTEN.HEADER.CustomerTypeCode$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSADDContact joint")
+
+JTFIND=DYNAMICSFindContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","contactid",$$JOINTTEN.HEADER.PersonNo$$)
+JTGUID=JSONGetGUIDContactNEW($$JTFIND.RESPONSE$$,"OBJECT")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSFindContact joint")
+
+ADDJTVCS:
+//Find visual cues
+SQLJTVC=SQLGetVisualCues($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.PersonNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGetVisualCues joint")
+
+IFGOTO($$SQLJTVC.DETAIL.CRM_Guid$$,"=","","UPDTEN:")
+
+//Add all to visual cues table
+JTVCADD=DYNAMICSADDVisualCues("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_visualcuecontexttexts","ADD","contact",$$JTGUID.HEADER.ID$$,$$SQLJTVC.DETAIL.CUEDesc$$,$$SQLJTVC.DETAIL.CRM_Guid$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSADDVisualCues joint")
+
+//Update contact flag for VC's
+JTVCCONTUPD=DYNAMICSUPDATEContactVCField("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$JTGUID.HEADER.ID$$,$$SQLJTVC.DETAIL.ContactField$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContactVCField joint")
+
+UPDTEN:
+UPDTEN=DYNAMICSUPDATETenancy("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_tenancies","UPDATE",$$TENGUID.HEADER.ID$$,$$JTGUID.HEADER.ID$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATETenancy joint")
+
+//add title afterward as cant send a blank
+FINDJTTITLE:
+CRMJTTITLE=SQLGetTitle($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.Title$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGetTitle joint")
+
+IFGOTO($$CRMJTTITLE.HEADER.Title$$,"=","","UPDJTLANG:")
+
+UPDJTTITLE=DYNAMICSUPDATEContactTitle("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$JTGUID.HEADER.ID$$,$$CRMJTTITLE.HEADER.Title$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContactTitle joint")
+
+UPDJTLANG:
+IFGOTO($$JOINTTEN.HEADER.Language$$,"=","","UPDJTREL:")
+
+JTLANG=DYNAMICSUPDATEContactLanguageNew("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$JTGUID.HEADER.ID$$,$$JOINTTEN.HEADER.Language$$,"")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContactLanguageNew joint")
+
+UPDJTREL:
+IFGOTO($$JOINTTEN.HEADER.Religion$$,"=","","UPDJTETH:")
+
+JTREL=DYNAMICSUPDATEContactReligion("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$JTGUID.HEADER.ID$$,$$JOINTTEN.HEADER.Religion$$,"")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContactReligion joint")
+
+UPDJTETH:
+IFGOTO($$JOINTTEN.HEADER.Ethnicity$$,"=","","JTHH:")
+
+JTETH=DYNAMICSUPDATEContactEthnicity("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$JTGUID.HEADER.ID$$,$$JOINTTEN.HEADER.Ethnicity$$,"")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSUPDATEContactEthnicity joint")
+
+JTHH:
+//Add JT household record
+HHADDJT=DYNAMICSADDHousehold2("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_households","ADD",$$JOINTTEN.HEADER.TenancyID$$,$$JOINTTEN.HEADER.StartDate$$,$$JOINTTEN.HEADER.PersonNo$$,"Joint Tenant",$$JTGUID.HEADER.ID$$,$$TENGUID.HEADER.ID$$,"")
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"DYNAMICSADDHousehold2 joint")
+
+HOUSEHOLDERS:
+//replace with parameter
+HOUSEH=SQLGetHouseholdersCRM($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.TenancyID$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"start of household process")
+
+IFGOTO($$HOUSEH.DETAIL.PersonNo$$,"=","","END:")
+
+SQLINS=SQLINSERTHouseholders($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$HOUSEH.DETAIL.PropertyNo$$,$$HOUSEH.DETAIL.TenancyID$$,$$HOUSEH.DETAIL.TenureDescription$$,$$HOUSEH.DETAIL.PersonNo$$,$$HOUSEH.DETAIL.Title$$,$$HOUSEH.DETAIL.FirstName$$,$$HOUSEH.DETAIL.Surname$$,$$HOUSEH.DETAIL.NINO$$,$$HOUSEH.DETAIL.DOB$$,$$HOUSEH.DETAIL.EMAIL$$,$$HOUSEH.DETAIL.MOBTEL$$,$$HOUSEH.DETAIL.MOBTEL2$$,$$HOUSEH.DETAIL.HOMETEL$$,$$HOUSEH.DETAIL.WORKTEL$$,$$HOUSEH.DETAIL.Language$$,$$HOUSEH.DETAIL.Ethnicity$$,$$HOUSEH.DETAIL.Religion$$,$$HOUSEH.DETAIL.Relationship$$)
+
+GETHH:
+//replace with parameter
+GETHH=SQLGetHouseholders($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.TenancyID$$)
+
+IFGOTO($$GETHH.HEADER.Personno$$,"=","","END:")
+
+//find guid first
+HHFIND=DYNAMICSFindContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","contactid",$$GETHH.HEADER.Personno$$)
+HHGUID=JSONGetGUIDContactNEW($$HHFIND.RESPONSE$$,"OBJECT")
+IFGOTO($$HHGUID.HEADER.ID$$,"=","","ADDHH:")
+
+UPDATEHH:
+//Update contact record
+CONTUPD=DYNAMICSUPDATEContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$HHGUID.HEADER.ID$$,$$LEADTEN.HEADER.PropertyNo$$,$$GETHH.HEADER.TenancyID$$,$$LEADTEN.HEADER.TenureDescription$$,$$GETHH.HEADER.Personno$$,$$GETHH.HEADER.FirstName$$,$$GETHH.HEADER.Surname$$,$$GETHH.HEADER.NINO$$,$$GETHH.HEADER.DOB$$,$$GETHH.HEADER.EMAIL$$,$$GETHH.HEADER.MOBTEL$$,$$GETHH.HEADER.MOBTEL2$$,$$GETHH.HEADER.HOMETEL$$,$$GETHH.HEADER.WORKTEL$$,$$GETHH.HEADER.Language$$,$$GETHH.HEADER.Ethnicity$$,$$GETHH.HEADER.Religion$$,$$PROPGUID.HEADER.Addr1$$,$$PROPGUID.HEADER.Addr2$$,$$PROPGUID.HEADER.Addr3$$,$$PROPGUID.HEADER.Area$$,$$PROPGUID.HEADER.Postcode$$,$$LEADTEN.HEADER.IncomeOfficer$$,$$LEADTEN.HEADER.CustomerTypeCode$$)
+
+GOTO("FINDHHTITLE:")
+
+ADDHH:
+//Create Household Contact in CRM
+HHADD=DYNAMICSADDContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","ADD",$$LEADTEN.HEADER.PropertyNo$$,$$GETHH.HEADER.TenancyID$$,$$LEADTEN.HEADER.TenureDescription$$,$$GETHH.HEADER.Personno$$,$$GETHH.HEADER.FirstName$$,$$GETHH.HEADER.Surname$$,$$GETHH.HEADER.NINO$$,$$GETHH.HEADER.DOB$$,$$GETHH.HEADER.EMAIL$$,$$GETHH.HEADER.MOBTEL$$,$$GETHH.HEADER.MOBTEL2$$,$$GETHH.HEADER.HOMETEL$$,$$GETHH.HEADER.WORKTEL$$,$$GETHH.HEADER.Language$$,$$GETHH.HEADER.Ethnicity$$,$$GETHH.HEADER.Religion$$,$$PROPGUID.HEADER.Addr1$$,$$PROPGUID.HEADER.Addr2$$,$$PROPGUID.HEADER.Addr3$$,$$PROPGUID.HEADER.Area$$,$$PROPGUID.HEADER.Postcode$$,$$LEADTEN.HEADER.IncomeOfficer$$,$$LEADTEN.HEADER.CustomerTypeCode$$)
+
+HHFIND=DYNAMICSFindContact("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","contactid",$$GETHH.HEADER.Personno$$)
+HHGUID=JSONGetGUIDContactNEW($$HHFIND.RESPONSE$$,"OBJECT")
+
+ADDHHVCS:
+//Find visual cues
+SQLHHVC=SQLGetVisualCues($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$GETHH.HEADER.Personno$$)
+
+IFGOTO($$SQLHHVC.DETAIL.CRM_Guid$$,"=","","FINDHHTITLE:")
+
+//Add all to visual cues table
+HHVCADD=DYNAMICSADDVisualCues("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_visualcuecontexttexts","ADD","contact",$$HHGUID.HEADER.ID$$,$$SQLHHVC.DETAIL.CUEDesc$$,$$SQLHHVC.DETAIL.CRM_Guid$$)
+
+//Update contact flag for VC's
+HHVCCONTUPD=DYNAMICSUPDATEContactVCField("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$HHGUID.HEADER.ID$$,$$SQLHHVC.DETAIL.ContactField$$)
+
+//add title afterward as cant send a blank
+FINDHHTITLE:
+CRMHHTITLE=SQLGetTitle($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$GETHH.HEADER.Title$$)
+
+IFGOTO($$CRMHHTITLE.HEADER.Title$$,"=","","UPDHHLANG:")
+
+UPDHHTITLE=DYNAMICSUPDATEContactTitle("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$HHGUID.HEADER.ID$$,$$CRMHHTITLE.HEADER.Title$$)
+
+UPDHHLANG:
+IFGOTO($$GETHH.HEADER.Language$$,"=","","UPDHHREL:")
+
+HHLANG=DYNAMICSUPDATEContactLanguageNew("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$HHGUID.HEADER.ID$$,$$GETHH.HEADER.Language$$,"")
+
+UPDHHREL:
+IFGOTO($$GETHH.HEADER.Religion$$,"=","","UPDHHETH:")
+
+HHREL=DYNAMICSUPDATEContactReligion("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$HHGUID.HEADER.ID$$,$$GETHH.HEADER.Religion$$,"")
+
+UPDHHETH:
+IFGOTO($$GETHH.HEADER.Ethnicity$$,"=","","HHADDHH:")
+
+HHETH=DYNAMICSUPDATEContactEthnicity("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"contacts","UPDATE",$$HHGUID.HEADER.ID$$,$$GETHH.HEADER.Ethnicity$$,"")
+
+HHADDHH:
+//Add HH household record
+HHADDHH=DYNAMICSADDHousehold2("x","",$$TP.HEADER.CRMWSUser$$,$$TP.HEADER.CRMWSPass$$,$$TP.HEADER.CRMURL$$,"gcs_households","ADD",$$GETHH.HEADER.TenancyID$$,$$LEADTEN.HEADER.StartDate$$,$$GETHH.HEADER.Personno$$,"Other",$$HHGUID.HEADER.ID$$,$$TENGUID.HEADER.ID$$,$$GETHH.HEADER.Relationship$$)
+
+PROC=SQLUPDHouseholders($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$GETHH.HEADER.id$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"end of household process")
+
+GOTO("GETHH:")
+
+END:
+
+WRAP:
+
+//
+// CS New section added to call the SP to create a PIN for Wrap
+//
+
+//Select the address for the tenancy
+WADDRESS=SQLSELECTAddress($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PropertyNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLSELECTAddress lead")
+
+//Get contractor UDC details
+CONTR=SQLSELECTContractorUDCDetails($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PropertyNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLSELECTContractorUDCDetails lead")
+
+//Find the rent and service charge data
+CHARGES=SQLSELECTRentAndServiceCharge($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLSELECTRentAndServiceCharge lead")
+
+//Stop the process if no rent is returned
+IFGOTO($$CHARGES.HEADER.rent$$,"=","0.00","END2:")
+
+//Check if lead tenant has a mobile number
+IFGOTO($$LEADTEN.HEADER.MOBTEL$$,"<>","","GENPINS:")
+
+//No mobile found so email error
+//LTNOMOB=EMAILWrapNoTenMob("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"chriss@blaze-is.com","OPTIVO TEST NO MOBILE ON NEW LEAD TENANT",$$LEADTEN.HEADER.TenancyID$$,$$LEADTEN.HEADER.PersonNo$$,$$LEADTEN.HEADER.FirstName$$,$$LEADTEN.HEADER.Surname$$,$$PARAM9.SQL$$,$$LEADTEN.HEADER.PropertyNo$$)
+
+//LTNOMOB1=EMAILWrapNoTenMob("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"Jo.Phelps@optivo.org.uk","OPTIVO TEST NO MOBILE ON NEW LEAD TENANT",$$LEADTEN.HEADER.TenancyID$$,$$LEADTEN.HEADER.PersonNo$$,$$LEADTEN.HEADER.FirstName$$,$$LEADTEN.HEADER.Surname$$,$$PARAM9.SQL$$,$$LEADTEN.HEADER.PropertyNo$$)
+
+//Generate PIN for joint tenant
+GOTO("JTEN:")
+
+//
+//Lead tenant stuff
+//
+
+GENPINS:
+
+//Generate the lead tenant PIN
+LTGENPIN=SQLGeneratePIN($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGeneratePIN lead")
+
+//Find the PIN for lead tenant
+LTGETPIN=SQLGetPIN($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGetPIN lead")
+
+//Add lead tenant data to SQL
+WRITELTSQL=WRITESQLINSERTTenantToWrap("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\WrapInsertLT.txt","NEW",$$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$,$$PARAM9.SQL$$,$$LEADTEN.HEADER.FirstName$$,$$LEADTEN.HEADER.Surname$$,$$LEADTEN.HEADER.PropertyNo$$,$$WADDRESS.HEADER.Address1$$,$$WADDRESS.HEADER.Address2$$,$$WADDRESS.HEADER.Address3$$,$$WADDRESS.HEADER.Address4$$,$$WADDRESS.HEADER.PostCode$$,$$LEADTEN.HEADER.MOBTEL$$,$$CHARGES.HEADER.rent$$,$$CHARGES.HEADER.service_charges$$,$$LTGETPIN.HEADER.PIN$$,$$CONTR.HEADER.Contractor$$,$$CONTR.HEADER.ContractorTel$$,$$CONTR.HEADER.ContractorURL$$)
+
+
+LTSQL=SQLINSERTTenantToWrap($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$LEADTEN.HEADER.PersonNo$$,$$PARAM9.SQL$$,$$LEADTEN.HEADER.FirstName$$,$$LEADTEN.HEADER.Surname$$,$$LEADTEN.HEADER.PropertyNo$$,$$WADDRESS.HEADER.Address1$$,$$WADDRESS.HEADER.Address2$$,$$WADDRESS.HEADER.Address3$$,$$WADDRESS.HEADER.Address4$$,$$WADDRESS.HEADER.PostCode$$,$$LEADTEN.HEADER.MOBTEL$$,$$CHARGES.HEADER.rent$$,$$CHARGES.HEADER.service_charges$$,$$LTGETPIN.HEADER.PIN$$,$$CONTR.HEADER.Contractor$$,$$CONTR.HEADER.ContractorTel$$,$$CONTR.HEADER.ContractorURL$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLINSERTTenantToWrap lead")
+
+//
+//Joint tenant stuff
+//
+
+JTEN:
+//Check if there is a joint tenant
+IFGOTO($$JOINTTEN.HEADER.PersonNo$$,"=","","END2:")
+
+//Check if joint tenant has a mobile number
+IFGOTO($$JOINTTEN.HEADER.MOBTEL$$,"<>","","JTPIN:")
+
+//No mobile found so email error
+//JTNOMOB=EMAILWrapNoTenMob("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"chriss@blaze-is.com","OPTIVO TEST NO MOBILE ON NEW JOINT TENANT",$$JOINTTEN.HEADER.TenancyID$$,$$JOINTTEN.HEADER.PersonNo$$,$$JOINTTEN.HEADER.FirstName$$,$$JOINTTEN.HEADER.Surname$$,$$PARAM9.SQL$$,$$JOINTTEN.HEADER.PropertyNo$$)
+
+//JTNOMOB1=EMAILWrapNoTenMob("https://outlook.office365.com/EWS/Exchange.asmx","CloudServices@Blaze-IS.com",$$P.HEADER.MSSOAuthAppID$$,$$P.HEADER.MSSOAuthClientSecret$$,$$P.HEADER.MSSOAuthTenantID$$,"Jo.Phelps@optio.org.uk","OPTIVO TEST NO MOBILE ON NEW JOINT TENANT",$$JOINTTEN.HEADER.TenancyID$$,$$JOINTTEN.HEADER.PersonNo$$,$$JOINTTEN.HEADER.FirstName$$,$$JOINTTEN.HEADER.Surname$$,$$PARAM9.SQL$$,$$JOINTTEN.HEADER.PropertyNo$$)
+
+//Go to the end
+GOTO("END2:")
+
+JTPIN:
+
+//Generate the joint tenant PIN
+JTGENPIN=SQLGeneratePIN($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.PersonNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGeneratePIN joint")
+
+//Find the PIN for joint tenant
+JTGETPIN=SQLGetPIN($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.PersonNo$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLGetPIN joint")
+
+//Add joint tenant data to SQL
+//JTSQL=SQLINSERTTenantToWrap($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.PersonNo$$,$$PARAM9.SQL$$,$$JOINTTEN.HEADER.FirstName$$,$$JOINTTEN.HEADER.Surname$$,$$LEADTEN.HEADER.PropertyNo$$,$$WADDRESS.HEADER.Address1$$,$$WADDRESS.HEADER.Address2$$,$$WADDRESS.HEADER.Address3$$,$$WADDRESS.HEADER.Address4$$,$$WADDRESS.HEADER.PostCode$$,$$JOINTTEN.HEADER.MOBTEL$$,$$JOINTTEN.HEADER.Rentval$$,$$JOINTTEN.HEADER.Nonrentval$$,$$JTGETPIN.HEADER.PIN$$,$$CONTR.HEADER.Contractor$$,$$CONTR.HEADER.ContractorTel$$,$$CONTR.HEADER.ContractorURL$$)
+
+//Write the insert out
+JTINS=WRITESQLINSERTTenantToWrap("C:\ManifestSoftware\TEST\ControlFiles\LETTINGS1\WrapInsertJT.txt","NEW",$$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.PersonNo$$,$$PARAM9.SQL$$,$$JOINTTEN.HEADER.FirstName$$,$$JOINTTEN.HEADER.Surname$$,$$LEADTEN.HEADER.PropertyNo$$,$$WADDRESS.HEADER.Address1$$,$$WADDRESS.HEADER.Address2$$,$$WADDRESS.HEADER.Address3$$,$$WADDRESS.HEADER.Address4$$,$$WADDRESS.HEADER.PostCode$$,$$JOINTTEN.HEADER.MOBTEL$$,$$CHARGES.HEADER.rent$$,$$CHARGES.HEADER.service_charges$$,$$JTGETPIN.HEADER.PIN$$,$$CONTR.HEADER.Contractor$$,$$CONTR.HEADER.ContractorTel$$,$$CONTR.HEADER.ContractorURL$$)
+
+JTSQL=SQLINSERTTenantToWrap($$TP.HEADER.SQLInstance$$,$$TP.HEADER.SQLDatabase$$,$$TP.HEADER.SQLUser$$,$$TP.HEADER.SQLPassword$$,$$JOINTTEN.HEADER.PersonNo$$,$$PARAM9.SQL$$,$$JOINTTEN.HEADER.FirstName$$,$$JOINTTEN.HEADER.Surname$$,$$LEADTEN.HEADER.PropertyNo$$,$$WADDRESS.HEADER.Address1$$,$$WADDRESS.HEADER.Address2$$,$$WADDRESS.HEADER.Address3$$,$$WADDRESS.HEADER.Address4$$,$$WADDRESS.HEADER.PostCode$$,$$JOINTTEN.HEADER.MOBTEL$$,$$CHARGES.HEADER.rent$$,$$CHARGES.HEADER.service_charges$$,$$JTGETPIN.HEADER.PIN$$,$$CONTR.HEADER.Contractor$$,$$CONTR.HEADER.ContractorTel$$,$$CONTR.HEADER.ContractorURL$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"SQLINSERTTenantToWrap joint")
+
+END2:
+
+//W=WRITEFile("C:\ManifestSoftware\TEST\Temp\JGTEST.txt","NEW",$$OISTEN.RESPONSE$$)
+//W2=WRITEFile("C:\ManifestSoftware\TEST\Temp\JGTESTPK.txt","NEW",$$TENANCYADD.HEADER.PK$$)
+
+CSDATE=GetDate()
+CSLOG=WRITELogFileCS("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","APPEND",$$CSDATE.SQL$$,"END2")
+
+CSARCHIVE=ARCHIVEFILE("C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\log.txt","C:\ManifestSoftware\TEST\DataFiles\TenancyLogs\","")
+
+
+STOPIFEMPTY("")

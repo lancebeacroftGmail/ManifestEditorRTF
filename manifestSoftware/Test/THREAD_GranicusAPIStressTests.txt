@@ -1,0 +1,32 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=THREAD
+FROM=Orchard Housing Database
+ACTIVEDAYS=SMTWTFS
+ACTIVESTARTTIME=10:00
+ACTIVEENDTIME=23:59
+TIMER=120
+DESCRIPTION=Stress test all Granicus APIs every 2 minutes
+CONTROLFOLDER=C:\ManifestSoftware\TEST\ControlFiles\GranicusAPIStressTests\
+$$
+
+//Make a log of the start time
+C:\ManifestSoftware\TEST\ControlFiles\GranicusAPIStressTests\IFCThreadStart.txt()
+
+//Stress test APIGetCommunalRepairHistory
+C:\ManifestSoftware\TEST\ControlFiles\GranicusAPIStressTests\IFCGetCommunalRepairHistory.txt()
+
+//Stress test APIGetHousingRepairHistory
+C:\ManifestSoftware\TEST\ControlFiles\GranicusAPIStressTests\IFCGetHousingRepairHistory.txt()
+
+//Stress test APIGetRentBreakdown2
+C:\ManifestSoftware\TEST\ControlFiles\GranicusAPIStressTests\IFCGetRentBreakdown2.txt()
+
+//Stress test APIGetRentStatement
+C:\ManifestSoftware\TEST\ControlFiles\GranicusAPIStressTests\IFCGetRentStatement.txt()
+
+//Stress test APIGetServiceChargeBreakdown
+C:\ManifestSoftware\TEST\ControlFiles\GranicusAPIStressTests\IFCGetServiceChargeBreakdown.txt()
+
+//Make a log of the end time
+C:\ManifestSoftware\TEST\ControlFiles\GranicusAPIStressTests\IFCThreadEnd.txt()

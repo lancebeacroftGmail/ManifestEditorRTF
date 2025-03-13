@@ -1,0 +1,39 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+FROM=Internal
+FORMAT=EXCHGEMAIL
+DESCRIPTION=Send Email to Exchange 2013
+RESULT=
+$$ERROR,nvarchar(10),,,,ERROR$$
+
+PARAMETERS=
+$$URL,nvarchar(100),,,,Folder to get email from$$
+$$FROMADDRESS,nvarchar(100),,,,Email address sending the email$$
+$$OAUTHAPPID,nvarchar(100),,,BLAZEAES,$$
+$$OAUTHCLIENTSECRET,nvarchar(100),,,BLAZEAES,$$
+$$OAUTHTENANTID,nvarchar(100),,,BLAZEAES,$$
+$$TOADDRESS,nvarchar(100),,,,Destination Email address$$
+$$SUBJECT,nvarchar(100),,,,Subject$$
+$$MESSAGE,nvarchar(100),,,,$$
+$$CASEID,nvarchar(100),,,,$$
+$$OISERROR,nvarchar(100),,,,$$
+$$PATHANDFILENAME1,nvarchar(100),,,,Attachment 1 to 10$$
+$$
+
+This is an automated Email (Please do not reply to this email)
+
+An error occured adding an application:
+
+$$MESSAGE,nvarchar(100),,,,$$
+
+Case ID: $$CASEID,nvarchar(100),,,,$$
+
+Error: $$OISERROR,nvarchar(100),,,,$$
+
+Kind regards
+
+
+
+
+Manifest Software Solutions

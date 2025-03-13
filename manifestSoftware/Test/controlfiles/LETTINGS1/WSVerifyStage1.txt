@@ -1,0 +1,42 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=Lifespan
+FORMAT=WEBSERVICE
+DESCRIPTION=Dash Verify/XREF Step 1
+RESULT=
+$$RESPONSE,string,[0-Z],,,description$$
+$$ERROR,int,[0-Z],,,description$$
+
+PARAMETERS=
+$$URL,nvarchar(500),,,,URL of the web service$$
+$$Content-Type,nvarchar(500),,,,Content Type$$
+$$METHOD,nvarchar(500),,,,Get$$
+$$Accept,nvarchar(500),,,,Format$$
+$$ALLOWERROR,nvarchar(500),,,,Y to allow error$$
+$$ProcessID,nvarchar(500),,,,$$
+$$UCRN,nvarchar(500),,,,$$
+$$Applicantemailaddress,nvarchar(500),,,,$$
+$$ApplicantUCRN,nvarchar(500),,,,$$
+$$ApplicantTenancyRef,nvarchar(500),,,,$$
+$$ApplicantPersonID,nvarchar(500),,,,$$
+$$
+{
+    "process_id": "$$ProcessID,nvarchar(500),,,,$$",
+    "data": {
+        "emailToVerify": "$$Applicantemailaddress,nvarchar(500),,,,$$",
+        "applicantUCRN": "$$ApplicantUCRN,nvarchar(500),,,,$$",
+        "applicantOccnumXref": "$$ApplicantTenancyRef,nvarchar(500),,,,$$",
+        "applicantPersonidXref": "$$ApplicantPersonID,nvarchar(500),,,,$$"
+    },
+    "ucrn": "$$UCRN,nvarchar(500),,,,$$", 
+    "published": "true",
+    "submissionType": "new",
+    "formCalculator": "true"
+}
+
+
+
+
+
+

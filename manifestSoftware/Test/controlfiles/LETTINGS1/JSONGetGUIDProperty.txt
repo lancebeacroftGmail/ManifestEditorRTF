@@ -1,0 +1,29 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+FROM=Internal Command
+FORMAT=JSONPARSE
+DESCRIPTION=
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+$$HEADER.ID,nvarchar(100),,value...gcs_propertyid,,$$
+$$HEADER.Addr1,nvarchar(100),,value...gcs_addressline1,,$$
+$$HEADER.Addr2,nvarchar(100),,value...gcs_addressline2,,$$
+$$HEADER.Addr3,nvarchar(100),,value...gcs_addressline3,,$$
+$$HEADER.Area,nvarchar(100),,value...gcs_commonarea,,$$
+$$HEADER.Postcode,nvarchar(100),,value...gcs_postcode,,$$ 
+
+PARAMETERS=
+$$JSON,nvarchar(100),,,,$$
+$$STRUCTURE,nvarchar(100),,,,$$
+
+$$
+HEADER=Y
+$$HEADER.ID,nvarchar(100),,value...gcs_propertyid,,$$
+$$HEADER.Addr1,nvarchar(100),,value...gcs_addressline1,,$$
+$$HEADER.Addr2,nvarchar(100),,value...gcs_addressline2,,$$
+$$HEADER.Addr3,nvarchar(100),,value...gcs_addressline3,,$$
+$$HEADER.Area,nvarchar(100),,value...gcs_commonarea,,$$
+$$HEADER.Postcode,nvarchar(100),,value...gcs_postcode,,$$ 
+DETAIL=N
+TRAILER=N

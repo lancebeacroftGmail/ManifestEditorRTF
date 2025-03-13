@@ -1,0 +1,73 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=WRITE
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=
+RESULT=
+$$ERROR,nvarchar(10),,,,OK or FAIL$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$PropertyNo,nvarchar(100),,,,$$
+$$TenancyID,nvarchar(100),,,,$$
+$$TenureDescription,nvarchar(100),,,,$$
+$$Personno,nvarchar(100),,,,$$
+$$Title,nvarchar(100),,,,$$
+$$FirstName,nvarchar(100),,,SQLSTRING,$$
+$$Surname,nvarchar(100),,,SQLSTRING,$$
+$$NINO,nvarchar(100),,,,$$
+$$DOB,nvarchar(100),,,,$$
+$$EMAIL,nvarchar(100),,,,$$
+$$MOBTEL,nvarchar(100),,,,$$
+$$MOBTEL2,nvarchar(100),,,,$$
+$$HOMETEL,nvarchar(100),,,,$$
+$$WORKTEL,nvarchar(100),,,,$$
+$$Language,nvarchar(100),,,,$$
+$$Ethnicity,nvarchar(100),,,,$$
+$$Religion,nvarchar(100),,,,$$
+$$Relationship,nvarchar(100),,,,$$
+$$
+
+INSERT INTO [dbo].[CRM_Householders]
+           ([PropertyNo]
+           ,[TenancyID]
+           ,[TenureDescription]
+           ,[Personno]
+           ,[Title]
+           ,[FirstName]
+           ,[Surname]
+           ,[NINO]
+           ,[DOB]
+           ,[EMAIL]
+           ,[MOBTEL]
+           ,[MOBTEL2]
+           ,[HOMETEL]
+           ,[WORKTEL]
+           ,[Language]
+           ,[Ethnicity]
+           ,[Religion]
+	   ,[Relationship])
+     VALUES
+           ('$$PropertyNo,nvarchar(100),,,,$$'
+,'$$TenancyID,nvarchar(100),,,,$$'
+,'$$TenureDescription,nvarchar(100),,,,$$'
+,'$$Personno,nvarchar(100),,,,$$'
+,'$$Title,nvarchar(100),,,,$$'
+,'$$FirstName,nvarchar(100),,,SQLSTRING,$$'
+,'$$Surname,nvarchar(100),,,SQLSTRING,$$'
+,'$$NINO,nvarchar(100),,,,$$'
+,'$$DOB,nvarchar(100),,,,$$'
+,'$$EMAIL,nvarchar(100),,,,$$'
+,'$$MOBTEL,nvarchar(100),,,,$$'
+,'$$MOBTEL2,nvarchar(100),,,,$$'
+,'$$HOMETEL,nvarchar(100),,,,$$'
+,'$$WORKTEL,nvarchar(100),,,,$$'
+,'$$Language,nvarchar(100),,,,$$'
+,'$$Ethnicity,nvarchar(100),,,,$$'
+,'$$Religion,nvarchar(100),,,,$$'
+,'$$Relationship,nvarchar(100),,,,$$'
+)

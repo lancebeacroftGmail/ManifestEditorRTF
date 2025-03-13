@@ -1,0 +1,136 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=READ
+TO=SQL Server
+FORMAT=SQLSERVER
+DESCRIPTION=Get Applications To Create In Orchard
+RESULT=
+$$ERROR,nvarchar(100),,,,OK or FAIL$$
+$$HEADER.TenancyID,nvarchar(100),,TenancyID,,$$
+$$HEADER.PersonNo,nvarchar(100),,Personno,,$$
+$$HEADER.PropertyNo,nvarchar(100),,PropertyNo,,$$
+$$HEADER.Title,nvarchar(100),,Title,,$$
+$$HEADER.FirstName,nvarchar(100),,FirstName,,$$
+$$HEADER.Surname,nvarchar(100),,Surname,,$$
+$$HEADER.NINO,nvarchar(100),,NINO,,$$
+$$HEADER.DOB,nvarchar(100),,DOB,,$$
+$$HEADER.GenderCode,nvarchar(100),,GenderCode,,$$
+$$HEADER.LeadTenant,nvarchar(100),,LeadTenant,,$$
+$$HEADER.TenureCode,nvarchar(100),,TenureCode,,$$
+$$HEADER.TenureDescription,nvarchar(100),,TenureDescription,,$$
+$$HEADER.Nonrentval,nvarchar(100),,Nonrentval,,$$
+$$HEADER.Rentval,nvarchar(00),,RentVal,,$$
+$$HEADER.StartDate,nvarchar(100),,StartDate,,$$
+$$HEADER.Checkdigit,nvarchar(100),,Checkdigit,,$$
+$$HEADER.EMAIL,nvarchar(100),,EMAIL,,$$
+$$HEADER.MOBTEL,nvarchar(100),,MOBTEL,,$$
+$$HEADER.MOBTEL2,nvarchar(100),,MOBTEL2,,$$
+$$HEADER.HOMETEL,nvarchar(100),,HOMETEL,,$$
+$$HEADER.WORKTEL,nvarchar(100),,WORKTEL,,$$
+$$HEADER.Language,nvarchar(100),,Language,,$$
+$$HEADER.Ethnicity,nvarchar(100),,Ethnicity,,$$
+$$HEADER.Religion,nvarchar(100),,Religion,,$$
+$$HEADER.IncomeOfficer,nvarchar(100),,IncomeOfficer,,$$
+
+PARAMETERS=
+$$SQLINSTANCE,nvarchar(100),,,,SQL Instance$$
+$$SQLDB,nvarchar(100),,,,DB$$
+$$SQLUSER,nvarchar(100),,,,UserID$$
+$$SQLPASSWORD,nvarchar(100),,,BLAZEAES,Password$$
+$$TenancyID,nvarchar(100),,,,$$
+$$
+
+/*
+-- =======================================================================================================================================
+--	Author:			Manifest
+--	Description:	Fetches Joint tenant details
+-- =======================================================================================================================================
+--	Change log:
+--	Version			Date		Author				Description
+--  -------			----------	----------------	----------------------------------------------------
+--	v1.1			17/04/2023	Kevin May		    Changed query to remove unneeded references to mis_tncy and mis_ttncytyp (these are
+--                                                  no longer maintained within MRI. Changed output field lengths from nvarchar(10) to 
+--                                                  nvarchar(100)
+--  -------			----------	----------------	----------------------------------------------------
+--	v1.2			21/07/2023	Kevin May		    Due to changes to rntpropchgs in MRI, query was no longer returning correct values, 
+--                                                  or not returning any value. We no longer need to feed these values throught to CRM 
+--                                                  so values defaulted to 0
+-- =======================================================================================================================================
+*/
+
+SELECT TenancyID,Personno, PropertyNo,ISNULL(INC.CRM_Guid,'171607ba-8500-e111-a6b7-005056ae0025') As IncomeOfficer,
+CASE when Title = 'Mast' then 'Master' when Title = 'Rabb' then 'Rabbi' when Title = 'Col' then 'Colonel' when Title = 'Col.' then 'Colonel' when Title = 'Fao' then '' Else Title END As Title, 
+'Current Resident' as CustomerType,
+'1' as CustomerTypeCode,
+FirstName,Surname, NINO, (CONVERT(VARCHAR,DOB)+'T06:00:00Z') As DOB,GenderCode,
+CASE WHEN GenderCode = 0 Then 'Female' WHEN GenderCode = 1 Then 'Male' ELSE 'Unknown' END As Gender,
+TenureCode,TenureDescription,LeadTenant, 
+--sum(Nonrentval) as Nonrentval,
+0 as Nonrentval,
+--RentVal,
+0 as RentVal,
+--(sum(Nonrentval)+RentVal) As GrossRent,
+0 As GrossRent,
+--((sum(Nonrentval)+RentVal)-isnull(BenefitVal,'0')) As NetRent,
+0 As NetRent,
+BenefitVal,
+(CONVERT(VARCHAR,StartDate)+'T12:00:00Z') As StartDate,Checkdigit
+,LANG.CRM_Guid As Language, ETH.CRM_Guid As Ethnicity, REL.CRM_Guid As Religion
+,EMAIL.CommsDetails As EMAIL,MOBTEL.CommsDetails As MOBTEL,MOBTEL2.CommsDetails As MOBTEL2, HOMETEL.CommsDetails As HOMETEL, WORKTEL.CommsDetails As WORKTEL
+from openquery(ORCHHMS, '
+select
+prhst."occ-num" As TenancyID, 
+per.num As PersonNo,
+prhst."pr-seq-no" As PropertyNo,
+per.ttl As Title,
+per.fnam As FirstName,
+per.snam As Surname,
+per."ni-number" As NINO,
+per.dob As DOB,
+per.sex As GenderCode,
+prhst."lead-tenant" As LeadTenant,
+prhst."tenu-cde" As TenureCode,
+tenu.dsc as TenureDescription,
+--nonrnt."chg-val" As Nonrentval,
+--rnt."chg-val" As Rentval,
+tncy."comm-dat" As StartDate,
+tncy."check-digit" As Checkdigit,
+per."eth-cde" As EthnicCode,
+per."lang-cde" As LanguageCode,
+per."religion-cde" As ReligionCode,
+--mis_ttncytyp.ttncytyp_dsc as TenancyTypeDesc,
+rntbenefit."trn-val" As BenefitVal
+FROM 
+pub.prhst
+LEFT JOIN pub.tncy ON prhst."occ-num" = tncy."prhst-occ-num"
+LEFT JOIN pub.per ON prhst."per-num" = per.num
+LEFT JOIN pub.tenu on tenu.cde = prhst."tenu-cde"
+--LEFT JOIN pub.rntpropchgs As nonrnt on nonrnt."pr-seq-no" = prhst."pr-seq-no"
+--LEFT JOIN pub.rntpropchgs As rnt on rnt."pr-seq-no" = prhst."pr-seq-no"
+--left join pub.mis_tncy on mis_tncy.occ_num = prhst."occ-num"
+--left join pub.mis_ttncytyp on mis_ttncytyp.ttncytyp_cde = mis_tncy.ttncytyp_cde
+left join pub.rntbenefit on rntbenefit."prhst-occ-num" = prhst."occ-num" and (rntbenefit."str-dte" <= SYSDATE) and (rntbenefit."end-dte">SYSDATE or rntbenefit."end-dte" is null) and rntbenefit."trn-val" <> 0
+Where prhst."lead-tenant" = 0
+and nonrnt."end-dte" is null
+and nonrnt."rnttrn-cde" not in (''RNT'')
+and rnt."end-dte" is null
+and rnt."rnttrn-cde" in (''RNT'')
+and prhst."occ-num" = ''$$TenancyID,nvarchar(100),,,,$$''')
+Left Join [dbo].[OISTenantCommunications] EMAIL on EMAIL.OISTenantID = PersonNo and EMAIL.CommsMethod = 'Email'
+Left Join [dbo].[OISTenantCommunications] MOBTEL on MOBTEL.OISTenantID = PersonNo and MOBTEL.CommsMethod = 'Mob Tel'
+Left Join [dbo].[OISTenantCommunications] MOBTEL2 on MOBTEL2.OISTenantID = PersonNo and MOBTEL2.CommsMethod = 'Mob Tel 2'
+Left Join [dbo].[OISTenantCommunications] HOMETEL on HOMETEL.OISTenantID = PersonNo and HOMETEL.CommsMethod = 'Home Tel'
+Left Join [dbo].[OISTenantCommunications] WORKTEL on WORKTEL.OISTenantID = PersonNo and WORKTEL.CommsMethod = 'Work Tel'
+Left join [dbo].[CRM_OIS_Lookups] LANG on LANG.OIS_Code = LanguageCode and LANG.Type = 'LANGUAGE'
+Left join [dbo].[CRM_OIS_Lookups] ETH on ETH.OIS_Code = EthnicCode and LANG.Type = 'ETHNICITY'
+Left join [dbo].[CRM_OIS_Lookups] REL on REL.OIS_Code = ReligionCode and LANG.Type = 'RELIGION'
+left join OISProperty OISP on OISP.ID = PropertyNo
+left join OISAreas OISA on OISA.OISID = OISP.Area8 
+left outer join [dbo].[CRM_OIS_Lookups] INC on INC.CRM_Name = CASE WHEN OISA.[Description] like '%(%' THEN left(OISA.[Description], charindex('(', OISA.[Description]) - 2) ELSE OISA.[Description] END
+ Group By TenancyID,Personno, PropertyNo,INC.CRM_Guid ,
+ Title, TenureDescription,
+ --TenancyTypeDesc,
+ FirstName,Surname, NINO, DOB,GenderCode,TenureCode,LeadTenant,StartDate,Checkdigit
+,LANG.CRM_Guid , ETH.CRM_Guid , REL.CRM_Guid,EMAIL.CommsDetails ,MOBTEL.CommsDetails ,MOBTEL2.CommsDetails , HOMETEL.CommsDetails , WORKTEL.CommsDetails, 
+--RentVal,
+BenefitVal

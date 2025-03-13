@@ -1,0 +1,14 @@
+WWW.BLAZE-IS.COM
+DELIM=$$
+TYPE=LOGIC
+FROM=Internal command
+FORMAT=IFGOTO
+DESCRIPTION=Goto Label if logic is true
+RESULT=
+$$OKFAIL,nvarchar(10),,,,OK or FAIL$$
+PARAMETERS=$$VARIABLE1,nvarchar(100),,,,Variable to check$$
+$$OPERAND,nvarchar(100),,,,Variable to check$$
+$$VARIABLE2,nvarchar(100),,,,Variable to check$$
+$$LABEL,nvarchar(100),,,,Variable to check$$
+$$
+
